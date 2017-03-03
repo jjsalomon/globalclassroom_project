@@ -4,7 +4,6 @@ import com.chess.engine.Alliance;
 import com.chess.engine.board.Board;
 import com.chess.engine.board.BoardUtils;
 import com.chess.engine.board.Move;
-import com.chess.engine.board.Move.AttackMove;
 import com.chess.engine.board.Move.MajorMove;
 import com.chess.engine.board.Tile;
 import com.google.common.collect.ImmutableList;
@@ -13,13 +12,17 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import static com.chess.engine.board.Move.*;
+
 /**
  * Created by azkei on 01/03/2017.
  */
-public class Bishop extends Piece {
+public class Queen extends Piece {
 
-    private final static int[] CANDIDATE_MOVE_VECTOR_COORDINATES = { -9, -7, 7, 9 };
-    Bishop(int piecePosition, Alliance pieceAlliance) {
+    //rook and bishop candidate move vectors
+    private final static int[] CANDIDATE_MOVE_VECTOR_COORDINATES = {-9, -8, -7, -1, 1, 7, 8, 9};
+
+    Queen(int piecePosition, Alliance pieceAlliance) {
         super(piecePosition, pieceAlliance);
     }
 
@@ -65,10 +68,10 @@ public class Bishop extends Piece {
 
     //edge cases - these are the positions where the bishop rules fall apart.
     private static boolean isFirstColumnExclusion(final int currentPosition, final int candidateOffset){
-        return BoardUtils.FIRST_COLUMN[currentPosition] && (candidateOffset == -9 || candidateOffset == 7);
+        return BoardUtils.FIRST_COLUMN[currentPosition] && (candidateOffset == -1 || candidateOffset == -9 ||candidateOffset == 7);
     }
 
     private static boolean isEightColumnExclusion(final int currentPosition, final int candidateOffset){
-        return BoardUtils.EIGHT_COLUMN[currentPosition] && (candidateOffset == -7 || candidateOffset == 9);
+        return BoardUtils.EIGHT_COLUMN[currentPosition] && (candidateOffset == 7 || candidateOffset == 1 || candidateOffset == 9);
     }
 }
