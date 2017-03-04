@@ -12,12 +12,15 @@ import java.util.List;
  */
 public abstract class Piece {
     //every piece has a tile position / coordinate
+    protected final PieceType pieceType;
     protected final int piecePosition;
     protected final Alliance pieceAlliance;
     protected  final boolean isFirstMove;
 
 
-    Piece( final Alliance pieceAlliance,final int piecePosition){
+    Piece( final PieceType pieceType,
+            final Alliance pieceAlliance,final int piecePosition){
+        this.pieceType = pieceType;
         this.pieceAlliance = pieceAlliance;
         this.piecePosition = piecePosition;
         //TODO more work here
@@ -36,16 +39,50 @@ public abstract class Piece {
         return this.isFirstMove;
     }
 
+    public PieceType getPieceType(){
+        return this.pieceType;
+    }
+
     public abstract Collection<Move> calculateLegalMoves(final Board board);
 
     public enum PieceType{
 
-        PAWN("p"),
-        KNIGHT("KN"),
-        BISHOP("B"),
-        ROOK("R"),
-        QUEEN("Q"),
-        KING("K");
+        PAWN("p") {
+            @Override
+            public boolean isKing() {
+                return false;
+            }
+        },
+        KNIGHT("KN") {
+            @Override
+            public boolean isKing() {
+                return false;
+            }
+        },
+        BISHOP("B") {
+            @Override
+            public boolean isKing() {
+                return false;
+            }
+        },
+        ROOK("R") {
+            @Override
+            public boolean isKing() {
+                return false;
+            }
+        },
+        QUEEN("Q") {
+            @Override
+            public boolean isKing() {
+                return false;
+            }
+        },
+        KING("K") {
+            @Override
+            public boolean isKing() {
+                return true;
+            }
+        };
         private String pieceName;
 
         PieceType(final String pieceName){
@@ -56,5 +93,7 @@ public abstract class Piece {
         public  String toString(){
             return this.pieceName;
         }
+
+        public abstract boolean isKing();
     }
 }
