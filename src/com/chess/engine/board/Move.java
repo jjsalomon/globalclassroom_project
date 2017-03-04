@@ -51,9 +51,27 @@ public abstract class Move {
             this.attackedPiece = attackedPiece;
         }
 
+        //making move on board - materializing new board not mutating a new board
         @Override
         public Board execute() {
-            return null;
+
+            final Board.Builder builder = new Board.Builder();
+
+            for(final Piece piece : this.board.currentPlayer().getActivePieces()){
+                //TODO hashcode and equals for pieces
+                if(!this.movedPiece.equals(piece)){
+                    builder.setPiece(piece)
+                }
+            }
+
+            for(final Piece piece : this.board.currentPlayer().getOpponent().getActivePieces()){
+                builder.setPiece(piece);
+            }
+            //move the moved piece
+            builder.setPiece(null);
+            builder.setMoveMaker(this.board.currentPlayer().getOpponent().getAlliance());
+
+            return builder.build();
         }
     }
 
