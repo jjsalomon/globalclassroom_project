@@ -43,16 +43,24 @@ public abstract class Tile{
 
     public static final class EmptyTile extends Tile{
         EmptyTile(final int coordinate){
+
             super(coordinate);
         }
 
         @Override
+        public String toString(){
+            //for empty tile return -
+            return "-";
+        }
+        @Override
         public boolean isTileOccupied(){
+
             return false;
         }
 
         @Override
         public Piece getPiece(){
+
             return null;
         }
     }
@@ -67,12 +75,22 @@ public abstract class Tile{
         }
 
         @Override
+        public String toString(){
+            //if tile is occupied print out the piece
+            return getPiece().getPieceAlliance().isBlack() ?
+                    getPiece().toString().toLowerCase() :
+                    getPiece().toString();
+        }
+
+        @Override
         public boolean isTileOccupied(){
+
             return true;
         }
 
         @Override
         public Piece getPiece(){
+
             return this.pieceOnTile;
         }
     }

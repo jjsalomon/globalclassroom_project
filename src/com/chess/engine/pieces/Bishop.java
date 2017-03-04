@@ -63,6 +63,11 @@ public class Bishop extends Piece {
         return ImmutableList.copyOf(legalMoves);
     }
 
+    @Override
+    public  String toString(){
+        return PieceType.BISHOP.toString();
+    }
+
     //edge cases - these are the positions where the bishop rules fall apart.
     private static boolean isFirstColumnExclusion(final int currentPosition, final int candidateOffset){
         return BoardUtils.FIRST_COLUMN[currentPosition] && (candidateOffset == -9 || candidateOffset == 7);
