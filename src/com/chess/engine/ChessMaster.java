@@ -9,7 +9,7 @@ public class ChessMaster {
 
     public static void main(String[] args){
 	
-		//Trying to push
+		//Trying to push and another one
         Board board = Board.createStandardBoard();
 
         System.out.println(board);
