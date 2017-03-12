@@ -28,7 +28,7 @@ public class mySQLDB {
     private ResultSet res;
 
     //set up JDBC_driver
-    public mySQLDB(){
+    public mySQLDB() {
         try {
             Class.forName(JDBC_DRIVER);
         } catch (Exception e) {
@@ -36,8 +36,27 @@ public class mySQLDB {
         }
     }
 
+    //Method to createTable
+    public void createTable() {
+        try {
+            //create connection to database
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
+            //create preparedStatement
+            pstmt = conn.prepareStatement("CREATE TABLE IF NOT EXISTS account(username VARCHAR(20) NOT NULL PRIMARY KEY, password VARCHAR(20) NOT NULL, email VARCHAR(40) UNIQUE )");
+            pstmt.executeUpdate();
+            pstmt = conn.prepareStatement("CREATE TABLE IF NOT EXISTS profile(userID int(11) NOT NULL PRIMARY KEY, rank int(11) NOT NULL, win int(11) NOT NULL, loss int(11) NOT NULL, coins int(11) NOT NULL, username varchar(20) NOT NULL, rewardID varchar(20) NOT NULL)");
+            pstmt.executeUpdate();
+            pstmt = conn.prepareStatement("ALTER TABLE profile ADD CONSTRAINT profile_ibfk_1 FOREIGN KEY (username) REFERENCES account (username)");
+            pstmt.executeUpdate();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            closeRsc();
+        }
+    }
+
     //Method for logging in
-    public boolean Login(String username, String password){
+    public boolean Login(String username, String password) {
         try {
             //create connection to database
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
@@ -47,10 +66,9 @@ public class mySQLDB {
             pstmt.setString(2, password);
             res = pstmt.executeQuery();
             //validation of account
-            if(res.next()) {
+            if (res.next()) {
                 return true;
-            }
-            else {
+            } else {
                 return false;
             }
         } catch (Exception e) {
@@ -60,17 +78,18 @@ public class mySQLDB {
         }
 
     }
+
     //Method to view selected user profile
-    public boolean viewProfile(String username){
+    public boolean viewProfile(String username) {
         try {
-            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
             pstmt = conn.prepareStatement("SELECT * FROM profile WHERE username = ?");
             pstmt.setString(1, username);
             res = pstmt.executeQuery();
 
             //Extract data from result set
             //loop through database (cursor)
-            if(res.next()) {
+            if (res.next()) {
                 System.out.println(username + " profile");
                 //Retrieve by column name
                 int ID = res.getInt("userID");
@@ -90,8 +109,7 @@ public class mySQLDB {
                 System.out.println("Skin: " + rewardID);
 
                 return true;
-            }
-            else {
+            } else {
                 return false;
             }
         } catch (Exception e) {
@@ -102,9 +120,9 @@ public class mySQLDB {
     }
 
     //Method to create account and profile
-    public boolean insertData(String username, String password, String email){ //need to add parameters for getting input from user
+    public boolean insertData(String username, String password, String email) { //need to add parameters for getting input from user
         try {
-            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
             //create account
             pstmt = conn.prepareStatement("INSERT INTO account VALUES(?,?,?)");
             pstmt.setString(1, username);
@@ -112,13 +130,13 @@ public class mySQLDB {
             pstmt.setString(3, email);
             int row = pstmt.executeUpdate();
             //validate if registration account succeed return greater than 0
-            if(row > 0){
+            if (row > 0) {
                 //create profile
                 int rank = 0;
                 int win = 0;
                 int loss = 0;
                 int coins = 0;
-                String rewardID ="";
+                String rewardID = "";
                 pstmt = conn.prepareStatement("INSERT INTO profile VALUES(default,?,?,?,?,?,?)");
                 pstmt.setInt(1, rank);
                 pstmt.setInt(2, win);
@@ -128,14 +146,12 @@ public class mySQLDB {
                 pstmt.setString(6, rewardID);
                 row = pstmt.executeUpdate();
                 //validate profile creation
-                if(row > 0){
+                if (row > 0) {
                     return true;
-                }
-                else{
+                } else {
                     return false;
                 }
-            }
-            else{
+            } else {
                 return false;
             }
         } catch (SQLException e) {
@@ -146,27 +162,25 @@ public class mySQLDB {
     }
 
     //Method to delete account and profile
-    public boolean deleteData(String username){
+    public boolean deleteData(String username) {
         try {//!! if account is deleted  profile should be deleted too!
-            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
 
             //deletes profile
             pstmt = conn.prepareStatement("DELETE FROM profile WHERE username = ?");
             pstmt.setString(1, username);
             int row = pstmt.executeUpdate();
-            if(row > 0){
+            if (row > 0) {
                 //deletes account
                 pstmt = conn.prepareStatement("DELETE FROM account WHERE username= ?");
                 pstmt.setString(1, username);
                 row = pstmt.executeUpdate();
-                if(row > 0){
+                if (row > 0) {
                     return true;
-                }
-                else {
+                } else {
                     return false;
                 }
-            }
-            else{
+            } else {
                 return false;
             }
         } catch (SQLException e) {
@@ -177,9 +191,9 @@ public class mySQLDB {
     }
 
     //Method to update profile
-    public boolean updateData(){ //
+    public boolean updateData() { //
         try {
-            conn = DriverManager.getConnection(DB_URL,USER,PASS);
+            conn = DriverManager.getConnection(DB_URL, USER, PASS);
             //!! change to profile update where username = username
             pstmt = conn.prepareStatement("UPDATE account SET username = ?, password = ?, email = ? WHERE username = ?");
             pstmt.setString(1, "changes");
@@ -187,10 +201,9 @@ public class mySQLDB {
             pstmt.setString(3, "kkdso@gmail.com");
             pstmt.setString(4, "kkdso");
             int row = pstmt.executeUpdate();
-            if(row > 0){
+            if (row > 0) {
                 return true;
-            }
-            else{
+            } else {
                 return false;
             }
             //System.out.println("Update Complete");

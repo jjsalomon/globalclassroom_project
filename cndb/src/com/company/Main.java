@@ -6,6 +6,8 @@ public class Main {
 
     public static void main(String[] args) {
         mySQLDB connect = new mySQLDB();
+        connect.createTable(); //creates table account and profile
+
         String username;
         String password;
         String email;
