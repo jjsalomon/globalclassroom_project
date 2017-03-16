@@ -1,7 +1,7 @@
 package com.chess;
 
-import com.chess.engine.board.Board;
-import com.chess.network.Network;
+import com.chess.network.Client;
+import com.chess.network.Server;
 
 /**
  * Created by azkei on 04/03/2017.
@@ -10,12 +10,7 @@ public class ChessMaster {
 
     public static void main(String[] args){
 
-
-	
-		//Trying to push and another one
-		//sadsadasd
-     //   Board board = Board.createStandardBoard();
-
-       // System.out.println(board);
+        Server server = new Server(222);
+        Client client = new Client("localhost",222);
     }
 }

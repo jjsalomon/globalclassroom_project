@@ -24,6 +24,12 @@ public abstract class Network extends Thread {
     //thread run method
     public abstract void run();
 
+    public void getStreams() throws IOException{
+        outputStream = new ObjectOutputStream(socket.getOutputStream());
+        outputStream.flush();
+        inputStream = new ObjectInputStream(socket.getInputStream());
+    }
+
     public void closeConnection(){
         try{
             if(outputStream != null){

@@ -60,7 +60,7 @@ public abstract class Move {
             for(final Piece piece : this.board.currentPlayer().getActivePieces()){
                 //TODO hashcode and equals for pieces
                 if(!this.movedPiece.equals(piece)){
-                    builder.setPiece(piece)
+                    builder.setPiece(piece);
                 }
             }
 
