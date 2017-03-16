@@ -1,4 +1,4 @@
-package com.chess.network;
+package com.network;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -7,34 +7,32 @@ import java.net.Socket;
 /**
  * Created by azkei on 16/03/2017.
  */
-public class Client extends Network {
+public class Client extends Network implements Runnable {
     private String hostName;
     private int serverPort;
+    private Thread thread;
 
     public Client(final String host, final int port){
         super("CLIENT");
         hostName = host;
         serverPort = port;
+        connectToServer();
     }
 
-    @Override
     public void run() {
         try{
-            connectToServer();
             getStreams();
         }catch(IOException e){
             e.printStackTrace();
-        }finally{
-            closeConnection();
         }
     }
 
     private void connectToServer() {
         try{
             socket = new Socket(InetAddress.getByName(hostName), serverPort);
-            System.out.println("Successfully connected to: "+socket.getInetAddress().getHostName());
+            System.out.println("CLIENT: Successfully connected to: "+socket.getInetAddress().getHostName());
         }catch(IOException e){
-            System.out.println("Failed to connect to: "+hostName);
+            System.out.println("CLIENT: Failed to connect to: "+hostName);
         }
     }
 }

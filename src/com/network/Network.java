@@ -1,4 +1,4 @@
-package com.chess.network;
+package com.network;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -11,8 +11,8 @@ import java.net.Socket;
 public abstract class Network extends Thread {
 
     //ObjectStreams are good for sending class objects rather than primitive types
-    protected ObjectOutputStream outputStream;
-    protected ObjectInputStream inputStream;
+    protected ObjectOutputStream dos;
+    protected ObjectInputStream dis;
     //Socket for connections
     protected Socket socket;
     protected Object receivedMessage;
@@ -25,18 +25,18 @@ public abstract class Network extends Thread {
     public abstract void run();
 
     public void getStreams() throws IOException{
-        outputStream = new ObjectOutputStream(socket.getOutputStream());
-        outputStream.flush();
-        inputStream = new ObjectInputStream(socket.getInputStream());
+        dos = new ObjectOutputStream(socket.getOutputStream());
+        dos.flush();
+        dis = new ObjectInputStream(socket.getInputStream());
     }
 
     public void closeConnection(){
         try{
-            if(outputStream != null){
-                outputStream.close();
+            if(dos != null){
+                dos.close();
             }
-            if(inputStream != null){
-                inputStream.close();
+            if(dis != null){
+                dis.close();
             }
             if(socket != null){
                 socket.close();
@@ -48,8 +48,8 @@ public abstract class Network extends Thread {
 
     public void sendData(final Object obj_send){
         try{
-            outputStream.writeObject(obj_send);
-            outputStream.flush();
+            dos.writeObject(obj_send);
+            dos.flush();
         }catch(IOException e){
             e.printStackTrace();
         }
