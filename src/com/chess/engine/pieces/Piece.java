@@ -17,6 +17,9 @@ public abstract class Piece {
     protected final Alliance pieceAlliance;
     protected  final boolean isFirstMove;
 
+    protected final int cachedHashCode;
+
+
 
     Piece( final PieceType pieceType,
             final Alliance pieceAlliance,final int piecePosition){
@@ -25,6 +28,40 @@ public abstract class Piece {
         this.piecePosition = piecePosition;
         //TODO more work here
         this.isFirstMove = false;
+        this.cachedHashCode = computeHashCode();
+
+    }
+
+
+    private int computeHashCode() {
+
+        int result = pieceType.hashCode();
+        result = 31 * result + pieceAlliance.hashCode();
+        result = 31 * result + piecePosition;
+        result = 31 * result + (isFirstMove ? 1 : 0);
+        return result;
+
+    }
+
+    @Override
+    public boolean equals(final  Object other)
+    {
+        if (this == other) {
+            return true;
+        }
+        if (!(other instanceof Piece)) {
+            return false;
+        }
+        final Piece otherPiece = (Piece) other;
+        return piecePosition == otherPiece.piecePosition && pieceType == otherPiece.pieceType &&
+                pieceAlliance == otherPiece.pieceAlliance && isFirstMove == otherPiece.isFirstMove;
+    }
+    @Override
+    public  int hashCode()
+    {
+
+       return this.cachedHashCode;
+
     }
 
     public int getPiecePosition(){
@@ -45,55 +82,127 @@ public abstract class Piece {
 
     public abstract Collection<Move> calculateLegalMoves(final Board board);
 
-    public enum PieceType{
+    public abstract Piece movePiece(Move move);
 
-        PAWN("p") {
+    public enum PieceType {
+
+        PAWN(100, "P") {
+            @Override
+            public boolean isPawn() {
+                return true;
+            }
+
+            @Override
+            public boolean isRook() {
+                return false;
+            }
+
             @Override
             public boolean isKing() {
                 return false;
             }
         },
-        KNIGHT("KN") {
+        KNIGHT(320, "N") {
+            @Override
+            public boolean isPawn() {
+                return false;
+            }
+
+            @Override
+            public boolean isRook() {
+                return false;
+            }
+
             @Override
             public boolean isKing() {
                 return false;
             }
         },
-        BISHOP("B") {
+        BISHOP(330, "B") {
+            @Override
+            public boolean isPawn() {
+                return false;
+            }
+
+            @Override
+            public boolean isRook() {
+                return false;
+            }
+
             @Override
             public boolean isKing() {
                 return false;
             }
         },
-        ROOK("R") {
+        ROOK(500, "R") {
+            @Override
+            public boolean isPawn() {
+                return false;
+            }
+
+            @Override
+            public boolean isRook() {
+                return true;
+            }
+
             @Override
             public boolean isKing() {
                 return false;
             }
         },
-        QUEEN("Q") {
+        QUEEN(900, "Q") {
+            @Override
+            public boolean isPawn() {
+                return false;
+            }
+
+            @Override
+            public boolean isRook() {
+                return false;
+            }
+
             @Override
             public boolean isKing() {
                 return false;
             }
         },
-        KING("K") {
+        KING(10000, "K") {
+            @Override
+            public boolean isPawn() {
+                return false;
+            }
+
+            @Override
+            public boolean isRook() {
+                return false;
+            }
+
             @Override
             public boolean isKing() {
                 return true;
             }
         };
-        private String pieceName;
 
-        PieceType(final String pieceName){
-            this.pieceName = pieceName;
+        private final int value;
+        private final String pieceName;
+
+        public int getPieceValue() {
+            return this.value;
         }
 
         @Override
-        public  String toString(){
+        public String toString() {
             return this.pieceName;
         }
 
+        PieceType(final int val, final String pieceName) {
+            this.value = val;
+            this.pieceName = pieceName;
+        }
+
+        public abstract boolean isPawn();
+        public abstract boolean isRook();
         public abstract boolean isKing();
+
     }
 }
