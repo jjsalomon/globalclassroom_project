@@ -4,6 +4,7 @@ import com.chess.engine.Alliance;
 import com.chess.engine.board.Board;
 import com.chess.engine.board.BoardUtils;
 import com.chess.engine.board.Move;
+import com.chess.engine.board.Move.MajorAttackMove;
 import com.chess.engine.board.Tile;
 import com.google.common.collect.ImmutableList;
 
@@ -52,7 +53,7 @@ public class Rook extends Piece {
                         final Alliance pieceAlliance = pieceAtDestination.getPieceAlliance();
                         //if enemy piece - attack move
                         if(this.pieceAlliance != pieceAlliance){
-                            legalMoves.add(new Move.AttackMove(board,this,candidateDestinationCoordinate,pieceAtDestination));
+                            legalMoves.add(new MajorAttackMove(board,this,candidateDestinationCoordinate,pieceAtDestination));
                         }
                         //break exists to stop the piece from continuing on the move ie stop where a friendly or enemy is
                         break;
@@ -61,6 +62,12 @@ public class Rook extends Piece {
             }
         }
         return ImmutableList.copyOf(legalMoves);
+    }
+
+
+    @Override
+    public Rook movePiece(final Move move) {
+        return new Rook(move.getMovedPiece().getPieceAlliance(),move.getDestinationCoordinate());
     }
 
     @Override
