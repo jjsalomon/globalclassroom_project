@@ -6,6 +6,7 @@ import com.chess.engine.player.BlackPlayer;
 import com.chess.engine.player.Player;
 import com.chess.engine.player.WhitePlayer;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 
 import java.util.*;
 
@@ -74,7 +75,10 @@ public class Board {
         return this.whitePieces;
     }
 
-
+    public Iterable<Move> getAllLegalMoves() {
+        return Iterables.unmodifiableIterable(Iterables.concat(this.whitePlayer.getLegalMoves(),
+                this.blackPlayer.getLegalMoves()));
+    }
     //pass chess pieces and calculate legal moves for white and black alliance
     private Collection<Move> calculateLegalMoves(Collection<Piece> pieces) {
 
@@ -166,6 +170,7 @@ public class Board {
 
         Map<Integer,Piece> boardConfig;
         Alliance nextMoveMaker;
+        Pawn enPassantPawn;
 
         public Builder(){
             this.boardConfig = new HashMap<>();
@@ -182,6 +187,10 @@ public class Board {
         }
         public Board build(){
             return new Board(this);
+        }
+
+        public void setEnPassantPawn(Pawn enPassantPawn) {
+            this.enPassantPawn = enPassantPawn;
         }
     }
 }
