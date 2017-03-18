@@ -1,0 +1,218 @@
+[33mcommit 308d45bb82af37d2cadff5f199da397bf694d018[m
+Author: Outclash <fjlat96@gmail.com>
+Date:   Sat Mar 18 20:45:40 2017 +0100
+
+    cleaning 1.1
+
+[33mcommit d15148429565169097a9e6d0c971c54c13f7c17a[m
+Author: Outclash <fjlat96@gmail.com>
+Date:   Sat Mar 18 20:13:23 2017 +0100
+
+    cleaning
+
+[33mcommit 293576af04960752644d3da88fe4d848ea8dd38d[m
+Merge: aafaf5a 0d2bb7a
+Author: Outclash <fjlat96@gmail.com>
+Date:   Sat Mar 18 20:12:19 2017 +0100
+
+    111
+
+[33mcommit aafaf5ab425a83f8b6ad84504d9dcb0ccaf188ce[m
+Author: Outclash <fjlat96@gmail.com>
+Date:   Sat Mar 18 20:05:53 2017 +0100
+
+    localdb
+
+[33mcommit 0d2bb7a9e68664b4719256e6f902de35c612682d[m
+Author: Jelo Salomon <c14429822@mydit.ie>
+Date:   Sat Mar 18 18:03:03 2017 +0000
+
+    Create README.md
+
+[33mcommit 20fa7bcbcf8ccebd9c527a4cdef6cd4c97dd150d[m
+Author: azuraiii <c14429822@mydit.ie>
+Date:   Sat Mar 18 18:02:15 2017 +0000
+
+    more cleaning
+
+[33mcommit 3023667b2570de25dcdc175d0c78231f0371aa4d[m
+Author: azuraiii <c14429822@mydit.ie>
+Date:   Sat Mar 18 16:03:01 2017 +0000
+
+    more cleaning
+
+[33mcommit b4db7236c864448b8ea652e8a4f29cf0b5f384d5[m
+Merge: 4e47122 07ed939
+Author: azuraiii <c14429822@mydit.ie>
+Date:   Sat Mar 18 15:40:46 2017 +0000
+
+    changes
+
+[33mcommit 4e47122ef8260cb34b30a9b99eab3c529c1c73b2[m
+Merge: e9a1c47 b6d4967
+Author: azuraiii <c14429822@mydit.ie>
+Date:   Sat Mar 18 15:37:59 2017 +0000
+
+    Merge branch 'master' of https://github.com/jjsalomon/chess_game
+
+[33mcommit e9a1c47f7d35340f1c2d342f2a3b46da17243e2d[m
+Author: azuraiii <c14429822@mydit.ie>
+Date:   Sat Mar 18 15:37:31 2017 +0000
+
+    more cleaning on repo
+
+[33mcommit 07ed939598e1933fa8502df355a0bd424fe3dda9[m
+Author: azuraiii <c14429822@mydit.ie>
+Date:   Sat Mar 18 15:35:24 2017 +0000
+
+    changes
+
+[33mcommit b6d4967eeeb928548b05b5136d5e35fdb746b592[m
+Author: azuraiii <c14429822@mydit.ie>
+Date:   Sat Mar 18 15:24:16 2017 +0000
+
+    added gitignore
+
+[33mcommit 488bc12e0fa0846e742c7141cf1c58c28936506f[m
+Author: azuraiii <c14429822@mydit.ie>
+Date:   Sat Mar 18 15:22:30 2017 +0000
+
+    added gitignore
+
+[33mcommit 9a0ff011a858eba3eede1370afbfc98f1f3bc0e1[m
+Author: azuraiii <c14429822@mydit.ie>
+Date:   Sat Mar 18 15:14:30 2017 +0000
+
+    test
+
+[33mcommit f8852412e84a84b9d70eea7316b7d8a5f90bfa24[m
+Author: azuraiii <c14429822@mydit.ie>
+Date:   Sat Mar 18 15:10:43 2017 +0000
+
+    fxing workspace bug
+
+[33mcommit 7f1344037c54ea98b8ec0238f5a0b4f7d9b16217[m
+Author: Outclash <fjlat96@gmail.com>
+Date:   Sat Mar 18 16:02:08 2017 +0100
+
+    with loginGUI
+
+[33mcommit 192f2b617573b051dc8502f21d07279ca1449d4c[m
+Author: Jonatans2014 <john_Almeida181@outlook.com>
+Date:   Sat Mar 18 14:47:20 2017 +0000
+
+    Move class Done
+
+[33mcommit a8dc84f9c27bfda5aa3025d4bba9d34c0b20e99e[m
+Author: azuraiii <c14429822@mydit.ie>
+Date:   Wed Mar 15 19:10:02 2017 +0000
+
+    added more GUI
+
+[33mcommit 4ff061776efcf7e3fb14e9a21f1ace24f3b79810[m
+Author: azuraiii <c14429822@mydit.ie>
+Date:   Mon Mar 13 03:58:56 2017 +0000
+
+    Added GUI component
+
+[33mcommit 4a42f00b4825c39b67d6536ca0ab81c27172e623[m
+Author: Outclash <fjlat96@gmail.com>
+Date:   Sun Mar 12 16:47:24 2017 +0100
+
+    dbwithcr8table
+
+[33mcommit ecdd681739461a697ec8b8d76b5143c4948a8879[m
+Author: Outclash <fjlat96@gmail.com>
+Date:   Sun Mar 12 15:46:50 2017 +0100
+
+    dBver1
+
+[33mcommit 5e28590d3906feca064b0f533f13693d82d89eb0[m
+Author: Outclash <fjlat96@gmail.com>
+Date:   Sun Mar 12 11:47:42 2017 +0100
+
+    database
+
+[33mcommit c0a8a3995a973b140e0dcea51f2fd76d79b9de20[m
+Author: Outclash <fjlat96@gmail.com>
+Date:   Sat Mar 11 17:19:06 2017 +0100
+
+    cndb(connectDB) trial
+
+[33mcommit 8fb2745113bd916730b758e622cb1cee3c799b88[m
+Author: Outclash <fjlat96@gmail.com>
+Date:   Fri Mar 10 09:26:34 2017 +0000
+
+    v2.3
+
+[33mcommit c83a49e6f8b25641f73b01c74251713b67df2197[m
+Author: Outclash <fjlat96@gmail.com>
+Date:   Fri Mar 10 09:19:56 2017 +0000
+
+    v1.1
+
+[33mcommit fde262e5eb442e13a4dfd530e036eb369bb04354[m
+Author: Outclash <fjlat96@gmail.com>
+Date:   Fri Mar 10 09:12:58 2017 +0000
+
+    change1
+
+[33mcommit d009ed4d05f9beb0e5116101addb03b92dd85f6a[m
+Author: azuraiii <c14429822@mydit.ie>
+Date:   Sat Mar 4 18:05:58 2017 +0000
+
+    Added more changes to move
+
+[33mcommit ef288780f478694c6be80a73cee7222117050ef8[m
+Author: azuraiii <c14429822@mydit.ie>
+Date:   Sat Mar 4 17:00:51 2017 +0000
+
+    Introduced Players, need to tie them to Moves
+
+[33mcommit ad1bab02b8628d5a9ca3bf6addbbb68e2f53cc66[m
+Author: azuraiii <c14429822@mydit.ie>
+Date:   Sat Mar 4 14:35:24 2017 +0000
+
+    Board skeleton is up in print format
+
+[33mcommit 5b1ab0d089e0c3f9f008b99fea1dc4f8355753d0[m
+Author: azuraiii <c14429822@mydit.ie>
+Date:   Sat Mar 4 13:50:49 2017 +0000
+
+    Added King and added Builder to Board
+
+[33mcommit 4604de2fbe972f271bb4c152e6de9810156502ac[m
+Author: azuraiii <c14429822@mydit.ie>
+Date:   Fri Mar 3 10:04:08 2017 +0000
+
+    added queen and pawn
+
+[33mcommit 41c93c4d6dc6f13b68adb73b10b7aa49ecb16828[m
+Author: azuraiii <c14429822@mydit.ie>
+Date:   Wed Mar 1 23:28:01 2017 +0000
+
+    added bishop
+
+[33mcommit d25c963e5ab46dfa14dcb3779443a11a0f7b67a9[m
+Author: azuraiii <c14429822@mydit.ie>
+Date:   Tue Feb 28 19:33:24 2017 +0000
+
+    finished knight class
+
+[33mcommit 3bf5edc60acb226d52c3d12424b791ce51f601da[m
+Author: azuraiii <c14429822@mydit.ie>
+Date:   Tue Feb 28 18:53:13 2017 +0000
+
+    Added some pieces code
+
+[33mcommit f51ee274542748d697b3885060b07bc8393ec31f[m
+Author: azuraiii <c14429822@mydit.ie>
+Date:   Sat Feb 25 19:11:05 2017 +0000
+
+    initial commit
+
+[33mcommit a65ad2a89bef410f792354360463770ac1f00259[m
+Author: Jelo Salomon <c14429822@mydit.ie>
+Date:   Mon Feb 13 18:30:01 2017 +0000
+
+    Initial commit
