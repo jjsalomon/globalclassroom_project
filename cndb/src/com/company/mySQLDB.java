@@ -42,14 +42,14 @@ public class mySQLDB {
             //create connection to database
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
             //create preparedStatement
-            pstmt = conn.prepareStatement("CREATE TABLE IF NOT EXISTS account(username VARCHAR(20) NOT NULL PRIMARY KEY, password VARCHAR(20) NOT NULL, email VARCHAR(40) UNIQUE )");
+            pstmt = conn.prepareStatement("CREATE TABLE IF NOT EXISTS account(username VARCHAR(20) NOT NULL PRIMARY KEY, password VARCHAR(20) NOT NULL)");
             pstmt.executeUpdate();
-            pstmt = conn.prepareStatement("CREATE TABLE IF NOT EXISTS profile(userID int(11) NOT NULL PRIMARY KEY, rank int(11) NOT NULL, win int(11) NOT NULL, loss int(11) NOT NULL, coins int(11) NOT NULL, username varchar(20) NOT NULL, rewardID varchar(20) NOT NULL)");
+            pstmt = conn.prepareStatement("CREATE TABLE IF NOT EXISTS profile(userID int(11) NOT NULL PRIMARY KEY AUTO_INCREMENT, rank int(11) NOT NULL, win int(11) NOT NULL, loss int(11) NOT NULL, coins int(11) NOT NULL, username varchar(20) NOT NULL, rewardID varchar(20) NOT NULL, status varchar(10),image BLOB)");
             pstmt.executeUpdate();
             pstmt = conn.prepareStatement("ALTER TABLE profile ADD CONSTRAINT profile_ibfk_1 FOREIGN KEY (username) REFERENCES account (username)");
             pstmt.executeUpdate();
         } catch (Exception e) {
-            e.printStackTrace();
+
         } finally {
             closeRsc();
         }
@@ -98,6 +98,8 @@ public class mySQLDB {
                 int loss = res.getInt("loss");
                 int coins = res.getInt("coins");
                 String rewardID = res.getString("rewardID");
+                String status = res.getString("status");
+                String img = res.getString("image");
 
                 //Display values
                 System.out.println("UserID: " + ID);
@@ -107,6 +109,8 @@ public class mySQLDB {
                 System.out.println("Loss: " + loss);
                 System.out.println("Coins: " + coins);
                 System.out.println("Skin: " + rewardID);
+                System.out.println("Status: " + status);
+                System.out.println("Skin: " + img);
 
                 return true;
             } else {
@@ -120,14 +124,13 @@ public class mySQLDB {
     }
 
     //Method to create account and profile
-    public boolean insertData(String username, String password, String email) { //need to add parameters for getting input from user
+    public boolean insertData(String username, String password) { //need to add parameters for getting input from user
         try {
             conn = DriverManager.getConnection(DB_URL, USER, PASS);
             //create account
-            pstmt = conn.prepareStatement("INSERT INTO account VALUES(?,?,?)");
+            pstmt = conn.prepareStatement("INSERT INTO account VALUES(?,?)");
             pstmt.setString(1, username);
             pstmt.setString(2, password);
-            pstmt.setString(3, email);
             int row = pstmt.executeUpdate();
             //validate if registration account succeed return greater than 0
             if (row > 0) {
@@ -137,13 +140,17 @@ public class mySQLDB {
                 int loss = 0;
                 int coins = 0;
                 String rewardID = "";
-                pstmt = conn.prepareStatement("INSERT INTO profile VALUES(default,?,?,?,?,?,?)");
+                String status = "online";
+                String img = "";
+                pstmt = conn.prepareStatement("INSERT INTO profile VALUES(default,?,?,?,?,?,?,?,?)");
                 pstmt.setInt(1, rank);
                 pstmt.setInt(2, win);
                 pstmt.setInt(3, loss);
                 pstmt.setInt(4, coins);
                 pstmt.setString(5, username);
                 pstmt.setString(6, rewardID);
+                pstmt.setString(7, status);
+                pstmt.setString(8, img);
                 row = pstmt.executeUpdate();
                 //validate profile creation
                 if (row > 0) {

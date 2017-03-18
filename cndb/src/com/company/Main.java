@@ -1,5 +1,6 @@
 package com.company;
 
+import javax.swing.*;
 import java.util.Scanner;
 
 public class Main {
@@ -8,9 +9,14 @@ public class Main {
         mySQLDB connect = new mySQLDB();
         connect.createTable(); //creates table account and profile
 
+        JFrame frame = new JFrame("loginGUI");
+        frame.setContentPane(new loginGUI().login);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.pack();
+        frame.setVisible(true);
+
         String username;
         String password;
-        String email;
         int option;
         boolean loop = true;
         boolean valid;
@@ -43,10 +49,8 @@ public class Main {
                     username = scanner.next();
                     System.out.print("Enter password: ");
                     password = scanner.next();
-                    System.out.print("Enter email: ");
-                    email = scanner.next();
                     //returns valid true of false
-                    valid = connect.insertData(username, password, email);
+                    valid = connect.insertData(username, password);
                     if (valid) {
                         System.out.println("Register success");
                     } else {
