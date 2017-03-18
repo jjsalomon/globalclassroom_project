@@ -55,7 +55,7 @@ public class Queen extends Piece {
                         final Alliance pieceAlliance = pieceAtDestination.getPieceAlliance();
                         //if enemy piece - attack move
                         if(this.pieceAlliance != pieceAlliance){
-                            legalMoves.add(new AttackMove(board,this,candidateDestinationCoordinate,pieceAtDestination));
+                            legalMoves.add(new MajorAttackMove(board,this,candidateDestinationCoordinate,pieceAtDestination));
                         }
                         //break exists to stop the piece from continuing on the move ie stop where a friendly or enemy is
                         break;
