@@ -229,6 +229,7 @@ public abstract class Move {
     public static class MajorAttackMove
             extends AttackMove {
 
+<<<<<<< HEAD
         public MajorAttackMove(final Board board,
                                final Piece pieceMoved,
                                final int destinationCoordinate,
@@ -318,6 +319,11 @@ public abstract class Move {
             }
             for (final Piece piece : this.board.currentPlayer().getOpponent().getActivePieces()) {
                 if(!piece.equals(this.getAttackedPiece())) {
+=======
+            for(final Piece piece : this.board.currentPlayer().getActivePieces()){
+                //TODO hashcode and equals for pieces
+                if(!this.movedPiece.equals(piece)){
+>>>>>>> gui_branch
                     builder.setPiece(piece);
                 }
             }
