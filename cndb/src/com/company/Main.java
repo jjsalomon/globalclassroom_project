@@ -49,6 +49,7 @@ public class Main {
                     username = scanner.next();
                     System.out.print("Enter password: ");
                     password = scanner.next();
+
                     //returns valid true of false
                     valid = connect.insertData(username, password);
                     if (valid) {
