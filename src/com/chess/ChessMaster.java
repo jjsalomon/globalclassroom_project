@@ -22,15 +22,12 @@ public class ChessMaster {
 
         //passed in server host: localhost, server port number: 222
 
-        java.awt.EventQueue.invokeLater(new Runnable()
-        {
-            @Override
-            public void run()
-            {
-                new loginGUI().setVisible(true);
-            }
-        });
 
+        loginGUI login =  new loginGUI();
+        //whenever x button then terminate
+        login.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        login.setSize(500,500);
+        login.setVisible(true);
 
     }
 }
