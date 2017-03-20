@@ -67,7 +67,7 @@ public class Client extends Thread implements Runnable {
         }
     }
 
-    private void sendData(final Object obj_send){
+    public void sendData(final Object obj_send){
         try{
             dos.writeObject(obj_send);
             dos.flush();

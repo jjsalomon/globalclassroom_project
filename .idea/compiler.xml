@@ -4,6 +4,7 @@
     <excludeFromCompile>
       <directory url="file://$PROJECT_DIR$/src/com/chess/engine" includeSubdirectories="true" />
       <directory url="file://$PROJECT_DIR$/src/com/chess/gui" includeSubdirectories="true" />
+      <file url="file://$PROJECT_DIR$/src/com/chess/login.java" />
     </excludeFromCompile>
     <resourceExtensions />
     <wildcardResourcePatterns>

@@ -12,11 +12,6 @@ public class ChessMaster {
 
     public static void main(String[] args){
 
-        JFrame frame = new JFrame("loginGUI");
-        frame.setContentPane(new loginGUI().login);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setVisible(true);
 
 
         //Board board = Board.createStandardBoard();
@@ -26,6 +21,16 @@ public class ChessMaster {
         //Table table = new Table();
 
         //passed in server host: localhost, server port number: 222
+
+        java.awt.EventQueue.invokeLater(new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                new loginGUI().setVisible(true);
+            }
+        });
+
 
     }
 }
