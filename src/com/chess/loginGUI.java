@@ -76,14 +76,12 @@ public class loginGUI extends JFrame{
             //if users clicks on login button
             if(e.getSource()== loginButton){
                     user = textField1.getText();
-                    pw = passwordField1.getSelectedText();
+                    pw = new String(passwordField1.getPassword());
                     try{
                         socket = new Socket(address,port);
                         InputStreamReader streamreader = new InputStreamReader(socket.getInputStream());
                         reader = new BufferedReader(streamreader);
                         writer = new PrintWriter(socket.getOutputStream());
-                        //to send data:
-                        //writer.write(variable);
                         writer.println(user + ":"+ pw +":Login");
                         writer.flush();
                     }catch (Exception ex){
@@ -97,14 +95,15 @@ public class loginGUI extends JFrame{
             //if user clicks on register button
             if(e.getSource() == registerButton){
                 user = textField1.getText();
-                pw = passwordField1.getSelectedText();
+                pw = new String(passwordField1.getPassword());
 
                 try{
                     socket = new Socket(address,port);
                     InputStreamReader streamReader = new InputStreamReader(socket.getInputStream());
                     reader = new BufferedReader(streamReader);
                     writer = new PrintWriter(socket.getOutputStream());
-                    writer.println(user+":"+pw+":Register");
+                    writer.println(user+":"+pw +":Register");
+                    writer.flush();
                 }catch (Exception ex){
                     System.out.println("You cannot register, Try again");
                     ex.printStackTrace();
@@ -129,14 +128,27 @@ public class loginGUI extends JFrame{
         public void run()
         {
             String[] data;
-            String stream, done = "Done", connect = "Connect", disconnect = "Disconnect", chat = "Chat";
-           /* try {
-                while ((stream = reader.readLine()) != null)
-                {
+            String stream,
+                    done = "Done", connect = "Connect",
+                    disconnect = "Disconnect", chat = "Message",
+                    login = "Login";
+            try {
+                while ((stream = reader.readLine()) != null) {
                     data = stream.split(":");
 
+                    if(data[1].equals(chat)){
+                        System.out.println(stream);
+                    }
+
+                    if(data[1].equals(login)){
+                        System.out.println(stream);
+                    }
+
+                }
+                    //data = stream.split(":");
+
                     //if data is a chat message
-                    if (data[2].equals(chat))
+                   /* if (data[2].equals(chat))
                     {
                         System.out.println(data[0] + ": " + data[1] + "\n");
 
@@ -159,8 +171,8 @@ public class loginGUI extends JFrame{
                         writeUsers();
                         users.clear();
                     }
-                }
-            }catch(Exception ex) { }*/
+                }*/
+            }catch(Exception ex) { }
         }
     }
 
