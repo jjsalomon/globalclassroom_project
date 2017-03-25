@@ -141,7 +141,19 @@ public class loginGUI extends JFrame{
                     }
 
                     if(data[1].equals(login)){
-                        System.out.println(stream);
+                        //System.out.println(stream);
+                        //code to change login gui(or open new window) to profile gui
+                        //and send this strings to that profile gui
+                        String username = data[2];
+                        String rank = data[3];
+                        String win = data[4];
+                        String loss = data[5];
+                        String coins = data[6];
+                        System.out.println("Username: " + username);
+                        System.out.println("Rank: " + rank);
+                        System.out.println("Win: " + win);
+                        System.out.println("Loss: " + loss);
+                        System.out.println("Coins: " + coins);
                     }
 
                 }
