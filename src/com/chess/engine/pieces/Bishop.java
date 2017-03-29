@@ -1,60 +1,56 @@
 package com.chess.engine.pieces;
 
-import com.chess.engine.Alliance;
-import com.chess.engine.board.Board;
-import com.chess.engine.board.BoardUtils;
-import com.chess.engine.board.Move;
-import com.chess.engine.board.Move.AttackMove;
-import com.chess.engine.board.Move.MajorMove;
-import com.chess.engine.board.Tile;
-import com.google.common.collect.ImmutableList;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-/**
- * Created by azkei on 01/03/2017.
- */
-public class Bishop extends Piece {
+import com.chess.engine.Alliance;
+import com.chess.engine.board.Board;
+import com.chess.engine.board.BoardUtils;
+import com.chess.engine.board.Move;
+import com.chess.engine.board.Move.MajorAttackMove;
+import com.chess.engine.board.Move.MajorMove;
+import com.chess.engine.board.Tile;
+import com.google.common.collect.ImmutableList;
 
-    private final static int[] CANDIDATE_MOVE_VECTOR_COORDINATES = { -9, -7, 7, 9 };
-    public Bishop(final Alliance pieceAlliance,final int piecePosition) {
-        super(PieceType.BISHOP,pieceAlliance, piecePosition);
+public final class Bishop extends Piece {
+
+    private final static int[] CANDIDATE_MOVE_COORDINATES = {-9, -7, 7, 9};
+
+    public Bishop(final Alliance alliance,
+                  final int piecePosition) {
+        super(PieceType.BISHOP, alliance, piecePosition, true);
+    }
+
+    public Bishop(final Alliance alliance,
+                  final int piecePosition,
+                  final boolean isFirstMove) {
+        super(PieceType.BISHOP, alliance, piecePosition, isFirstMove);
     }
 
     @Override
     public Collection<Move> calculateLegalMoves(final Board board) {
-
         final List<Move> legalMoves = new ArrayList<>();
-
-        for(final int candidateCoordinateOffset : CANDIDATE_MOVE_VECTOR_COORDINATES){
-
+        for (final int currentCandidateOffset : CANDIDATE_MOVE_COORDINATES) {
             int candidateDestinationCoordinate = this.piecePosition;
-
-            while(BoardUtils.isValidTileCoordinate(candidateDestinationCoordinate)){
-
-
-                //if edge cases are triggered
-                if(isFirstColumnExclusion(candidateDestinationCoordinate, candidateCoordinateOffset) ||
-                        isEightColumnExclusion(candidateDestinationCoordinate,candidateCoordinateOffset)){
+            while (BoardUtils.isValidTileCoordinate(candidateDestinationCoordinate)) {
+                if (isFirstColumnExclusion(currentCandidateOffset, candidateDestinationCoordinate) ||
+                        isEighthColumnExclusion(currentCandidateOffset, candidateDestinationCoordinate)) {
                     break;
                 }
-
-                candidateDestinationCoordinate += candidateCoordinateOffset;
-                //is position valid ?
-                if(BoardUtils.isValidTileCoordinate(candidateDestinationCoordinate)){
+                candidateDestinationCoordinate += currentCandidateOffset;
+                if (BoardUtils.isValidTileCoordinate(candidateDestinationCoordinate)) {
                     final Tile candidateDestinationTile = board.getTile(candidateDestinationCoordinate);
-                    if(!candidateDestinationTile.isTileOccupied()){
-                        legalMoves.add(new MajorMove(board,this,candidateDestinationCoordinate));
-                    }else{
+                    if (!candidateDestinationTile.isTileOccupied()) {
+                        legalMoves.add(new MajorMove(board, this, candidateDestinationCoordinate));
+                    }
+                    else {
                         final Piece pieceAtDestination = candidateDestinationTile.getPiece();
-                        final Alliance pieceAlliance = pieceAtDestination.getPieceAlliance();
-                        //if enemy piece - attack move
-                        if(this.pieceAlliance != pieceAlliance){
-                            legalMoves.add(new AttackMove(board,this,candidateDestinationCoordinate,pieceAtDestination));
+                        final Alliance pieceAlliance = pieceAtDestination.getPieceAllegiance();
+                        if (this.pieceAlliance != pieceAlliance) {
+                            legalMoves.add(new MajorAttackMove(board, this, candidateDestinationCoordinate,
+                                    pieceAtDestination));
                         }
-                        //break exists to stop the piece from continuing on the move ie stop where a friendly or enemy is
                         break;
                     }
                 }
@@ -63,30 +59,31 @@ public class Bishop extends Piece {
         return ImmutableList.copyOf(legalMoves);
     }
 
-
-    /*
     @Override
-    public Piece movePiece(Move move) {
-        return null;
+    public int locationBonus() {
+        return this.pieceAlliance.bishopBonus(this.piecePosition);
     }
-*/
 
     @Override
     public Bishop movePiece(final Move move) {
-        return new Bishop(move.getMovedPiece().getPieceAlliance(),move.getDestinationCoordinate());
+        return PieceUtils.INSTANCE.getMovedBishop(move);
     }
 
     @Override
-    public  String toString(){
-        return PieceType.BISHOP.toString();
+    public String toString() {
+        return this.pieceType.toString();
     }
 
-    //edge cases - these are the positions where the bishop rules fall apart.
-    private static boolean isFirstColumnExclusion(final int currentPosition, final int candidateOffset){
-        return BoardUtils.FIRST_COLUMN[currentPosition] && (candidateOffset == -9 || candidateOffset == 7);
+    private static boolean isFirstColumnExclusion(final int currentCandidate,
+                                                  final int candidateDestinationCoordinate) {
+        return (BoardUtils.INSTANCE.FIRST_COLUMN.get(candidateDestinationCoordinate) &&
+                ((currentCandidate == -9) || (currentCandidate == 7)));
     }
 
-    private static boolean isEightColumnExclusion(final int currentPosition, final int candidateOffset){
-        return BoardUtils.EIGHT_COLUMN[currentPosition] && (candidateOffset == -7 || candidateOffset == 9);
+    private static boolean isEighthColumnExclusion(final int currentCandidate,
+                                                   final int candidateDestinationCoordinate) {
+        return BoardUtils.INSTANCE.EIGHTH_COLUMN.get(candidateDestinationCoordinate) &&
+                ((currentCandidate == -7) || (currentCandidate == 9));
     }
+
 }
