@@ -5,9 +5,6 @@ import com.chess.engine.pieces.Piece;
 import com.chess.engine.board.Board.Builder;
 import com.chess.engine.pieces.Rook;
 
-/**
- * Created by azkei on 28/02/2017.
- */
 public abstract class Move {
 
     protected final Board board;
@@ -199,7 +196,7 @@ public abstract class Move {
         @Override
         public String toString() {
             return BoardUtils.INSTANCE.getPositionAtCoordinate(this.movedPiece.getPiecePosition()) + "-" +
-                    BoardUtils.INSTANCE.getPositionAtCoordinate(this.destinationCoordinate) + "=" + PieceType.QUEEN;
+                    BoardUtils.INSTANCE.getPositionAtCoordinate(this.destinationCoordinate) + "=" + Piece.PieceType.QUEEN;
         }
 
     }
@@ -228,6 +225,7 @@ public abstract class Move {
 
     public static class MajorAttackMove
             extends AttackMove {
+
         public MajorAttackMove(final Board board,
                                final Piece pieceMoved,
                                final int destinationCoordinate,
@@ -317,16 +315,12 @@ public abstract class Move {
             }
             for (final Piece piece : this.board.currentPlayer().getOpponent().getActivePieces()) {
                 if(!piece.equals(this.getAttackedPiece())) {
-            for(final Piece piece : this.board.currentPlayer().getActivePieces()){
-                //TODO hashcode and equals for pieces
-                if(!this.movedPiece.equals(piece)){
-
                     builder.setPiece(piece);
                 }
             }
             builder.setPiece(this.movedPiece.movePiece(this));
             builder.setMoveMaker(this.board.currentPlayer().getOpponent().getAlliance());
-           // builder.setMoveTransition(this);
+            builder.setMoveTransition(this);
             return builder.build();
         }
 
