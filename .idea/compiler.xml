@@ -5,6 +5,8 @@
       <directory url="file://$PROJECT_DIR$/src/com/chess/engine" includeSubdirectories="true" />
       <directory url="file://$PROJECT_DIR$/src/com/chess/gui" includeSubdirectories="true" />
       <file url="file://$PROJECT_DIR$/src/com/chess/login.java" />
+      <file url="file://$PROJECT_DIR$/src/com/chess/loginGUI.form" />
+      <file url="file://$PROJECT_DIR$/src/com/chess/loginGUI.java" />
     </excludeFromCompile>
     <resourceExtensions />
     <wildcardResourcePatterns>

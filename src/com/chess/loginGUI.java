@@ -63,16 +63,12 @@ public class loginGUI extends JFrame{
         loginButton.addActionListener(handler);
         textField1.addActionListener(handler);
         passwordField1.addActionListener(handler);
-
-
     }
 
 
     private class Handlers implements ActionListener{
-
         @Override
         public void actionPerformed(ActionEvent e) {
-
             //if users clicks on login button
             if(e.getSource()== loginButton){
                     user = textField1.getText();
@@ -84,11 +80,10 @@ public class loginGUI extends JFrame{
                         writer = new PrintWriter(socket.getOutputStream());
                         writer.println(user + ":"+ pw +":Login");
                         writer.flush();
-                    }catch (Exception ex){
+                    }catch (Exception ex) {
                         System.out.println("You cannot login, Try again");
                         ex.printStackTrace();
                     }
-
                     ListenThread();
             }
 
@@ -175,9 +170,5 @@ public class loginGUI extends JFrame{
             }catch(Exception ex) { }
         }
     }
-
-
-
-
 
 }
