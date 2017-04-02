@@ -18,18 +18,25 @@ public class Account extends JFrame {
     private JList list;
 
     private JButton btnRefresh;
-    BufferedReader reader;
-    PrintWriter writer;
+    private JLabel username;
+    private JLabel rank;
+    private JLabel coins;
 
 
     private ArrayList onlineStreams = new ArrayList();
 
-    public Account(){
-
+    public Account(String stream){
         super("Chess Master - Jelo");
+        //dummy variables
         onlineStreams.add("jelo");
         onlineStreams.add("john");
         onlineStreams.add("francis");
+        username = new JLabel("jelonator");
+        add(username);
+        rank = new JLabel("#1");
+        add(rank);
+        coins = new JLabel("20000");
+        add(coins);
         setLayout(new FlowLayout());
 
         btnRefresh = new JButton("Refresh");
