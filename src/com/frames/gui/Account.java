@@ -27,15 +27,17 @@ public class Account extends JFrame {
 
     public Account(String stream){
         super("Chess Master - Jelo");
+        //splits stream into data[] username starts at data[2]
+        String[] data = stream.split(":");
         //dummy variables
         onlineStreams.add("jelo");
         onlineStreams.add("john");
         onlineStreams.add("francis");
-        username = new JLabel("jelonator");
+        username = new JLabel(data[2]);
         add(username);
-        rank = new JLabel("#1");
+        rank = new JLabel(data[3]);
         add(rank);
-        coins = new JLabel("20000");
+        coins = new JLabel(data[5]);
         add(coins);
         setLayout(new FlowLayout());
 

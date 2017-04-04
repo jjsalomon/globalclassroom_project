@@ -1,7 +1,7 @@
 package com;
 
 
-import com.frames.gui.Account;
+import com.frames.gui.*;
 
 import javax.swing.*;
 
@@ -21,12 +21,12 @@ public class ChessMaster {
         Table.get().show();*/
 
         //passed in server host: localhost, server port number: 222
-       /* LoginRegister login =  new LoginRegister();
-        //whenever x button then terminate
-        login.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        login.setSize(500,500);
-        login.setVisible(true);*/
-
+//        LoginRegister login =  new LoginRegister();
+//        //whenever x button then terminate
+//        login.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        login.setSize(500,500);
+//        login.setVisible(true);
+//
         Account accounts =  new Account("test");
         //whenever x button then terminate
         accounts.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
