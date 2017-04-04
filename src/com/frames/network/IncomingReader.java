@@ -3,14 +3,21 @@ package com.frames.network;
 import com.frames.gui.Account;
 
 import javax.swing.*;
+import java.io.BufferedReader;
 
 /**
  * Created by azkei on 02/04/2017.
  * This class class is a Thread handler for information
  * coming into the client.
  */
-public class IncomingReader extends NetworkHandler implements Runnable
+public class IncomingReader implements Runnable
 {
+    BufferedReader breader;
+
+    public IncomingReader(BufferedReader reader) {
+        this.breader = reader;
+    }
+
     @Override
     public void run()
     {
@@ -22,7 +29,7 @@ public class IncomingReader extends NetworkHandler implements Runnable
                 disconnect = "Disconnect", chat = "Message",
                 login = "Login";
         try {
-            while ((stream = reader.readLine()) != null) {
+            while ((stream = breader.readLine()) != null) {
                 data = stream.split(":");
 
                 if(data[1].equals(chat)){

@@ -29,8 +29,12 @@ public class LoginRegister extends JFrame{
     private JLabel username;
     private JLabel password;
 
+    ConnectListenHandler connectListenHandler;
+
     //Initialize components
     public LoginRegister(){
+        connectListenHandler = new ConnectListenHandler();
+
         username = new JLabel("Username");
         add(username);
         textField1 = new JTextField("Enter Your Username Here");
@@ -52,13 +56,14 @@ public class LoginRegister extends JFrame{
         loginButton.addActionListener(handler);
         textField1.addActionListener(handler);
         passwordField1.addActionListener(handler);
+
+        //Make initia
     }
 
 
     //Handler for sending data to the server
     private class Handlers implements ActionListener{
-        //Make initial connection to the Server
-        ConnectListenHandler connectListenHandler = new ConnectListenHandler();
+
 
         @Override
         public void actionPerformed(ActionEvent e) {

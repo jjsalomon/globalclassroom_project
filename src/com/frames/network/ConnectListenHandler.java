@@ -9,28 +9,34 @@ import java.net.Socket;
 /**
  * Created by azkei on 02/04/2017.
  */
-public class ConnectListenHandler extends NetworkHandler {
+public class ConnectListenHandler {
 
+
+
+    //Addressing information
+    String address = "localhost";
+    int port = 2222;
+
+    //Socket information, writers, readers
+    Socket socket;
+    BufferedReader reader;
     public PrintWriter writer;
 
     public ConnectListenHandler(){
-        connectToServer();
-    }
-
-    private void connectToServer() {
         try {
             socket = new Socket(address,port);
+            writer = new PrintWriter(socket.getOutputStream());
             InputStreamReader streamReader = new InputStreamReader(socket.getInputStream());
             reader = new BufferedReader(streamReader);
-            writer = new PrintWriter(socket.getOutputStream());
-            System.out.println("Connected to Server");
+            System.out.println("Connected to the Server");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+
     public void ListenThread(){
-        Thread IncomingReader = new Thread(new IncomingReader());
+        Thread IncomingReader = new Thread(new IncomingReader(reader));
         IncomingReader.start();
     }
 }
