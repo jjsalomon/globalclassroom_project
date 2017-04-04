@@ -20,6 +20,8 @@ public class Account extends JFrame {
     private JButton btnRefresh;
     private JLabel username;
     private JLabel rank;
+    private JLabel win;
+    private JLabel loss;
     private JLabel coins;
 
 
@@ -37,7 +39,11 @@ public class Account extends JFrame {
         add(username);
         rank = new JLabel(data[3]);
         add(rank);
-        coins = new JLabel(data[5]);
+        win = new JLabel(data[4]);
+        add(win);
+        loss = new JLabel(data[5]);
+        add(loss);
+        coins = new JLabel(data[6]);
         add(coins);
         setLayout(new FlowLayout());
 
