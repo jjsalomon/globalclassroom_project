@@ -1,7 +1,6 @@
 package com.frames.network;
 
 import com.frames.gui.*;
-
 import javax.swing.*;
 import java.io.BufferedReader;
 

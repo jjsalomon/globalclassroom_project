@@ -1,9 +1,8 @@
 package com;
 
 
-import com.frames.gui.Account;
 import com.frames.gui.LoginRegister;
-import com.frames.network.IncomingReader;
+
 
 import javax.swing.*;
 
@@ -20,6 +19,7 @@ public class ChessMaster {
         System.out.println(board);
 
         Table.get().show();*/
+
 
         //passed in server host: localhost, server port number: 222
         LoginRegister login =  new LoginRegister();
