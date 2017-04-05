@@ -81,6 +81,7 @@ public class LoginRegister extends JFrame{
                     }
                     //Read response information from server
                     connectListenHandler.ListenThread();
+
             }
 
             //if user clicks on register button
@@ -90,12 +91,14 @@ public class LoginRegister extends JFrame{
                 try{
                     connectListenHandler.writer.println(user+":"+pw +":Register");
                     connectListenHandler.writer.flush();
+
                 }catch (Exception ex){
                     System.out.println("You cannot register, Try again");
                     ex.printStackTrace();
                 }
                 //Read response information from server
                 connectListenHandler.ListenThread();
+
             }
         }
     }

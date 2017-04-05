@@ -1,6 +1,6 @@
 package com.frames.network;
 
-import com.frames.gui.Account;
+import com.frames.gui.*;
 
 import javax.swing.*;
 import java.io.BufferedReader;
@@ -44,6 +44,7 @@ public class IncomingReader implements Runnable
                     accounts.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                     accounts.setSize(500,500);
                     accounts.setVisible(true);
+
                 }
 //combine login and account.. since when u login u go to ur account directly
 //                if(data[0].equals(account)){

@@ -3,6 +3,7 @@ package com;
 
 import com.frames.gui.Account;
 import com.frames.gui.LoginRegister;
+import com.frames.network.IncomingReader;
 
 import javax.swing.*;
 
@@ -13,7 +14,6 @@ import javax.swing.*;
 public class ChessMaster {
 
     public static void main(String[] args){
-
 
        /* Board board = Board.createStandardBoard();
 
@@ -26,6 +26,7 @@ public class ChessMaster {
         //whenever x button then terminate
         login.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         login.setSize(500,500);
+
         login.setVisible(true);
 
        /* Account accounts =  new Account("test");

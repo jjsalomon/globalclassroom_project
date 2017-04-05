@@ -23,6 +23,7 @@ public class Account extends JFrame {
     private JLabel win;
     private JLabel loss;
     private JLabel coins;
+    private JLabel skins;
 
 
     private ArrayList onlineStreams = new ArrayList();
@@ -45,6 +46,8 @@ public class Account extends JFrame {
         add(loss);
         coins = new JLabel(data[6]);
         add(coins);
+        skins = new JLabel(data[6]);
+        add(skins);
         setLayout(new FlowLayout());
 
         btnRefresh = new JButton("Refresh");
