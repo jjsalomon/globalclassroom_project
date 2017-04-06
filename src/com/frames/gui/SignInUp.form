@@ -17,6 +17,8 @@
           </grid>
         </constraints>
         <properties>
+          <horizontalAlignment value="0"/>
+          <horizontalTextPosition value="11"/>
           <text value="Login"/>
         </properties>
       </component>

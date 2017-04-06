@@ -38,8 +38,7 @@ public class LoginRegister extends JFrame{
         username = new JLabel("Username");
         add(username);
         textField1 = new JTextField("Enter Your Username Here");
-        add(textField1);
-        password = new JLabel("Password");
+        add(textField1);password = new JLabel("Password");
         add(password);
         passwordField1 = new JPasswordField(10);
         add(passwordField1);
@@ -49,7 +48,7 @@ public class LoginRegister extends JFrame{
         add(loginButton);
 
         //FLOW LAYOUT for GUI Components
-        setLayout(new FlowLayout(FlowLayout.LEFT));
+        setLayout(new FlowLayout());
         //Handler for sending information
         Handlers handler = new Handlers();
         registerButton.addActionListener(handler);

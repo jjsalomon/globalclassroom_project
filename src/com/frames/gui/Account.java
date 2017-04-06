@@ -46,7 +46,7 @@ public class Account extends JFrame {
         add(loss);
         coins = new JLabel(data[6]);
         add(coins);
-        skins = new JLabel(data[6]);
+        skins = new JLabel("skin");
         add(skins);
         setLayout(new FlowLayout());
 
