@@ -41,7 +41,7 @@ public class IncomingReader implements Runnable
                     Account accounts =  new Account(stream);
                     //whenever x button then terminate
                     accounts.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                    accounts.setSize(500,500);
+                    accounts.setSize(700,500);
                     accounts.setVisible(true);
 
                 }

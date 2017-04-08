@@ -12,8 +12,9 @@ import java.util.ArrayList;
  */
 public class Account extends JFrame {
 
-    public JPanel accprof;
+    public JPanel container;
     public JList online;
+    public JScrollPane jspane;
     private JLabel username;
     private JLabel loss;
     private JLabel coins;
@@ -35,115 +36,107 @@ public class Account extends JFrame {
         String[] data = stream.split(":");
 
         //dummy variables for arraylist online players
-        onlineStreams.add("jelo");
-        onlineStreams.add("john");
-        onlineStreams.add("francis");
+        onlineStreams.add("Jelo");
+        onlineStreams.add("John");
+        onlineStreams.add("Francis");
         onlineStreams.add("Pamela");
         onlineStreams.add("Ben");
         onlineStreams.add("Mark");
+        onlineStreams.add("Luke");
+        onlineStreams.add("Mati");
+        onlineStreams.add("Carl");
+        onlineStreams.add("Hendry");
+        onlineStreams.add("Sonna");
+        onlineStreams.add("Queena");
 
-        accprof = new JPanel();
-        accprof.setLayout(new GridBagLayout());
+        //Adding and setting up components
+        container = new JPanel();
+        container.setLayout(null);
 
-        //Reference:http://www.newthinktank.com/2012/03/java-video-tutorial-29/
-        //Explains what each variable does in the gridbaglayout
-        // You create a GridBagContraints object that defines
-        // DEFAULTS for your components
-        GridBagConstraints gridConstraints = new GridBagConstraints();
-        // Define the x position of the component
-        gridConstraints.gridx = 1;
-        // Define the y position of the component
-        gridConstraints.gridy = 1;
-        // Number of columns the component takes up
-        gridConstraints.gridwidth = 1;
-        // Number of rows the component takes up
-        gridConstraints.gridheight = 1;
-        // Gives the layout manager a hint on how to adjust
-        // component width (0 equals fixed)
-        gridConstraints.weightx = 0;
-        // Gives the layout manager a hint on how to adjust
-        // component height (0 equals fixed)
-        gridConstraints.weighty = 0;
-        // Defines padding top, left, bottom, right
-        gridConstraints.insets = new Insets(3, 3, 3, 3);
-        // Defines where to place components if they don't
-        // fill the space: CENTER, NORTH, SOUTH, EAST, WEST
-        // NORTHEAST, etc.
-        gridConstraints.anchor = GridBagConstraints.NORTH;
-        // How should the component be stretched to fill the
-        // space: NONE, HORIZONTAL, VERTICAL, BOTH
-        gridConstraints.fill = GridBagConstraints.BOTH;
-        //End Reference:
+        //cant access image??? or not showing...
+        //tried getClass().getResource()
+/*        background= new JLabel(new ImageIcon("com/frames/gui/images/loginbackground.jpg"));
+        background.setBounds(0,0,500,500);
+        container.add(background);*/
 
-        //Adding and setting up components to panel accprof gridbaglayout
         username = new JLabel(data[2]);
-        gridConstraints.gridwidth = 2;
-        accprof.add(username,gridConstraints);
+//        username = new JLabel("Jsexrqiexe");
+        username.setBounds(20,30,300,35);
+        username.setFont(new Font("Lucida Handwriting", Font.BOLD, 30));
+        container.add(username);
 
         OnlinePlayers = new JLabel("Online Players");
-        gridConstraints.gridx = 3;
-        gridConstraints.gridwidth = 1;
-        accprof.add(OnlinePlayers,gridConstraints);
+        OnlinePlayers.setBounds(270,70,250,20);
+        OnlinePlayers.setFont(new Font("Lucida Handwriting", Font.PLAIN, 20));
+        container.add(OnlinePlayers);
 
         Refresh = new JButton("Refresh");
-        gridConstraints.gridx = 4;
-        accprof.add(Refresh,gridConstraints);
+        Refresh.setBounds(520,70,150,20);
+        Refresh.setHorizontalAlignment(SwingConstants.CENTER);
+        Refresh.setFont(new Font("Lucida Handwriting", Font.PLAIN, 20));
+        container.add(Refresh);
 
         rank = new JLabel("Rank#");
-        gridConstraints.gridy = 2;
-        gridConstraints.gridx = 1;
-        accprof.add(rank,gridConstraints);
+        rank.setBounds(35,120,100,20);
+        rank.setFont(new Font("Lucida Handwriting", Font.PLAIN, 18));
+        container.add(rank);
 
         dbrank = new JLabel(data[3]); //user rank data from database
-        gridConstraints.gridx = 2;
-        accprof.add(dbrank,gridConstraints);
+//        dbrank = new JLabel("12"); //user rank data from database
+        dbrank.setBounds(120,120,100,20);
+        dbrank.setFont(new Font("Lucida Handwriting", Font.PLAIN, 18));
+        container.add(dbrank);
 
         win = new JLabel("Win");
-        gridConstraints.gridy = 3;
-        gridConstraints.gridx = 1;
-        accprof.add(win,gridConstraints);
+        win.setBounds(35,170,100,20);
+        win.setFont(new Font("Lucida Handwriting", Font.PLAIN, 18));
+        container.add(win);
 
+//        dbwin = new JLabel("15"); //user win data from database
         dbwin = new JLabel(data[4]); //user win data from database
-        gridConstraints.gridx = 2;
-        accprof.add(dbwin,gridConstraints);
+        dbwin.setBounds(120,170,100,20);
+        dbwin.setFont(new Font("Lucida Handwriting", Font.PLAIN, 18));
+        container.add(dbwin);
 
         loss = new JLabel("Loss");
-        gridConstraints.gridy = 4;
-        gridConstraints.gridx = 1;
-        accprof.add(loss,gridConstraints);
+        loss.setBounds(35,220,100,20);
+        loss.setFont(new Font("Lucida Handwriting", Font.PLAIN, 18));
+        container.add(loss);
 
+//        dbloss = new JLabel("55"); //user loss data from database
         dbloss = new JLabel(data[5]); //user loss data from database
-        gridConstraints.gridx = 2;
-        accprof.add(dbloss,gridConstraints);
+        dbloss.setBounds(120,220,100,20);
+        dbloss.setFont(new Font("Lucida Handwriting", Font.PLAIN, 18));
+        container.add(dbloss);
 
         coins = new JLabel("Coins");
-        gridConstraints.gridy = 5;
-        gridConstraints.gridx = 1;
-        accprof.add(coins,gridConstraints);
+        coins.setBounds(35,270,100,20);
+        coins.setFont(new Font("Lucida Handwriting", Font.PLAIN, 18));
+        container.add(coins);
 
+//        dbcoin = new JLabel("13224"); //user coin data from database
         dbcoin = new JLabel(data[6]); //user coin data from database
-        gridConstraints.gridx = 2;
-        accprof.add(dbcoin,gridConstraints);
+        dbcoin.setBounds(120,270,100,20);
+        dbcoin.setFont(new Font("Lucida Handwriting", Font.PLAIN, 18));
+        container.add(dbcoin);
 
 /*        skin = new JLabel("Skins"); //server can only send to data[6]? give null pointer.. + this feature don't know how it works
         gridConstraints.gridy = 6;
         gridConstraints.gridx = 1;
-        accprof.add(skins,gridConstraints);*/
+        container.add(skins);*/
 
         //change this to onlineStreams
         online = new JList(onlineStreams.toArray());
-        //how many options can they see
-        online.setVisibleRowCount(5);
+//        //how many options can they see
+//        online.setVisibleRowCount(5);
         //can only select one thing on the list at the time
         online.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        gridConstraints.gridy = 2;
-        gridConstraints.gridx = 3;
-        gridConstraints.gridwidth = 2;
-        gridConstraints.gridheight = 4;
-        accprof.add(new JScrollPane(online),gridConstraints);
+        jspane = new JScrollPane(online);
+        jspane.setBounds(270,120,400,170);
+        container.add(jspane);
 
-        //add panel accprof to Jframe
-        add(accprof);
+        //add panel container to Jframe
+        add(container);
 
         Account.Handlers handler = new Account.Handlers();
         Refresh.addActionListener(handler);
@@ -172,7 +165,7 @@ public class Account extends JFrame {
         online.setVisibleRowCount(5);
         //can only select one thing on the list at the time
         online.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        accprof.add(new JScrollPane(online));
-        add(accprof);
+        container.add(new JScrollPane(online));
+        add(container);
     }
 }

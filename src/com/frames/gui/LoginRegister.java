@@ -1,7 +1,6 @@
 package com.frames.gui;
 
 import com.frames.network.ConnectListenHandler;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -15,11 +14,12 @@ import java.awt.event.ActionListener;
  */
 
 
-public class LoginRegister extends JFrame{
+public class LoginRegister extends JFrame {
 
     String user, pw;
 
     //GUI components
+    public JPanel container;
     public JPanel login;
     private JButton registerButton;
     private JButton loginButton;
@@ -28,76 +28,68 @@ public class LoginRegister extends JFrame{
     private JLabel title;
     private JLabel username;
     private JLabel password;
+    private JLabel background;
 
     ConnectListenHandler connectListenHandler;
 
     //Initialize components
     public LoginRegister() {
         connectListenHandler = new ConnectListenHandler();
+
+        //Adding and setting up components
+        //Container panel = main panel
+        container = new JPanel();
+        container.setLayout(null);
+
+        //login panel contains login/register form inside container panel
         login = new JPanel();
-        login.setLayout(new GridBagLayout());
+        login.setLayout(null);
+        login.setBounds(5,100,120,180);
+        login.setBackground(new Color(0,0,0,64));
 
-        //Reference:http://www.newthinktank.com/2012/03/java-video-tutorial-29/
-        //Explains what each variable does in the gridbaglayout
-        // You create a GridBagContraints object that defines
-        // DEFAULTS for your components
-        GridBagConstraints gridConstraints = new GridBagConstraints();
-        // Define the x position of the component
-        gridConstraints.gridx = 1;
-        // Define the y position of the component
-        gridConstraints.gridy = 1;
-        // Number of columns the component takes up
-        gridConstraints.gridwidth = 1;
-        // Number of rows the component takes up
-        gridConstraints.gridheight = 1;
-        // Gives the layout manager a hint on how to adjust
-        // component width (0 equals fixed)
-        gridConstraints.weightx = 0;
-        // Gives the layout manager a hint on how to adjust
-        // component height (0 equals fixed)
-        gridConstraints.weighty = 0;
-        // Defines padding top, left, bottom, right
-        gridConstraints.insets = new Insets(3, 3, 3, 3);
-        // Defines where to place components if they don't
-        // fill the space: CENTER, NORTH, SOUTH, EAST, WEST
-        // NORTHEAST, etc.
-        gridConstraints.anchor = GridBagConstraints.NORTH;
-        // How should the component be stretched to fill the
-        // space: NONE, HORIZONTAL, VERTICAL, BOTH
-        gridConstraints.fill = GridBagConstraints.BOTH;
-        //End Reference:
+        //cant access image??? or not showing...
+        //tried getClass().getResource()
+/*        background= new JLabel(new ImageIcon("com/frames/gui/images/loginbackground.png"));
+        background.setBounds(0,0,500,500);
+        container.add(background);*/
 
-        //Adding and setting up components to panel login gridbaglayout
         title = new JLabel("Chess Master");
-        title.setHorizontalAlignment(SwingConstants.CENTER);
-        login.add(title,gridConstraints);
+        title.setBounds(10,10,300,35);
+        title.setFont(new Font("Lucida Handwriting", Font.BOLD, 30));
+        container.add(title);
 
         username = new JLabel("Username");
-        gridConstraints.gridy = 2;
-        login.add(username,gridConstraints);
+        username.setBounds(5,5,100,20);
+        username.setFont(new Font("Lucida Handwriting", Font.PLAIN, 14));
+        login.add(username);
 
         textField1 = new JTextField();
-        gridConstraints.gridy = 3;
-        login.add(textField1,gridConstraints);
+        textField1.setBounds(5,30,100,20);
+        login.add(textField1);
 
         password = new JLabel("Password");
-        gridConstraints.gridy = 4;
-        login.add(password,gridConstraints);
+        password.setBounds(5,55,100,20);
+        password.setFont(new Font("Lucida Handwriting", Font.PLAIN, 14));
+        login.add(password);
 
         passwordField1 = new JPasswordField();
-        gridConstraints.gridy = 5;
-        login.add(passwordField1,gridConstraints);
+        passwordField1.setBounds(5,80,100,20);
+        login.add(passwordField1);
 
         registerButton = new JButton("Register");
-        gridConstraints.gridy = 6;
-        login.add(registerButton,gridConstraints);
+        registerButton.setBounds(5,110,100,25);
+        registerButton.setFont(new Font("Lucida Handwriting", Font.PLAIN, 14));
+        login.add(registerButton);
 
         loginButton = new JButton("Login");
-        gridConstraints.gridy = 7;
-        login.add(loginButton,gridConstraints);
+        loginButton.setBounds(5,150,100,25);
+        loginButton.setFont(new Font("Lucida Handwriting", Font.PLAIN, 14));
+        login.add(loginButton);
 
+
+        container.add(login);
         //add panel login to Jframe
-        add(login);
+        add(container);
 
         LoginRegister.Handlers handler = new LoginRegister.Handlers();
         registerButton.addActionListener(handler);
