@@ -7,10 +7,9 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 /**
- * Created by azkei on 01/04/2017.
- * Changes by Francis on 08/04/2017
+ * Created by Francis on 4/8/2017.
  */
-public class Account extends JFrame {
+public class testacc extends JFrame {
 
     public JPanel accprof;
     public JList online;
@@ -29,26 +28,26 @@ public class Account extends JFrame {
 
     private ArrayList onlineStreams = new ArrayList();
 
-    public Account(String stream){
-        super("Chess Master - ");
+    public testacc(String stream){
+        super("Chess Master - Jelo");
         //splits stream into data[] username starts at data[2]
         String[] data = stream.split(":");
-
-        //dummy variables for arraylist online players
+        //dummy variables
         onlineStreams.add("jelo");
         onlineStreams.add("john");
         onlineStreams.add("francis");
-        onlineStreams.add("Pamela");
-        onlineStreams.add("Ben");
-        onlineStreams.add("Mark");
+        onlineStreams.add("123");
+        onlineStreams.add("41");
+        onlineStreams.add("321");
+        onlineStreams.add("51");
+        onlineStreams.add("jo55hn");
+        onlineStreams.add("asd");
 
         accprof = new JPanel();
         accprof.setLayout(new GridBagLayout());
 
-        //Reference:http://www.newthinktank.com/2012/03/java-video-tutorial-29/
-        //Explains what each variable does in the gridbaglayout
         // You create a GridBagContraints object that defines
-        // DEFAULTS for your components
+        // defaults for your components
         GridBagConstraints gridConstraints = new GridBagConstraints();
         // Define the x position of the component
         gridConstraints.gridx = 1;
@@ -73,10 +72,9 @@ public class Account extends JFrame {
         // How should the component be stretched to fill the
         // space: NONE, HORIZONTAL, VERTICAL, BOTH
         gridConstraints.fill = GridBagConstraints.BOTH;
-        //End Reference:
 
-        //Adding and setting up components to panel accprof gridbaglayout
-        username = new JLabel(data[2]);
+        //Adding and setting up components to panel gridbaglayout
+        username = new JLabel("Francis");
         gridConstraints.gridwidth = 2;
         accprof.add(username,gridConstraints);
 
@@ -94,7 +92,7 @@ public class Account extends JFrame {
         gridConstraints.gridx = 1;
         accprof.add(rank,gridConstraints);
 
-        dbrank = new JLabel(data[3]); //user rank data from database
+        dbrank = new JLabel("1#"); //data[]
         gridConstraints.gridx = 2;
         accprof.add(dbrank,gridConstraints);
 
@@ -103,7 +101,7 @@ public class Account extends JFrame {
         gridConstraints.gridx = 1;
         accprof.add(win,gridConstraints);
 
-        dbwin = new JLabel(data[4]); //user win data from database
+        dbwin = new JLabel("12"); //data
         gridConstraints.gridx = 2;
         accprof.add(dbwin,gridConstraints);
 
@@ -112,7 +110,7 @@ public class Account extends JFrame {
         gridConstraints.gridx = 1;
         accprof.add(loss,gridConstraints);
 
-        dbloss = new JLabel(data[5]); //user loss data from database
+        dbloss = new JLabel("1"); //data[]
         gridConstraints.gridx = 2;
         accprof.add(dbloss,gridConstraints);
 
@@ -121,11 +119,11 @@ public class Account extends JFrame {
         gridConstraints.gridx = 1;
         accprof.add(coins,gridConstraints);
 
-        dbcoin = new JLabel(data[6]); //user coin data from database
+        dbcoin = new JLabel("21321"); //data[]
         gridConstraints.gridx = 2;
         accprof.add(dbcoin,gridConstraints);
 
-/*        skin = new JLabel("Skins"); //server can only send to data[6]? give null pointer.. + this feature don't know how it works
+/*        skin = new JLabel("Skins");
         gridConstraints.gridy = 6;
         gridConstraints.gridx = 1;
         accprof.add(skins,gridConstraints);*/
@@ -142,11 +140,12 @@ public class Account extends JFrame {
         gridConstraints.gridheight = 4;
         accprof.add(new JScrollPane(online),gridConstraints);
 
-        //add panel accprof to Jframe
         add(accprof);
 
-        Account.Handlers handler = new Account.Handlers();
+        testacc.Handlers handler = new testacc.Handlers();
         Refresh.addActionListener(handler);
+
+
     }
 
     private class Handlers implements ActionListener {

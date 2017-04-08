@@ -33,8 +33,10 @@ public class test123 extends JFrame {
         login = new JPanel();
         login.setLayout(new GridBagLayout());
 
+        //Reference:http://www.newthinktank.com/2012/03/java-video-tutorial-29/
+        //Explains what each variable does in the gridbaglayout
         // You create a GridBagContraints object that defines
-        // defaults for your components
+        // DEFAULTS for your components
         GridBagConstraints gridConstraints = new GridBagConstraints();
         // Define the x position of the component
         gridConstraints.gridx = 1;
@@ -46,10 +48,10 @@ public class test123 extends JFrame {
         gridConstraints.gridheight = 1;
         // Gives the layout manager a hint on how to adjust
         // component width (0 equals fixed)
-        gridConstraints.weightx = 1;
+        gridConstraints.weightx = 0;
         // Gives the layout manager a hint on how to adjust
         // component height (0 equals fixed)
-        gridConstraints.weighty = 1;
+        gridConstraints.weighty = 0;
         // Defines padding top, left, bottom, right
         gridConstraints.insets = new Insets(3, 3, 3, 3);
         // Defines where to place components if they don't
@@ -59,60 +61,49 @@ public class test123 extends JFrame {
         // How should the component be stretched to fill the
         // space: NONE, HORIZONTAL, VERTICAL, BOTH
         gridConstraints.fill = GridBagConstraints.BOTH;
+        //End Reference:
 
+        //Adding and setting up components to panel login gridbaglayout
         title = new JLabel("Chess Master");
-        loginButton = new JButton("Login");
-        registerButton = new JButton("Register");
-        passwordField1 = new JPasswordField();
-        textField1 = new JTextField();
-        username = new JLabel("Username");
-        password = new JLabel("Password");
-
+        title.setHorizontalAlignment(SwingConstants.CENTER);
         login.add(title,gridConstraints);
+
+        username = new JLabel("Username");
         gridConstraints.gridy = 2;
         login.add(username,gridConstraints);
+
+        textField1 = new JTextField();
         gridConstraints.gridy = 3;
         login.add(textField1,gridConstraints);
+
+        password = new JLabel("Password");
         gridConstraints.gridy = 4;
         login.add(password,gridConstraints);
+
+        passwordField1 = new JPasswordField();
         gridConstraints.gridy = 5;
         login.add(passwordField1,gridConstraints);
+
+        registerButton = new JButton("Register");
         gridConstraints.gridy = 6;
         login.add(registerButton,gridConstraints);
+
+        loginButton = new JButton("Login");
         gridConstraints.gridy = 7;
         login.add(loginButton,gridConstraints);
-        gridConstraints.gridy = 8;
+
+        //add panel login to Jframe
         add(login);
-//        username = new JLabel("Username");
-//        add(username);
-//        textField1 = new JTextField("Enter Your Username Here");
-//        add(textField1);
-//        password = new JLabel("Password");
-//        add(password);
-//        passwordField1 = new JPasswordField(10);
-//        add(passwordField1);
-//        registerButton = new JButton("Register");
-//        add(registerButton);
-//        loginButton = new JButton("Login");
-//        add(loginButton);
-//
-//        //FLOW LAYOUT for GUI Components
-//        setLayout(new FlowLayout());
-        //Handler for sending information
+
         test123.Handlers handler = new test123.Handlers();
         registerButton.addActionListener(handler);
         loginButton.addActionListener(handler);
         textField1.addActionListener(handler);
         passwordField1.addActionListener(handler);
-
-        //Make initia
     }
-
 
     //Handler for sending data to the server
     private class Handlers implements ActionListener {
-
-
         @Override
         public void actionPerformed(ActionEvent e) {
             //if users clicks on login button
@@ -129,7 +120,6 @@ public class test123 extends JFrame {
                 }
                 //Read response information from server
                 connectListenHandler.ListenThread();
-
             }
 
             //if user clicks on register button
@@ -146,11 +136,8 @@ public class test123 extends JFrame {
                 }
                 //Read response information from server
                 connectListenHandler.ListenThread();
-
             }
         }
     }
-
-
 }
 

@@ -14,6 +14,7 @@ import java.util.ArrayList;
  * Created by Francis on 4/5/2017.
  */
 public class AccProfile extends JFrame {
+    public JPanel accprof;
     public JList online;
     private JLabel username;
     private JLabel loss;
@@ -26,7 +27,6 @@ public class AccProfile extends JFrame {
     private JLabel dbrank;
     private JLabel dbloss;
     private JButton Refresh;
-    public JPanel accprof;
     private JLabel OnlinePlayers;
     private ArrayList onlineStreams = new ArrayList();
 
