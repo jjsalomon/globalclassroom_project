@@ -21,52 +21,6 @@ public class ChessMaster {
         System.out.println(board);
 
         Table.get().show();*/
-//
-
-/*
-        //runs the account gui form..with  instantiate
-        AccProfile acc =  new AccProfile("est");
-        acc.setContentPane(new AccProfile("est").accprof);
-//        acc.setLocationRelativeTo(null);
-        //whenever x button then terminate
-        acc.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        acc.pack();
-//        login.setSize(500,300);
-        acc.setVisible(true);*/
-
-/*
-        // runs the singinup login gui form with instantiate the java class
-        SignInUp login =  new SignInUp();
-        login.setContentPane(new SignInUp().Sign);
-        login.setLocationRelativeTo(null);
-        //whenever x button then terminate
-        login.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//      login.pack();
-        login.setSize(500,300);
-        login.setVisible(true);*/
-
-/*
-        //runs the singinup login gui form
-        JFrame frame = new JFrame("Login");
-        frame.setContentPane(new SignInUp().Sign);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.pack();
-        frame.setVisible(true);*/
-
-/*        //runs the tes123 login gui trial
-        test123 login =  new test123();
-        //whenever x button then terminate
-        login.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        login.setSize(500,500);
-        login.setVisible(true);*/
-
-/*
-        testacc accounts =  new testacc("test");
-        //whenever x button then terminate
-        accounts.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        accounts.setSize(500,500);
-        accounts.setVisible(true);
-*/
 
         //passed in server host: localhost, server port number: 222
         LoginRegister login =  new LoginRegister();
@@ -74,7 +28,6 @@ public class ChessMaster {
         login.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         login.setSize(500,500);
         login.setVisible(true);
-
 
        /* Account accounts =  new Account("test");
         //whenever x button then terminate
