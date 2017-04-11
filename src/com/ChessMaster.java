@@ -27,10 +27,5 @@ public class ChessMaster {
         login.setSize(500,500);
         login.setVisible(true);
 
-//        Account accounts =  new Account("test");
-//        //whenever x button then terminate
-//        accounts.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//        accounts.setSize(700,500);
-//        accounts.setVisible(true);
     }
 }

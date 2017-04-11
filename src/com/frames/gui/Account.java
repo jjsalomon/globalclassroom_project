@@ -29,33 +29,21 @@ public class Account extends JFrame {
     private JButton Refresh;
     private JLabel OnlinePlayers;
 
-    private ArrayList onlineStreams = new ArrayList();
+    private ArrayList onlineList = new ArrayList();
 
-    public Account(String stream){
+    public Account(String stream, ArrayList<String> onlineUsers){
         super("Chess Master - ");
         //splits stream into data[] username starts at data[2]
         String[] data = stream.split(":");
 
-        //dummy variables for arraylist online players
-        onlineStreams.add("Jelo");
-        onlineStreams.add("John");
-        onlineStreams.add("Francis");
-        onlineStreams.add("Pamela");
-        onlineStreams.add("Ben");
-        onlineStreams.add("Mark");
-        onlineStreams.add("Luke");
-        onlineStreams.add("Mati");
-        onlineStreams.add("Carl");
-        onlineStreams.add("Hendry");
-        onlineStreams.add("Sonna");
-        onlineStreams.add("Queena");
+        this.onlineList = onlineUsers;
 
         //Adding and setting up components
         container = new JPanel();
         container.setLayout(null);
 
 //        username = new JLabel(data[2]);
-        username = new JLabel("Jsexrqiexe");
+        username = new JLabel(data[2]);
         username.setBounds(20,30,300,35);
         username.setFont(new Font("Lucida Handwriting", Font.BOLD, 30));
         username.setForeground(new Color(245, 245, 245));
@@ -132,7 +120,7 @@ public class Account extends JFrame {
         container.add(skins);*/
 
         //change this to onlineStreams
-        online = new JList(onlineStreams.toArray());
+        online = new JList(onlineList.toArray());
 //        //how many options can they see
 //        online.setVisibleRowCount(5);
         //can only select one thing on the list at the time
@@ -164,7 +152,7 @@ public class Account extends JFrame {
 
             //if user clicks on a list item
             if(e.getSource() == online){
-                System.out.println(onlineStreams.get(online.getSelectedIndex()));
+                System.out.println(onlineList.get(online.getSelectedIndex()));
                 refreshList();
             }
         }
@@ -172,7 +160,7 @@ public class Account extends JFrame {
 
     //
     public void refreshList() {
-        online = new JList(onlineStreams.toArray());
+        online = new JList(onlineList.toArray());
         //how many options can they see
         online.setVisibleRowCount(5);
         //can only select one thing on the list at the time

@@ -3,6 +3,7 @@ package com.frames.network;
 import com.frames.gui.*;
 import javax.swing.*;
 import java.io.BufferedReader;
+import java.util.ArrayList;
 
 /**
  * Created by azkei on 02/04/2017.
@@ -12,6 +13,8 @@ import java.io.BufferedReader;
 public class IncomingReader implements Runnable
 {
     BufferedReader breader;
+    ArrayList<String>tempList = new ArrayList<>();
+    ArrayList<String>onlineUsers;
 
     public IncomingReader(BufferedReader reader) {
         this.breader = reader;
@@ -26,7 +29,7 @@ public class IncomingReader implements Runnable
         String stream,
                 account = "Account",
                 disconnect = "Disconnect", chat = "Message",
-                login = "Login";
+                login = "Login", add="Add",done="Done";
         try {
             while ((stream = breader.readLine()) != null) {
                 data = stream.split(":");
@@ -35,25 +38,28 @@ public class IncomingReader implements Runnable
                     System.out.println(stream);
                 }
 
+                //if server is sending users data
+                if(data[0].equals(add)){
+                    String user = data[1];
+                    tempList.add(user);
+                }
+
+                //if server is finished sending users data
+                if(data[0].equals(done)){
+                    onlineUsers = (ArrayList<String>)tempList.clone();
+                    tempList.clear();
+                }
+
                 if(data[1].equals(login)){
                     System.out.println(stream);
                     //create GUI and pass account information.
-                    Account accounts =  new Account(stream);
+                    Account accounts =  new Account(stream,onlineUsers);
                     //whenever x button then terminate
                     accounts.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                     accounts.setSize(700,500);
                     accounts.setVisible(true);
-
+                    onlineUsers.clear();
                 }
-//combine login and account.. since when u login u go to ur account directly
-//                if(data[0].equals(account)){
-//                    //create GUI and pass account information.
-//                    Account accounts =  new Account(stream);
-//                    //whenever x button then terminate
-//                    accounts.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-//                    accounts.setSize(500,500);
-//                    accounts.setVisible(true);
-//                }
             }
         }catch(Exception ex) {
             ex.printStackTrace();
