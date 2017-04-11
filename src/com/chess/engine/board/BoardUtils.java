@@ -65,6 +65,8 @@ public enum  BoardUtils {
         return ImmutableMap.copyOf(positionToCoordinate);
     }
 
+
+    //algebraic notation
     private static List<String> initializeAlgebraicNotation() {
         return ImmutableList.copyOf(new String[]{
                 "a8", "b8", "c8", "d8", "e8", "f8", "g8", "h8",

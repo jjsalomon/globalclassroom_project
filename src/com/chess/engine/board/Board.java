@@ -101,6 +101,8 @@ public final class Board {
         return this.transitionMove;
     }
 
+
+
     public static Board createStandardBoard() {
         final Builder builder = new Builder();
         // Black Layout

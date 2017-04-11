@@ -707,16 +707,29 @@ public final class Table extends Observable {
 
                                     final Move move = MoveFactory.createMove(chessBoard, sourceTile.getTileCoordinate(),
                                             destinationTile.getTileCoordinate());
-                                    final MoveTransition transition = chessBoard.currentPlayer().makeMove(move);
 
 
-                                    if (transition.getMoveStatus().isDone()) {
-                                        chessBoard = transition.getToBoard();
-                                        moveLog.addMove(move);
+                                System.out.println("geeeett that buuu"+MoveFactory.getBollean());
+
+                                    //String moveee =  move.toString();
+                                  //  System.out.println("nullmoveeee"+chessBoard.getAllLegalMoves());
+
+
+
+
+                                // that checks if the boolean is true of false if true then the move can be done if not #
+                                // then it will set the sourceTile destinationtile and humanmovePiece to null
+                                    if(MoveFactory.getBollean().equals(true)) {
+                                        final MoveTransition transition = chessBoard.currentPlayer().makeMove(move);
+
+
+                                        if (transition.getMoveStatus().isDone()) {
+                                            chessBoard = transition.getToBoard();
+                                            moveLog.addMove(move);
+                                        }
+
+
                                     }
-
-
-
 
 
                                 sourceTile = null;

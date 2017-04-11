@@ -12,6 +12,7 @@ public abstract class Move {
     protected final Piece movedPiece;
     protected final boolean isFirstMove;
 
+
     public static final Move NULL_MOVE = new NullMove();
 
     private Move(final Board board,
@@ -21,6 +22,7 @@ public abstract class Move {
         this.destinationCoordinate = destinationCoordinate;
         this.movedPiece = pieceMoved;
         this.isFirstMove = pieceMoved.isFirstMove();
+
     }
 
     private Move(final Board board,
@@ -29,6 +31,7 @@ public abstract class Move {
         this.destinationCoordinate = destinationCoordinate;
         this.movedPiece = null;
         this.isFirstMove = false;
+
     }
 
     @Override
@@ -43,6 +46,9 @@ public abstract class Move {
 
     @Override
     public boolean equals(final Object other) {
+
+
+
         if (this == other) {
             return true;
         }
@@ -53,7 +59,11 @@ public abstract class Move {
         return getCurrentCoordinate() == otherMove.getCurrentCoordinate() &&
                 getDestinationCoordinate() == otherMove.getDestinationCoordinate() &&
                 getMovedPiece().equals(otherMove.getMovedPiece());
+
+
     }
+
+
 
     public Board getBoard() {
         return this.board;
@@ -588,12 +598,27 @@ public abstract class Move {
         }
     }
 
+
+
+
+
     public static class MoveFactory {
+
+        private static Boolean isMoveLegal;
+
+
+
+        public static Boolean  getBollean()
+        {
+            return isMoveLegal;
+        }
 
         private MoveFactory() {
             throw new RuntimeException("Not instantiatable!");
         }
 
+            //MoveFactory it gets all the legalmoves on the board, then check if the currentcordiante and destinaion coordinates
+           //matches with some of the move if yes then it return the move if not then it returns Null
         public static Move createMove(final Board board,
                                       final int currentCoordinate,
                                       final int destinationCoordinate) {
@@ -603,14 +628,32 @@ public abstract class Move {
 
 
 
+
+
+
+                    isMoveLegal=true;
+
+                   // System.out.println("hey"+isMoveLegal);
                     return move;
+
 
                 }
 
+
+
+
+
             }
 
-            System.out.println("nope" +NULL_MOVE);
+
+            isMoveLegal =false;
+
             return NULL_MOVE;
         }
+
+
+
+
+
     }
 }
