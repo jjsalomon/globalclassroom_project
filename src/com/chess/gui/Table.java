@@ -1,5 +1,6 @@
 package com.chess.gui;
 
+import com.chess.engine.Alliance;
 import com.chess.engine.board.*;
 import com.chess.engine.pieces.Piece;
 
@@ -45,8 +46,12 @@ public final class Table extends Observable {
     private final GameSetup gameSetup;
     private Board chessBoard;
     private Move computerMove;
+
+
     private Tile sourceTile;
+
     private Tile destinationTile;
+
     private Piece humanMovedPiece;
     private BoardDirection boardDirection;
     private String pieceIconPath;
@@ -636,6 +641,8 @@ public final class Table extends Observable {
 
         private final int tileId;
 
+
+
         TilePanel(final BoardPanel boardPanel,
                   final int tileId) {
             super(new GridBagLayout());
@@ -644,6 +651,14 @@ public final class Table extends Observable {
             assignTileColor();
             assignTilePieceIcon(chessBoard);
             highlightTileBorder(chessBoard);
+
+            // this instance passes the data so if you hard code 52 it'll get the sourcetile of the 5th pawn behind the king
+            // uncomment these two piece of code and click on the gui to see the change automatically because the tileid was entered
+            //
+            //sourceTile = chessBoard.getTile(52);
+            //destinationTile = chessBoard.getTile(36);
+
+
             addMouseListener(new MouseListener() {
                 @Override
                 public void mouseClicked(final MouseEvent event) {
@@ -652,15 +667,25 @@ public final class Table extends Observable {
 
 
                     if (isRightMouseButton(event)) {
+
+                        // SourceTile is a instance of tile
                         sourceTile = null;
                         destinationTile = null;
                         humanMovedPiece = null;
                     } else if (isLeftMouseButton(event)) {
 
-                        System.out.println("this is happening"+Counter);
+
                         if (sourceTile == null ) {
+
+                            //sourcetile equal the
+                            //ChessBoard is an istanc of board
+                            // to get the Piece in the source tile a method in board is used getTile which
+                            // takes on parameter thats gonna be the position of the tile clicked
                             sourceTile = chessBoard.getTile(tileId);
                             //getPosition =tileId;
+
+                            //humanMovedPiece is to check if human clicked on a tile with a piece
+                            //sourceTile.getPiece() will return the piece clicked
                             humanMovedPiece = sourceTile.getPiece();
                             if (humanMovedPiece == null) {
                                 sourceTile = null;
@@ -673,7 +698,9 @@ public final class Table extends Observable {
 
 
 
-                             getCurrentPlayer  = humanMovedPiece.getPieceAllegiance().toString();
+
+                            // transformed those two values to string
+                            getCurrentPlayer  = humanMovedPiece.getPieceAllegiance().toString();
                              getPieceAllegianceClicked = chessBoard.currentPlayer().toString();
 
 
@@ -685,58 +712,68 @@ public final class Table extends Observable {
                         }
                         else
                         {
+
+                            // uncomment this piece of code to get the chess engine running properly
+
                             destinationTile = chessBoard.getTile(tileId);
 
-                            //it checks if destination tile is equal to source tile if yah then set the instances do null
-                            if(destinationTile == sourceTile)
-                            {
-                                System.out.println("this is same piece" +destinationTile);
-                                System.out.println("this is same piece" +chessBoard.currentPlayer());
-                                sourceTile = null;
-                                destinationTile = null;
-                                humanMovedPiece = null;
-                            }
 
-                            else
-                            {
+                            System.out.println("Destination"+tileId);
+
+
+                            //it checks if destination tile is equal to source tile if yah then set the instances do null
+
+
+
 
                                 System.out.println("Piece Clicked"+getCurrentPlayer);
                                 System.out.println("Current Player"+getPieceAllegianceClicked);
 
 
 
+                                // MoveFactory this class will check for all the legal moves when you clickn on a piece
+                                // if user chooses a legal move the it returns the move if not the it returns a
+                                // nullVale theres a boolean ismovelegal if thats true it draws the piece o the
+                                // board  if not it deselect the sourcetile instance and other instances
+
+
+//                                System.out.println("Tile Dest" +destinationTile.getTileCoordinate());
+
+                               // System.out.println("Tile Sourc" +sourceTile.getTileCoordinate());
                                     final Move move = MoveFactory.createMove(chessBoard, sourceTile.getTileCoordinate(),
                                             destinationTile.getTileCoordinate());
 
 
-                                System.out.println("geeeett that buuu"+MoveFactory.getBollean());
+                                System.out.println("Get Boolean"+MoveFactory.getBollean());
+                                System.out.println("This is the legalMoveChosen  "+move);
 
-                                    //String moveee =  move.toString();
-                                  //  System.out.println("nullmoveeee"+chessBoard.getAllLegalMoves());
-
-
-
-
+                                //String moveee =  move.toString();
+                                //  System.out.println("nullmoveeee"+chessBoard.getAllLegalMoves());
                                 // that checks if the boolean is true of false if true then the move can be done if not #
                                 // then it will set the sourceTile destinationtile and humanmovePiece to null
                                     if(MoveFactory.getBollean().equals(true)) {
+
                                         final MoveTransition transition = chessBoard.currentPlayer().makeMove(move);
 
 
+                                        System.out.println("allianve"+chessBoard.currentPlayer().getAlliance());
                                         if (transition.getMoveStatus().isDone()) {
+
+
+                                            // board will be rendered again and will add move
                                             chessBoard = transition.getToBoard();
+
+                                            //this add the move to the movelog
                                             moveLog.addMove(move);
                                         }
-
-
                                     }
-
-
                                 sourceTile = null;
                                 destinationTile = null;
                                 humanMovedPiece = null;
+
+
                             }
-                        }
+
                     }
                     invokeLater(new Runnable() {
                         public void run() {

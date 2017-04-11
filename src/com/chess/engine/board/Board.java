@@ -12,13 +12,16 @@ import java.util.*;
 
 public final class Board {
 
+
+    //Gameboard is a list of tiles it takes one paramaterer which renders the actual piece
     private final List<Tile> gameBoard;
     private final Collection<Piece> whitePieces;
     private final Collection<Piece> blackPieces;
     private final WhitePlayer whitePlayer;
     private final BlackPlayer blackPlayer;
     private final Player currentPlayer;
-    //
+
+
     private final Pawn enPassantPawn;
     private final Move transitionMove;
 
@@ -56,6 +59,7 @@ public final class Board {
         return tile.toString();
     }
 
+    //Collection of black and white pieces
     public Collection<Piece> getBlackPieces() {
         return this.blackPieces;
     }
@@ -85,6 +89,8 @@ public final class Board {
         return this.currentPlayer;
     }
 
+
+    //get tile method chooses the piece
     public Tile getTile(final int coordinate) {
         return this.gameBoard.get(coordinate);
     }
@@ -103,6 +109,7 @@ public final class Board {
 
 
 
+    //here's is all the positions of the pieces
     public static Board createStandardBoard() {
         final Builder builder = new Builder();
         // Black Layout
@@ -146,6 +153,8 @@ public final class Board {
         builder.setMoveMaker(Alliance.WHITE);
         //build the board
         return builder.build();
+
+
     }
 
     private static List<Tile> createGameBoard(final Builder boardBuilder) {
@@ -156,6 +165,8 @@ public final class Board {
         return ImmutableList.copyOf(tiles);
     }
 
+
+    //Calculate all the pieces legal moves
     private Collection<Move> calculateLegalMoves(final Collection<Piece> pieces) {
         final List<Move> legalMoves = new ArrayList<>(35);
         for (final Piece piece : pieces) {

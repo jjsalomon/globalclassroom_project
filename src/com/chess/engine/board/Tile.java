@@ -33,6 +33,8 @@ abstract public class Tile {
             return EMPTY_TILES.get(coordinate);
         }
 
+
+
         final OccupiedTile cachedOccupiedTile = OCCUPIED_TILES.get(coordinate, piece);
 
         if(cachedOccupiedTile != null) {
