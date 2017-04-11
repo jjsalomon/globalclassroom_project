@@ -10,14 +10,22 @@ enum PieceUtils {
 
     INSTANCE;
 
-    private final Table<Alliance, Integer, Queen> ALL_POSSIBLE_QUEENS = PieceUtils.createAllPossibleMovedQueens();
-    private final Table<Alliance, Integer, Rook> ALL_POSSIBLE_ROOKS = PieceUtils.createAllPossibleMovedRooks();
-    private final Table<Alliance, Integer, Knight> ALL_POSSIBLE_KNIGHTS = PieceUtils.createAllPossibleMovedKnights();
-    private final Table<Alliance, Integer, Bishop> ALL_POSSIBLE_BISHOPS = PieceUtils.createAllPossibleMovedBishops();
-    private final Table<Alliance, Integer, Pawn> ALL_POSSIBLE_PAWNS = PieceUtils.createAllPossibleMovedPawns();
 
+    private final Table<Alliance, Integer, Queen> ALL_POSSIBLE_QUEENS = PieceUtils.createAllPossibleMovedQueens();
+   private final Table<Alliance, Integer, Rook> ALL_POSSIBLE_ROOKS = PieceUtils.createAllPossibleMovedRooks();
+   private final Table<Alliance, Integer, Knight> ALL_POSSIBLE_KNIGHTS = PieceUtils.createAllPossibleMovedKnights();
+   private final Table<Alliance, Integer, Bishop> ALL_POSSIBLE_BISHOPS = PieceUtils.createAllPossibleMovedBishops();
+   private final Table<Alliance, Integer, Pawn> ALL_POSSIBLE_PAWNS = PieceUtils.createAllPossibleMovedPawns();
+
+
+
+    // method to render moved pieces
     Pawn getMovedPawn(final Move move) {
+
+
         return ALL_POSSIBLE_PAWNS.get(move.getMovedPiece().getPieceAllegiance(), move.getDestinationCoordinate());
+
+
     }
 
     Knight getMovedKnight(final Move move) {
@@ -35,6 +43,8 @@ enum PieceUtils {
     Queen getMovedQueen(final Move move) {
         return ALL_POSSIBLE_QUEENS.get(move.getMovedPiece().getPieceAllegiance(), move.getDestinationCoordinate());
     }
+
+
 
     private static Table<Alliance, Integer, Pawn> createAllPossibleMovedPawns() {
         final ImmutableTable.Builder<Alliance, Integer, Pawn> pieces = ImmutableTable.builder();

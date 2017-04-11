@@ -83,16 +83,26 @@ public abstract class Move {
         return null;
     }
 
+
+
     public Board execute() {
         final Board.Builder builder = new Builder();
+        // it will return a new board it will help to materialise a new board and render all the pieces that arent  moved
+        // piece
         for (final Piece piece : this.board.currentPlayer().getActivePieces()) {
             if (!this.movedPiece.equals(piece)) {
                 builder.setPiece(piece);
             }
         }
+
+        // do the same thing for black
         for (final Piece piece : this.board.currentPlayer().getOpponent().getActivePieces()) {
             builder.setPiece(piece);
         }
+
+
+        // the pieces that are being moved we gonna move it via this setPiece call
+        // we move the piece and pass the all the move info to the movePiece Method
         builder.setPiece(this.movedPiece.movePiece(this));
         builder.setMoveMaker(this.board.currentPlayer().getOpponent().getAlliance());
         builder.setMoveTransition(this);
@@ -407,15 +417,25 @@ public abstract class Move {
 
         @Override
         public Board execute() {
+
+
             final Board.Builder builder = new Builder();
+            // this will help materialise a new board from execute
+            //gonna traverse from the all of the board current player
+            // gonna traverse from all of the pieces all of the pieces that arent
+            // the moved piece we just gonna place them on the board
             for (final Piece piece : this.board.getAllPieces()) {
+
                 if (!this.movedPiece.equals(piece) && !this.castleRook.equals(piece)) {
                     builder.setPiece(piece);
                 }
             }
             builder.setPiece(this.movedPiece.movePiece(this));
+
             //calling movePiece here doesn't work, we need to explicitly create a new Rook
             builder.setPiece(new Rook(this.castleRook.getPieceAllegiance(), this.castleRookDestination, false));
+
+            //if the incoming movie make is white then this piece of code will set the the movie make to black
             builder.setMoveMaker(this.board.currentPlayer().getOpponent().getAlliance());
             builder.setMoveTransition(this);
             return builder.build();
@@ -580,9 +600,16 @@ public abstract class Move {
             for (final Move move : board.getAllLegalMoves()) {
                 if (move.getCurrentCoordinate() == currentCoordinate &&
                         move.getDestinationCoordinate() == destinationCoordinate) {
+
+
+
                     return move;
+
                 }
+
             }
+
+            System.out.println("nope" +NULL_MOVE);
             return NULL_MOVE;
         }
     }

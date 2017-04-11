@@ -14,7 +14,10 @@ import com.google.common.collect.ImmutableList;
 public final class Pawn
         extends Piece {
 
+
+
     private final static int[] CANDIDATE_MOVE_COORDINATES = {8, 16, 7, 9};
+
 
     public Pawn(final Alliance allegiance,
                 final int piecePosition) {
@@ -132,6 +135,8 @@ public final class Pawn
 
     @Override
     public Pawn movePiece(final Move move) {
+
+        System.out.println("getmoved Pawn " + PieceUtils.INSTANCE.getMovedPawn(move));
         return PieceUtils.INSTANCE.getMovedPawn(move);
     }
 

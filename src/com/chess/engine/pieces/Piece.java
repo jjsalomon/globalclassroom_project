@@ -8,6 +8,8 @@ import java.util.Collection;
 
 public abstract class Piece {
 
+
+
     protected final PieceType pieceType;
     protected final Alliance pieceAlliance;
     protected final int piecePosition;
@@ -30,6 +32,8 @@ public abstract class Piece {
     }
 
     public Alliance getPieceAllegiance() {
+
+       // System.out.println("PieceA"+pieceAlliance);
         return this.pieceAlliance;
     }
 
@@ -46,6 +50,9 @@ public abstract class Piece {
     }
     public abstract int locationBonus();
 
+
+    //It's gonna take in a move and apply to existing piece that we're on and return a new piece given a piece is imutable, just like the old
+    // piece but with a updated move
     public abstract Piece movePiece(Move move);
 
     public abstract Collection<Move> calculateLegalMoves(final Board board);
@@ -63,6 +70,9 @@ public abstract class Piece {
                 pieceAlliance == otherPiece.pieceAlliance && isFirstMove == otherPiece.isFirstMove;
     }
 
+    //any time you interact with collection of object youll need to implement the hash code and equal method
+
+
     @Override
     public int hashCode() {
         return cachedHashCode;
@@ -73,6 +83,8 @@ public abstract class Piece {
         result = 31 * result + pieceAlliance.hashCode();
         result = 31 * result + piecePosition;
         result = 31 * result + (isFirstMove ? 1 : 0);
+
+
         return result;
     }
 
@@ -186,6 +198,9 @@ public abstract class Piece {
         public String toString() {
             return this.pieceName;
         }
+
+
+        //seting piece type
 
         PieceType(final int val, final String pieceName) {
             this.value = val;

@@ -12,7 +12,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-//import static com.chess.pgn.PGNUtilities.*;
+
 import static javax.swing.JFrame.setDefaultLookAndFeelDecorated;
 import static javax.swing.SwingUtilities.invokeLater;
 import static javax.swing.SwingUtilities.isLeftMouseButton;
@@ -54,6 +54,9 @@ public final class Table extends Observable {
     private boolean useBook;
     private Color lightTileColor = Color.decode("#FFFACD");
     private Color darkTileColor = Color.decode("#593E1A");
+    private int Counter;
+    private String getCurrentPlayer;
+    private String getPieceAllegianceClicked;
 
     private static final Dimension OUTER_FRAME_DIMENSION = new Dimension(600, 600);
     private static final Dimension BOARD_PANEL_DIMENSION = new Dimension(400, 350);
@@ -77,7 +80,7 @@ public final class Table extends Observable {
         this.takenPiecesPanel = new TakenPiecesPanel();
         this.boardPanel = new BoardPanel();
         this.moveLog = new MoveLog();
-        this.addObserver(new TableGameAIWatcher());
+
         this.gameSetup = new GameSetup(this.gameFrame, true);
         this.gameFrame.add(this.takenPiecesPanel, BorderLayout.WEST);
         this.gameFrame.add(this.boardPanel, BorderLayout.CENTER);
@@ -88,6 +91,9 @@ public final class Table extends Observable {
         this.gameFrame.setSize(OUTER_FRAME_DIMENSION);
         center(this.gameFrame);
         this.gameFrame.setVisible(true);
+        Counter = -1;
+
+
     }
 
     public static Table get() {
@@ -168,7 +174,7 @@ public final class Table extends Observable {
                 JFileChooser chooser = new JFileChooser();
                 int option = chooser.showOpenDialog(Table.get().getGameFrame());
                 if (option == JFileChooser.APPROVE_OPTION) {
-                    //loadPGNFile(chooser.getSelectedFile());
+
                 }
             }
         });
@@ -179,7 +185,7 @@ public final class Table extends Observable {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 String fenString = JOptionPane.showInputDialog("Input FEN");
-                //undoAllMoves();
+                undoAllMoves();
                 //chessBoard = FenUtilities.createGameFromFEN(fenString);
                 Table.get().getBoardPanel().drawBoard(chessBoard);
             }
@@ -203,7 +209,7 @@ public final class Table extends Observable {
                 });
                 final int option = chooser.showSaveDialog(Table.get().getGameFrame());
                 if (option == JFileChooser.APPROVE_OPTION) {
-                    //savePGNFile(chooser.getSelectedFile());
+
                 }
             }
         });
@@ -231,7 +237,7 @@ public final class Table extends Observable {
         resetMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
-                //undoAllMoves();
+                undoAllMoves();
             }
 
         });
@@ -253,7 +259,7 @@ public final class Table extends Observable {
             public void actionPerformed(final ActionEvent e) {
                 final Move lastMove = moveLog.getMoves().get(moveLog.size() - 1);
                 if(lastMove != null) {
-                   // System.out.println(MoveUtils.exchangeScore(lastMove));
+                    System.out.println(MoveUtils.exchangeScore(lastMove));
                 }
 
             }
@@ -277,7 +283,7 @@ public final class Table extends Observable {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 if(Table.get().getMoveLog().size() > 0) {
-                    //undoLastMove();
+                    undoLastMove();
                 }
             }
         });
@@ -469,7 +475,6 @@ public final class Table extends Observable {
         this.computerMove = move;
     }
 
-    /*
     private void undoAllMoves() {
         for(int i = Table.get().getMoveLog().size() - 1; i >= 0; i--) {
             final Move lastMove = Table.get().getMoveLog().removeMove(Table.get().getMoveLog().size() - 1);
@@ -481,29 +486,13 @@ public final class Table extends Observable {
         Table.get().getTakenPiecesPanel().redo(Table.get().getMoveLog());
         Table.get().getBoardPanel().drawBoard(chessBoard);
         Table.get().getDebugPanel().redo();
-    }*/
-
-
-    /*
-    private static void loadPGNFile(final File pgnFile) {
-        try {
-            persistPGNFile(pgnFile);
-        }
-        catch (final IOException e) {
-            e.printStackTrace();
-        }
     }
-/*
-    private static void savePGNFile(final File pgnFile) {
-        try {
-            writeGameToPGNFile(pgnFile, Table.get().getMoveLog());
-        }
-        catch (final IOException e) {
-            e.printStackTrace();
-        }
-    }*/
 
-/*
+
+
+
+
+
     private void undoLastMove() {
         final Move lastMove = Table.get().getMoveLog().removeMove(Table.get().getMoveLog().size() - 1);
         this.chessBoard = this.chessBoard.currentPlayer().unMakeMove(lastMove).getToBoard();
@@ -513,7 +502,7 @@ public final class Table extends Observable {
         Table.get().getTakenPiecesPanel().redo(Table.get().getMoveLog());
         Table.get().getBoardPanel().drawBoard(chessBoard);
         Table.get().getDebugPanel().redo();
-    }*/
+    }
 
     private void moveMadeUpdate(final PlayerType playerType) {
         setChanged();
@@ -525,36 +514,13 @@ public final class Table extends Observable {
         notifyObservers(gameSetup);
     }
 
-    private static class TableGameAIWatcher
-            implements Observer {
 
-        public void update(final Observable o,
-                           final Object arg) {
-
-
-
-            if (Table.get().getGameBoard().currentPlayer().isInCheckMate() ||
-                    Table.get().getGameBoard().currentPlayer().isInStaleMate()) {
-                JOptionPane.showMessageDialog(Table.get().getBoardPanel(),
-                        "Game Over: Player " + Table.get().getGameBoard().currentPlayer() + " is in checkmate!", "Game Over",
-                        JOptionPane.INFORMATION_MESSAGE);
-            }
-
-            if (Table.get().getGameBoard().currentPlayer().isInStaleMate() ||
-                    Table.get().getGameBoard().currentPlayer().isInStaleMate()) {
-                JOptionPane.showMessageDialog(Table.get().getBoardPanel(),
-                        "Game Over: Player " + Table.get().getGameBoard().currentPlayer() + " is in stalemate!", "Game Over",
-                        JOptionPane.INFORMATION_MESSAGE);
-            }
-
-        }
-
-    }
 
     enum PlayerType {
         HUMAN,
         COMPUTER
     }
+
 
 
     private class BoardPanel extends JPanel {
@@ -681,36 +647,93 @@ public final class Table extends Observable {
             addMouseListener(new MouseListener() {
                 @Override
                 public void mouseClicked(final MouseEvent event) {
+
+
+
+
                     if (isRightMouseButton(event)) {
                         sourceTile = null;
                         destinationTile = null;
                         humanMovedPiece = null;
                     } else if (isLeftMouseButton(event)) {
-                        if (sourceTile == null) {
+
+                        System.out.println("this is happening"+Counter);
+                        if (sourceTile == null ) {
                             sourceTile = chessBoard.getTile(tileId);
+                            //getPosition =tileId;
                             humanMovedPiece = sourceTile.getPiece();
                             if (humanMovedPiece == null) {
                                 sourceTile = null;
+
                             }
-                        } else {
+
+                            System.out.println("this is SourceT"+sourceTile);
+                            System.out.println("this is Tiled"+tileId);
+                            System.out.println("this is humand moved P"+humanMovedPiece);
+
+
+
+                             getCurrentPlayer  = humanMovedPiece.getPieceAllegiance().toString();
+                             getPieceAllegianceClicked = chessBoard.currentPlayer().toString();
+
+
+                            System.out.println("Piece Clicked"+getCurrentPlayer);
+                            System.out.println("Current Player"+getPieceAllegianceClicked);
+
+
+
+                        }
+                        else
+                        {
                             destinationTile = chessBoard.getTile(tileId);
-                            final Move move = MoveFactory.createMove(chessBoard, sourceTile.getTileCoordinate(),
-                                    destinationTile.getTileCoordinate());
-                            final MoveTransition transition = chessBoard.currentPlayer().makeMove(move);
-                            if (transition.getMoveStatus().isDone()) {
-                                chessBoard = transition.getToBoard();
-                                moveLog.addMove(move);
+
+                            //it checks if destination tile is equal to source tile if yah then set the instances do null
+                            if(destinationTile == sourceTile)
+                            {
+                                System.out.println("this is same piece" +destinationTile);
+                                System.out.println("this is same piece" +chessBoard.currentPlayer());
+                                sourceTile = null;
+                                destinationTile = null;
+                                humanMovedPiece = null;
                             }
-                            sourceTile = null;
-                            destinationTile = null;
-                            humanMovedPiece = null;
+
+                            else
+                            {
+
+                                System.out.println("Piece Clicked"+getCurrentPlayer);
+                                System.out.println("Current Player"+getPieceAllegianceClicked);
+
+
+
+                                    final Move move = MoveFactory.createMove(chessBoard, sourceTile.getTileCoordinate(),
+                                            destinationTile.getTileCoordinate());
+                                    final MoveTransition transition = chessBoard.currentPlayer().makeMove(move);
+
+
+                                    if (transition.getMoveStatus().isDone()) {
+                                        chessBoard = transition.getToBoard();
+                                        moveLog.addMove(move);
+                                    }
+
+
+
+
+
+                                sourceTile = null;
+                                destinationTile = null;
+                                humanMovedPiece = null;
+                            }
                         }
                     }
                     invokeLater(new Runnable() {
                         public void run() {
                             gameHistoryPanel.redo(chessBoard, moveLog);
                             takenPiecesPanel.redo(moveLog);
+                            if (gameSetup.isAIPlayer(chessBoard.currentPlayer())) {
+                                Table.get().moveMadeUpdate(PlayerType.HUMAN);
+                            }
 
+                            //this will redraw the board
                             boardPanel.drawBoard(chessBoard);
                             debugPanel.redo();
                         }

@@ -64,6 +64,9 @@ public final class Bishop extends Piece {
         return this.pieceAlliance.bishopBonus(this.piecePosition);
     }
 
+
+    // this method will render a bishop a different location
+
     @Override
     public Bishop movePiece(final Move move) {
         return PieceUtils.INSTANCE.getMovedBishop(move);

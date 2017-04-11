@@ -104,6 +104,9 @@ public final class Board {
     public static Board createStandardBoard() {
         final Builder builder = new Builder();
         // Black Layout
+
+
+        //setting piece and on the right positions
         builder.setPiece(new Rook(Alliance.BLACK, 0));
         builder.setPiece(new Knight(Alliance.BLACK, 1));
         builder.setPiece(new Bishop(Alliance.BLACK, 2));
@@ -186,8 +189,10 @@ public final class Board {
             return this;
         }
 
+        // method to get the movemakers
         public Builder setMoveMaker(final Alliance nextMoveMaker) {
             this.nextMoveMaker = nextMoveMaker;
+            System.out.println("MoveMaker"+nextMoveMaker);
             return this;
         }
 
@@ -197,6 +202,9 @@ public final class Board {
         }
 
         public Builder setMoveTransition(final Move transitionMove) {
+
+
+            System.out.println("setMoveTRns"+transitionMove);
             this.transitionMove = transitionMove;
             return this;
         }
