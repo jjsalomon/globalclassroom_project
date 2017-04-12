@@ -1,16 +1,27 @@
 package com.frames.gui;
 
+import com.frames.network.ConnectListenHandler;
+import com.frames.resource.UserOnline;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * Created by azkei on 01/04/2017.
  * Changes by Francis on 08/04/2017
  */
 public class Account extends JFrame {
+
+    UserOnline onlineBuffer;
+    DefaultListModel lmodel;
+
+    //network
+    ConnectListenHandler connectListenHandler;
 
     private  JLabel background;
     public JPanel container;
@@ -29,14 +40,19 @@ public class Account extends JFrame {
     private JButton Refresh;
     private JLabel OnlinePlayers;
 
-    private ArrayList onlineList = new ArrayList();
 
-    public Account(String stream, ArrayList<String> onlineUsers){
+    public Account(String stream){
         super("Chess Master - ");
+        UserOnline onlineBuff = UserOnline.getInstance();
+        this.onlineBuffer = onlineBuff;
+        //network
+        connectListenHandler = new ConnectListenHandler();
+
+        DefaultListModel listModel = new DefaultListModel();
+        this.lmodel = listModel;
         //splits stream into data[] username starts at data[2]
         String[] data = stream.split(":");
 
-        this.onlineList = onlineUsers;
 
         //Adding and setting up components
         container = new JPanel();
@@ -120,7 +136,7 @@ public class Account extends JFrame {
         container.add(skins);*/
 
         //change this to onlineStreams
-        online = new JList(onlineList.toArray());
+        online = new JList(lmodel);
 //        //how many options can they see
 //        online.setVisibleRowCount(5);
         //can only select one thing on the list at the time
@@ -152,15 +168,25 @@ public class Account extends JFrame {
 
             //if user clicks on a list item
             if(e.getSource() == online){
-                System.out.println(onlineList.get(online.getSelectedIndex()));
+                System.out.println(onlineBuffer.getOnlineBuff().get(online.getSelectedIndex()));
                 refreshList();
             }
         }
     }
 
     //
-    public void refreshList() {
-        online = new JList(onlineList.toArray());
+    public void refreshList(){
+        lmodel.removeAllElements();
+        String strArray[] = new String[onlineBuffer.getOnlineBuff().size()];
+        for(int i =0;i<strArray.length;i++){
+            strArray[i] = onlineBuffer.getOnlineBuff().toString();
+            System.out.println(strArray[i]+"Added to lmodel");
+            lmodel.addElement(strArray[i]);
+
+        }
+
+        online = new JList(lmodel);
+        System.out.println("REFRESH:"+onlineBuffer.getOnlineBuff());
         //how many options can they see
         online.setVisibleRowCount(5);
         //can only select one thing on the list at the time

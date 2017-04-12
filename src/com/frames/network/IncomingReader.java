@@ -1,9 +1,10 @@
 package com.frames.network;
 
 import com.frames.gui.*;
+import com.frames.resource.UserOnline;
+
 import javax.swing.*;
 import java.io.BufferedReader;
-import java.util.ArrayList;
 
 /**
  * Created by azkei on 02/04/2017.
@@ -13,52 +14,56 @@ import java.util.ArrayList;
 public class IncomingReader implements Runnable
 {
     BufferedReader breader;
-    ArrayList<String>tempList = new ArrayList<>();
-    ArrayList<String>onlineUsers;
 
     public IncomingReader(BufferedReader reader) {
         this.breader = reader;
     }
 
+
     @Override
     public void run()
     {
+        UserOnline usersOnlineInstance = UserOnline.getInstance();
+        System.out.println("IncomingReader: Instance ID" + System.identityHashCode(usersOnlineInstance));
 
         System.out.println("Thread running");
         String[] data;
         String stream,
                 account = "Account",
                 disconnect = "Disconnect", chat = "Message",
-                login = "Login", add="Add",done="Done";
+                login = "Login", add="Add", sending = "Sending";
         try {
             while ((stream = breader.readLine()) != null) {
+
                 data = stream.split(":");
 
                 if(data[1].equals(chat)){
                     System.out.println(stream);
                 }
 
-                //if server is sending users data
-                if(data[0].equals(add)){
-                    String user = data[1];
-                    tempList.add(user);
+                //clear the existing buffer and add new data
+                if(data[0].equals(sending)){
+                    usersOnlineInstance.clearBuffer();
+                    System.out.println("Incoming Reader: Buffer Cleared: "+usersOnlineInstance.getOnlineBuff());
                 }
 
-                //if server is finished sending users data
-                if(data[0].equals(done)){
-                    onlineUsers = (ArrayList<String>)tempList.clone();
-                    tempList.clear();
+                //if server is streaming user data
+                if(data[0].equals(add)){
+                    String user = data[1];
+                    usersOnlineInstance.addBuffer(user);
+                    System.out.println("Incoming Reader: Added new Data: "+usersOnlineInstance.getOnlineBuff());
                 }
 
                 if(data[1].equals(login)){
+
+                    //Show new account activity
                     System.out.println(stream);
                     //create GUI and pass account information.
-                    Account accounts =  new Account(stream,onlineUsers);
+                    Account accounts =  new Account(stream);
                     //whenever x button then terminate
                     accounts.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                     accounts.setSize(700,500);
                     accounts.setVisible(true);
-                    onlineUsers.clear();
                 }
             }
         }catch(Exception ex) {
