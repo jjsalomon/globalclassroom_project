@@ -135,10 +135,16 @@ public class Account extends JFrame {
         gridConstraints.gridx = 1;
         container.add(skins);*/
 
-        //change this to onlineStreams
+        //remove current elements to make sure its clear before adding
+        lmodel.removeAllElements();
+        //add global user online data to Listmodel
+        for(int i =0; i<onlineBuff.getOnlineBuff().size();i++){
+            lmodel.addElement(onlineBuffer.getOnlineBuff().get(i));
+        }
+        //add into the JList
         online = new JList(lmodel);
-//        //how many options can they see
-//        online.setVisibleRowCount(5);
+        //how many options can they see
+        online.setVisibleRowCount(5);
         //can only select one thing on the list at the time
         online.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         online.setForeground(new Color(245, 245, 245));
@@ -177,14 +183,14 @@ public class Account extends JFrame {
     //
     public void refreshList(){
         lmodel.removeAllElements();
-        String strArray[] = new String[onlineBuffer.getOnlineBuff().size()];
+       /* String strArray[] = new String[onlineBuffer.getOnlineBuff().size()];
         for(int i =0;i<strArray.length;i++){
             strArray[i] = onlineBuffer.getOnlineBuff().toString();
             System.out.println(strArray[i]+"Added to lmodel");
-            lmodel.addElement(strArray[i]);
-
-        }
-
+        }*/
+       for(int i = 0;i<onlineBuffer.getOnlineBuff().size();i++){
+           lmodel.addElement(onlineBuffer.getOnlineBuff().get(i));
+       }
         online = new JList(lmodel);
         System.out.println("REFRESH:"+onlineBuffer.getOnlineBuff());
         //how many options can they see
