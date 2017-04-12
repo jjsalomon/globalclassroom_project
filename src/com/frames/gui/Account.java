@@ -162,6 +162,33 @@ public class Account extends JFrame {
 
         Account.Handlers handler = new Account.Handlers();
         Refresh.addActionListener(handler);
+
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+
+                int confirm = JOptionPane.showOptionDialog(Account.this,
+                        "Are you sure you want to log out?",
+                        "Exit Confirmation", JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE, null, null, null);
+                if (confirm == JOptionPane.YES_OPTION) {
+                    try {
+                        connectListenHandler.writer.println(username.getText() + ":to" + ":Disconnect");
+                        connectListenHandler.writer.flush();
+                        //Read response information from server
+                        connectListenHandler.ListenThread();
+                        System.exit(0);
+                    } catch (Exception ex) {
+                        System.out.println("You cannot login, Try again");
+                        ex.printStackTrace();
+                    }
+
+                }
+                if (confirm == JOptionPane.NO_OPTION) {
+                    setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+                }
+            }
+        });
     }
 
     private class Handlers implements ActionListener {

@@ -1,7 +1,7 @@
 package com;
 
-import com.chess.engine.board.Board;
-import com.chess.gui.Table;
+//import com.chess.engine.board.Board;
+//import com.chess.gui.Table;
 import com.frames.gui.*;
 import com.frames.resource.UserOnline;
 

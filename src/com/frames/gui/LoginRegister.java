@@ -103,6 +103,7 @@ public class LoginRegister extends JFrame {
         loginButton.addActionListener(handler);
         textField1.addActionListener(handler);
         passwordField1.addActionListener(handler);
+
     }
 
     //Handler for sending data to the server

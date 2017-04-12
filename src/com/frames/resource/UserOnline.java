@@ -47,10 +47,14 @@ public final class UserOnline {
         onlineBuff.add(data);
     }
 
+    public void removeBuffer(String data) {onlineBuff.remove(data);}
+
     public ArrayList<String> getOnlineBuff(){
         return onlineBuff;
     }
 
     public void clearBuffer() { onlineBuff.clear();
     }
+
+
 }

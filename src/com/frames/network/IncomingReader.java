@@ -31,7 +31,7 @@ public class IncomingReader implements Runnable
         String stream,
                 account = "Account",
                 disconnect = "Disconnect", chat = "Message",
-                login = "Login", add="Add", sending = "Sending";
+                login = "Login", add="Add", sending = "Sending",remove="Remove";
         try {
             while ((stream = breader.readLine()) != null) {
 
@@ -51,6 +51,13 @@ public class IncomingReader implements Runnable
                 if(data[0].equals(add)){
                     String user = data[1];
                     usersOnlineInstance.addBuffer(user);
+                    System.out.println("Incoming Reader: Added new Data: "+usersOnlineInstance.getOnlineBuff());
+                }
+
+                //if server is removing user data
+                if(data[0].equals(remove)){
+                    String user = data[1];
+                    usersOnlineInstance.removeBuffer(user);
                     System.out.println("Incoming Reader: Added new Data: "+usersOnlineInstance.getOnlineBuff());
                 }
 
