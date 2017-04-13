@@ -28,6 +28,5 @@ public class ChessMaster {
         login.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         login.setSize(500,500);
         login.setVisible(true);
-
     }
 }

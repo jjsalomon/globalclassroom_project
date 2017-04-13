@@ -7,7 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * Created by Francis on 3/18/2017.
+ * Created by Francis   on 3/18/2017.
  * This class contains the GUI components which connectListenHandler to
  * network handlers that  send data to the server and handle
  * response from server
@@ -117,7 +117,7 @@ public class LoginRegister extends JFrame {
                 try {
                     connectListenHandler.writer.println(user + ":" + pw + ":Login");
                     connectListenHandler.writer.flush();
-                    setVisible(false);
+                    //setVisible(false);
                 } catch (Exception ex) {
                     System.out.println("You cannot login, Try again");
                     ex.printStackTrace();
