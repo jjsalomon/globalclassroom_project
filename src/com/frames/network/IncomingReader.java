@@ -58,7 +58,7 @@ public class IncomingReader implements Runnable
                 if(data[0].equals(remove)){
                     String user = data[1];
                     usersOnlineInstance.removeBuffer(user);
-                    System.out.println("Incoming Reader: Added new Data: "+usersOnlineInstance.getOnlineBuff());
+                    System.out.println("Incoming Reader: Remove Data: "+usersOnlineInstance.getOnlineBuff());
                 }
 
                 if(data[1].equals(login)){

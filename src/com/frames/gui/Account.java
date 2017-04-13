@@ -5,8 +5,7 @@ import com.frames.resource.UserOnline;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
+import java.awt.event.*;
 import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -38,6 +37,7 @@ public class Account extends JFrame {
     private JLabel dbrank;
     private JLabel dbloss;
     private JButton Refresh;
+    private JButton Play;
     private JLabel OnlinePlayers;
 
 
@@ -55,6 +55,8 @@ public class Account extends JFrame {
 
 
         //Adding and setting up components
+        setResizable(false);
+
         container = new JPanel();
         container.setLayout(null);
 
@@ -72,7 +74,7 @@ public class Account extends JFrame {
         container.add(OnlinePlayers);
 
         Refresh = new JButton("Refresh");
-        Refresh.setBounds(520,70,150,20);
+        Refresh.setBounds(520,70,150,25);
         Refresh.setHorizontalAlignment(SwingConstants.CENTER);
         Refresh.setFont(new Font("Lucida Handwriting", Font.PLAIN, 20));
         Refresh.setToolTipText("Refresh Online list");
@@ -130,6 +132,14 @@ public class Account extends JFrame {
         dbcoin.setForeground(new Color(245, 245, 245));
         container.add(dbcoin);
 
+        Play = new JButton("Play");
+        Play.setBounds(570,300,100,25);
+        Play.setHorizontalAlignment(SwingConstants.CENTER);
+        Play.setFont(new Font("Lucida Handwriting", Font.PLAIN, 20));
+        Play.setEnabled(false);
+        Play.setToolTipText("Select a player to challenge and then press play");
+        container.add(Play);
+
 /*        skin = new JLabel("Skins"); //server can only send to data[6]? give null pointer.. + this feature don't know how it works
         gridConstraints.gridy = 6;
         gridConstraints.gridx = 1;
@@ -162,7 +172,29 @@ public class Account extends JFrame {
 
         Account.Handlers handler = new Account.Handlers();
         Refresh.addActionListener(handler);
+        Play.addActionListener(handler);
 
+        //user wants to challenge other user
+        MouseListener mouselistener = new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 1) {
+
+                    if (online.getSelectedIndex() == -1) {
+                        //No selection, disable Play button.
+                        Play.setEnabled(false);
+
+                    } else {
+                        //Selection, enable the Play button.
+                        Play.setEnabled(true);
+                    }
+                }
+            }
+
+        };
+        online.addMouseListener(mouselistener);
+
+        //when user wants to log out by X close button
         addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent windowEvent) {
@@ -179,7 +211,7 @@ public class Account extends JFrame {
                         connectListenHandler.ListenThread();
                         System.exit(0);
                     } catch (Exception ex) {
-                        System.out.println("You cannot login, Try again");
+                        System.out.println("You cannot log out, Try again");
                         ex.printStackTrace();
                     }
 
@@ -191,6 +223,7 @@ public class Account extends JFrame {
         });
     }
 
+
     private class Handlers implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e){
@@ -198,11 +231,20 @@ public class Account extends JFrame {
             if(e.getSource() == Refresh){
                 refreshList();
             }
-
-            //if user clicks on a list item
-            if(e.getSource() == online){
-                System.out.println(onlineBuffer.getOnlineBuff().get(online.getSelectedIndex()));
-                refreshList();
+            //if user clicks on play button
+            if(e.getSource() == Play){
+                String selectedItem = (String) online.getSelectedValue();
+                System.out.print(selectedItem);
+                Play.setEnabled(false);
+                try {
+                    connectListenHandler.writer.println(selectedItem + ":Invite");
+                    connectListenHandler.writer.flush();
+                    //Read response information from server
+                    connectListenHandler.ListenThread();
+                } catch (Exception ex) {
+                    System.out.println("You cannot challenge " + selectedItem + "please try again later");
+                    ex.printStackTrace();
+                }
             }
         }
     }
@@ -218,13 +260,8 @@ public class Account extends JFrame {
        for(int i = 0;i<onlineBuffer.getOnlineBuff().size();i++){
            lmodel.addElement(onlineBuffer.getOnlineBuff().get(i));
        }
-        online = new JList(lmodel);
-        System.out.println("REFRESH:"+onlineBuffer.getOnlineBuff());
-        //how many options can they see
-        online.setVisibleRowCount(5);
-        //can only select one thing on the list at the time
-        online.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        container.add(new JScrollPane(online));
-        add(container);
+       //re-set the listmodel
+       online.setModel(lmodel);
+       Play.setEnabled(false);
     }
 }
