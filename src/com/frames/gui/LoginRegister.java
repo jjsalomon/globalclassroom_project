@@ -35,7 +35,7 @@ public class LoginRegister extends JFrame {
     //Initialize components
     public LoginRegister() {
         connectListenHandler = new ConnectListenHandler();
-
+        setResizable(false);
         //Adding and setting up components
         //Container panel = main panel
         container = new JPanel();
