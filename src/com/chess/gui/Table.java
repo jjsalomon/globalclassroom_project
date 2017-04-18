@@ -21,6 +21,7 @@ import static javax.swing.SwingUtilities.isRightMouseButton;
 
 import com.chess.engine.board.Move.MoveFactory;
 import com.chess.engine.player.Player;
+import com.frames.network.ConnectListenHandler;
 import com.google.common.collect.Lists;
 
 import java.awt.event.KeyEvent;
@@ -51,6 +52,8 @@ public final class Table extends Observable {
     private Tile sourceTile;
 
     private Tile destinationTile;
+    private int SourceT;
+    private int DestT;
 
     private Piece humanMovedPiece;
     private BoardDirection boardDirection;
@@ -59,7 +62,7 @@ public final class Table extends Observable {
     private boolean useBook;
     private Color lightTileColor = Color.decode("#FFFACD");
     private Color darkTileColor = Color.decode("#593E1A");
-    private int Counter;
+
     private String getCurrentPlayer;
     private String getPieceAllegianceClicked;
 
@@ -68,8 +71,11 @@ public final class Table extends Observable {
     private static final Dimension TILE_PANEL_DIMENSION = new Dimension(10, 10);
 
     private static final Table INSTANCE = new Table();
+    ConnectListenHandler connectListenHandler;
+
 
     private Table() {
+        connectListenHandler = new ConnectListenHandler();
         this.gameFrame = new JFrame("BlackWidow");
         final JMenuBar tableMenuBar = new JMenuBar();
         populateMenuBar(tableMenuBar);
@@ -96,7 +102,7 @@ public final class Table extends Observable {
         this.gameFrame.setSize(OUTER_FRAME_DIMENSION);
         center(this.gameFrame);
         this.gameFrame.setVisible(true);
-        Counter = -1;
+
 
 
     }
@@ -682,6 +688,9 @@ public final class Table extends Observable {
                             // to get the Piece in the source tile a method in board is used getTile which
                             // takes on parameter thats gonna be the position of the tile clicked
                             sourceTile = chessBoard.getTile(tileId);
+
+                             SourceT = tileId;
+
                             //getPosition =tileId;
 
                             //humanMovedPiece is to check if human clicked on a tile with a piece
@@ -701,7 +710,7 @@ public final class Table extends Observable {
 
                             // transformed those two values to string
                             getCurrentPlayer  = humanMovedPiece.getPieceAllegiance().toString();
-                             getPieceAllegianceClicked = chessBoard.currentPlayer().toString();
+                            getPieceAllegianceClicked = chessBoard.currentPlayer().toString();
 
 
                             System.out.println("Piece Clicked"+getCurrentPlayer);
@@ -716,6 +725,7 @@ public final class Table extends Observable {
                             // uncomment this piece of code to get the chess engine running properly
 
                             destinationTile = chessBoard.getTile(tileId);
+                            DestT = tileId;
 
 
                             System.out.println("Destination"+tileId);
@@ -752,6 +762,17 @@ public final class Table extends Observable {
                                 // that checks if the boolean is true of false if true then the move can be done if not #
                                 // then it will set the sourceTile destinationtile and humanmovePiece to null
                                     if(MoveFactory.getBollean().equals(true)) {
+
+                                        try {
+                                            connectListenHandler.writer.println(SourceT + ":" + DestT + ":Move");
+                                            connectListenHandler.writer.flush();
+
+                                        } catch (Exception ex) {
+                                            System.out.println("You Cannot send data try again");
+                                            ex.printStackTrace();
+                                        }
+                                        //Read response information from server
+                                        connectListenHandler.ListenThread();
 
                                         final MoveTransition transition = chessBoard.currentPlayer().makeMove(move);
 
