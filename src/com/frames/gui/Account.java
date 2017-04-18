@@ -46,13 +46,15 @@ public class Account extends JFrame {
         UserOnline onlineBuff = UserOnline.getInstance();
         this.onlineBuffer = onlineBuff;
         //network
-        connectListenHandler = new ConnectListenHandler();
+
 
         DefaultListModel listModel = new DefaultListModel();
         this.lmodel = listModel;
         //splits stream into data[] username starts at data[2]
         String[] data = stream.split(":");
 
+        // pass down validated message and the username for mapping
+        connectListenHandler = new ConnectListenHandler();
 
         //Adding and setting up components
         setResizable(false);
@@ -237,7 +239,7 @@ public class Account extends JFrame {
                 System.out.print(selectedItem);
                 Play.setEnabled(false);
                 try {
-                    connectListenHandler.writer.println(selectedItem + ":Invite");
+                    connectListenHandler.writer.println(selectedItem +":"+username.getText()+ ":"+"Challenge");
                     connectListenHandler.writer.flush();
                     //Read response information from server
                     connectListenHandler.ListenThread();

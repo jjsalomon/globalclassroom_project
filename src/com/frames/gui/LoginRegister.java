@@ -117,7 +117,7 @@ public class LoginRegister extends JFrame {
                 try {
                     connectListenHandler.writer.println(user + ":" + pw + ":Login");
                     connectListenHandler.writer.flush();
-                    //setVisible(false);
+                    setVisible(false);
                 } catch (Exception ex) {
                     System.out.println("You cannot login, Try again");
                     ex.printStackTrace();

@@ -2,6 +2,7 @@ package com.frames.network;
 
 import com.frames.gui.*;
 import com.frames.resource.UserOnline;
+import com.sun.org.glassfish.gmbal.ParameterNames;
 
 import javax.swing.*;
 import java.io.BufferedReader;
@@ -31,11 +32,14 @@ public class IncomingReader implements Runnable
         String stream,
                 account = "Account",
                 disconnect = "Disconnect", chat = "Message",
-                login = "Login", add="Add", sending = "Sending",remove="Remove";
+                login = "Login", add="Add", sending = "Sending",
+                remove="Remove", invite="Invite", start = "START",
+                declined="DECLINED";
         try {
             while ((stream = breader.readLine()) != null) {
 
                 data = stream.split(":");
+
 
                 if(data[1].equals(chat)){
                     System.out.println(stream);
@@ -72,6 +76,31 @@ public class IncomingReader implements Runnable
                     accounts.setSize(700,500);
                     accounts.setVisible(true);
                 }
+
+                if(data[0].equals(invite)){
+                    //PARAM: challenged, challenger
+                    String challenged = data[1];
+                    String challenger = data[2];
+                    ShowInvitePane invitePane = new ShowInvitePane(challenged,challenger);
+                    invitePane.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+                    invitePane.setSize(300,250);
+                    invitePane.setVisible(true);
+
+
+                    System.out.println("You have been invited by: "+data[1]);
+                    System.out.println(stream);
+                }
+
+                if(data[0].equals(start)){
+                    //Create board here
+                    System.out.println(stream);
+                }
+
+                if(data[0].equals(declined)){
+                    System.out.println("User has declined");
+                    System.out.println(stream);
+                }
+
             }
         }catch(Exception ex) {
             ex.printStackTrace();
