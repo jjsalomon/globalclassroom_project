@@ -25,7 +25,7 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="guava-21.0" level="project" />
     <orderEntry type="library" name="guava-21" level="application" />
+    <orderEntry type="library" name="guava-21.0" level="project" />
   </component>
 </module>

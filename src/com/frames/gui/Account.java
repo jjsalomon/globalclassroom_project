@@ -82,14 +82,14 @@ public class Account extends JFrame {
         Refresh.setToolTipText("Refresh Online list");
         container.add(Refresh);
 
-        rank = new JLabel("Rank#");
+        rank = new JLabel("Rank");
         rank.setBounds(35,120,100,20);
         rank.setFont(new Font("Lucida Handwriting", Font.PLAIN, 18));
         rank.setForeground(new Color(245, 245, 245));
         container.add(rank);
 
-//        dbrank = new JLabel(data[3]); //user rank data from database
-        dbrank = new JLabel("12"); //user rank data from database
+        dbrank = new JLabel("#"+data[3]); //user rank data from database
+//        dbrank = new JLabel("12"); //dummy data
         dbrank.setBounds(120,120,100,20);
         dbrank.setFont(new Font("Lucida Handwriting", Font.PLAIN, 18));
         dbrank.setForeground(new Color(245, 245, 245));
@@ -101,8 +101,8 @@ public class Account extends JFrame {
         win.setForeground(new Color(245, 245, 245));
         container.add(win);
 
-        dbwin = new JLabel("15"); //user win data from database
-//        dbwin = new JLabel(data[4]); //user win data from database
+//        dbwin = new JLabel("15"); //dummy data
+        dbwin = new JLabel(data[4]); //user win data from database
         dbwin.setBounds(120,170,100,20);
         dbwin.setFont(new Font("Lucida Handwriting", Font.PLAIN, 18));
         dbwin.setForeground(new Color(245, 245, 245));
@@ -114,8 +114,8 @@ public class Account extends JFrame {
         loss.setForeground(new Color(245, 245, 245));
         container.add(loss);
 
-        dbloss = new JLabel("55"); //user loss data from database
-//        dbloss = new JLabel(data[5]); //user loss data from database
+//        dbloss = new JLabel("55"); //dummy data
+        dbloss = new JLabel(data[5]); //user loss data from database
         dbloss.setBounds(120,220,100,20);
         dbloss.setFont(new Font("Lucida Handwriting", Font.PLAIN, 18));
         dbloss.setForeground(new Color(245, 245, 245));
@@ -127,8 +127,8 @@ public class Account extends JFrame {
         coins.setForeground(new Color(245, 245, 245));
         container.add(coins);
 
-        dbcoin = new JLabel("13224"); //user coin data from database
-//        dbcoin = new JLabel(data[6]); //user coin data from database
+//        dbcoin = new JLabel("13224"); //dummy data
+        dbcoin = new JLabel(data[6]); //user coin data from database
         dbcoin.setBounds(120,270,100,20);
         dbcoin.setFont(new Font("Lucida Handwriting", Font.PLAIN, 18));
         dbcoin.setForeground(new Color(245, 245, 245));

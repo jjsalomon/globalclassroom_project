@@ -1,5 +1,7 @@
 package com.frames.network;
 
+import com.chess.engine.board.Board;
+import com.chess.gui.Table;
 import com.frames.gui.*;
 import com.frames.resource.UserOnline;
 import com.sun.org.glassfish.gmbal.ParameterNames;
@@ -93,6 +95,9 @@ public class IncomingReader implements Runnable
 
                 if(data[0].equals(start)){
                     //Create board here
+                    Board board = Board.createStandardBoard();
+                    System.out.println(board);
+                    Table.get().show();
                     System.out.println(stream);
                 }
 
