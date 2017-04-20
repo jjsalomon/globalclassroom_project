@@ -22,6 +22,7 @@ import static javax.swing.SwingUtilities.isRightMouseButton;
 import com.chess.engine.board.Move.MoveFactory;
 import com.chess.engine.player.Player;
 import com.frames.network.ConnectListenHandler;
+import com.frames.network.IncomingReader;
 import com.google.common.collect.Lists;
 
 import java.awt.event.KeyEvent;
@@ -69,9 +70,14 @@ public final class Table extends Observable {
     private static final Dimension OUTER_FRAME_DIMENSION = new Dimension(600, 600);
     private static final Dimension BOARD_PANEL_DIMENSION = new Dimension(400, 350);
     private static final Dimension TILE_PANEL_DIMENSION = new Dimension(10, 10);
+    private static String Challenger;
+    private static String Challenged;
 
     private static final Table INSTANCE = new Table();
     ConnectListenHandler connectListenHandler;
+    IncomingReader IncomingReader = new IncomingReader();
+
+
 
 
     private Table() {
@@ -105,7 +111,14 @@ public final class Table extends Observable {
 
 
 
+       // System.out.println("Challenger"+Challenger);
+        //System.out.println("Challenged"+Challenged);
+
+
+
     }
+
+
 
     public static Table get() {
         return INSTANCE;
@@ -660,9 +673,15 @@ public final class Table extends Observable {
 
             // this instance passes the data so if you hard code 52 it'll get the sourcetile of the 5th pawn behind the king
             // uncomment these two piece of code and click on the gui to see the change automatically because the tileid was entered
-            //
+
             //sourceTile = chessBoard.getTile(52);
             //destinationTile = chessBoard.getTile(36);
+
+            //Challenger=  IncomingReader.GetChallenger();
+           // Challenged =  IncomingReader.GetChallenged();
+            System.out.println("heyyyy"+IncomingReader.GetChallenged());
+            System.out.println("heyyyy"+IncomingReader.GetChallenger());
+
 
 
             addMouseListener(new MouseListener() {
@@ -764,7 +783,10 @@ public final class Table extends Observable {
                                     if(MoveFactory.getBollean().equals(true)) {
 
                                         try {
-                                            connectListenHandler.writer.println(SourceT + ":" + DestT + ":Move");
+                                            System.out.println("heyyyy"+IncomingReader.GetChallenged());
+                                            System.out.println("heyyyy"+IncomingReader.GetChallenger());
+                                            connectListenHandler.writer.println("Move"+ ":"+ IncomingReader.getChallenger() + ":" +IncomingReader.GetChallenged()+ ":"+ SourceT + ":" + DestT );
+
                                             connectListenHandler.writer.flush();
 
                                         } catch (Exception ex) {

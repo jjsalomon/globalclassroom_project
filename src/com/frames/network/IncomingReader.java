@@ -8,14 +8,53 @@ import com.sun.org.glassfish.gmbal.ParameterNames;
 
 import javax.swing.*;
 import java.io.BufferedReader;
+import java.io.PrintWriter;
 
 /**
  * Created by azkei on 02/04/2017.
  * This class class is a Thread handler for information
  * coming into the client.
  */
+
+
 public class IncomingReader implements Runnable {
+    private static String Challenger;
+    private static String Challenged;
+
+
+
+
+
+
+    public IncomingReader() {
+
+
+       // this.Challenger = Challenger;
+        //this.Challenged = Challenged ;
+    }
+
+    public static String getChallenger() {
+        return Challenger;
+    }
+
+    public static void setChallenger(String challenger) {
+        Challenger = challenger;
+    }
+
+    public static String getChallenged() {
+        return Challenged;
+    }
+
+    public static void setChallenged(String challenged) {
+        Challenged = challenged;
+    }
+
+
+
     BufferedReader breader;
+
+
+
 
     public IncomingReader(BufferedReader reader) {
         this.breader = reader;
@@ -34,7 +73,7 @@ public class IncomingReader implements Runnable {
                 disconnect = "Disconnect", chat = "Message",
                 login = "Login", add = "Add", sending = "Sending",
                 remove = "Remove", invite = "Invite", start = "START",
-                declined = "DECLINED";
+                declined = "DECLINED"  , move = "Move";
         try {
             while ((stream = breader.readLine()) != null) {
                 data = stream.split(":");
@@ -92,17 +131,20 @@ public class IncomingReader implements Runnable {
 
                 if (data[0].equals(start)) {
 
-                    //Person who sent the invite
-                    String challenger = data[1];
+                                      //Person who sent the invite
+                    //Challenger= data[1];
                     //Person who received the invite
-                    String challenged = data[2];
+                     //Challenged = data[2];
 
-                    System.out.println("I am challenger!: "+ challenger);
-                    System.out.println("I am the challenged!: "+challenged);
+                    setChallenger(data[1]);
+                    setChallenged(data[2]);
+
+                    System.out.println("I am challenger!: "+ getChallenger());
+                    System.out.println("I am the challenged!: "+getChallenged());
                     System.out.println(stream);
                     //Create board here
                     Board board = Board.createStandardBoard();
-                    System.out.println(board);
+                   System.out.println(board);
                     Table.get().show();
 
 
@@ -111,10 +153,39 @@ public class IncomingReader implements Runnable {
                 if (data[0].equals(declined)) {
                     System.out.println("User has declined");
                     System.out.println(stream);
+                }else if(data[0].equals(move)){
+                    //data coming in into readable strings
+                    //challenger
+                    String fromClient = data[1];
+                    //challenged
+                    String toClient = data[2];
+                    String sourceTile = data[3];
+                    String destinationTile = data[4];
+
+                    System.out.println("from Client"+fromClient);
+                    System.out.println("to Client"+toClient);
+                    System.out.println("source "+sourceTile);
+                    System.out.println("Dest "+destinationTile);
+
+                    //sending to the other client
+                    //PrintWriter toClientWriter = singleton.fetchSocket(toClient);
+                   // toClientWriter.println("Move"+":"+fromClient+":"+toClient+":"+sourceTile+":"+destinationTile);
+                    //toClientWriter.flush();
+
                 }
             }
             }catch(Exception ex){
                 ex.printStackTrace();
             }
+    }
+
+
+    public String GetChallenger()
+    {
+        return Challenger;
+    }
+    public String GetChallenged()
+    {
+        return Challenged;
     }
 }

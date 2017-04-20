@@ -92,8 +92,10 @@ public final class Board {
 
     //get tile method chooses the piece
     public Tile getTile(final int coordinate) {
+
         return this.gameBoard.get(coordinate);
     }
+
 
     public List<Tile> getGameBoard() {
         return this.gameBoard;

@@ -122,5 +122,6 @@ public enum  BoardUtils {
     public static boolean isEndGame(final Board board) {
         return board.currentPlayer().isInCheckMate() ||
                 board.currentPlayer().isInStaleMate();
+
     }
 }
