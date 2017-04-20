@@ -53,8 +53,7 @@ public final class UserOnline {
         return onlineBuff;
     }
 
-    public void clearBuffer() { onlineBuff.clear();
-    }
+    public void clearBuffer(){ onlineBuff.clear();}
 
 
 }

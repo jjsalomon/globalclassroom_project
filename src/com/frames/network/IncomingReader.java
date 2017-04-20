@@ -14,8 +14,7 @@ import java.io.BufferedReader;
  * This class class is a Thread handler for information
  * coming into the client.
  */
-public class IncomingReader implements Runnable
-{
+public class IncomingReader implements Runnable {
     BufferedReader breader;
 
     public IncomingReader(BufferedReader reader) {
@@ -24,8 +23,7 @@ public class IncomingReader implements Runnable
 
 
     @Override
-    public void run()
-    {
+    public void run() {
         UserOnline usersOnlineInstance = UserOnline.getInstance();
         System.out.println("IncomingReader: Instance ID" + System.identityHashCode(usersOnlineInstance));
 
@@ -34,81 +32,89 @@ public class IncomingReader implements Runnable
         String stream,
                 account = "Account",
                 disconnect = "Disconnect", chat = "Message",
-                login = "Login", add="Add", sending = "Sending",
-                remove="Remove", invite="Invite", start = "START",
-                declined="DECLINED";
+                login = "Login", add = "Add", sending = "Sending",
+                remove = "Remove", invite = "Invite", start = "START",
+                declined = "DECLINED";
         try {
             while ((stream = breader.readLine()) != null) {
-
                 data = stream.split(":");
 
 
-                if(data[1].equals(chat)){
+                if (data[1].equals(chat)) {
                     System.out.println(stream);
                 }
 
                 //clear the existing buffer and add new data
-                if(data[0].equals(sending)){
+                if (data[0].equals(sending)) {
                     usersOnlineInstance.clearBuffer();
-                    System.out.println("Incoming Reader: Buffer Cleared: "+usersOnlineInstance.getOnlineBuff());
+                    System.out.println("Incoming Reader: Buffer Cleared: " + usersOnlineInstance.getOnlineBuff());
                 }
 
                 //if server is streaming user data
-                if(data[0].equals(add)){
+                if (data[0].equals(add)) {
                     String user = data[1];
                     usersOnlineInstance.addBuffer(user);
-                    System.out.println("Incoming Reader: Added new Data: "+usersOnlineInstance.getOnlineBuff());
+                    System.out.println("Incoming Reader: Added new Data: " + usersOnlineInstance.getOnlineBuff());
                 }
 
                 //if server is removing user data
-                if(data[0].equals(remove)){
+                if (data[0].equals(remove)) {
                     String user = data[1];
                     usersOnlineInstance.removeBuffer(user);
-                    System.out.println("Incoming Reader: Remove Data: "+usersOnlineInstance.getOnlineBuff());
+                    System.out.println("Incoming Reader: Remove Data: " + usersOnlineInstance.getOnlineBuff());
                 }
 
-                if(data[1].equals(login)){
+                if (data[1].equals(login)) {
 
                     //Show new account activity
                     System.out.println(stream);
                     //create GUI and pass account information.
-                    Account accounts =  new Account(stream);
+                    Account accounts = new Account(stream);
                     //whenever x button then terminate
                     accounts.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                    accounts.setSize(700,500);
+                    accounts.setSize(700, 500);
                     accounts.setVisible(true);
                 }
 
-                if(data[0].equals(invite)){
+                if (data[0].equals(invite)) {
                     //PARAM: challenged, challenger
                     String challenged = data[1];
                     String challenger = data[2];
-                    ShowInvitePane invitePane = new ShowInvitePane(challenged,challenger);
+                    ShowInvitePane invitePane = new ShowInvitePane(challenged, challenger);
                     invitePane.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                    invitePane.setSize(300,250);
+                    invitePane.setSize(300, 250);
                     invitePane.setVisible(true);
 
 
-                    System.out.println("You have been invited by: "+data[1]);
+                    System.out.println("You have been invited by: " + data[1]);
                     System.out.println(stream);
                 }
 
-                if(data[0].equals(start)){
+                if (data[0].equals(start)) {
+
+                    //Person who sent the invite
+                    String challenger = data[1];
+                    //Person who received the invite
+                    String challenged = data[2];
+
+                    System.out.println("I am challenger!: "+ challenger);
+                    System.out.println("I am the challenged!: "+challenged);
+                    System.out.println(stream);
                     //Create board here
                     Board board = Board.createStandardBoard();
                     System.out.println(board);
                     Table.get().show();
-                    System.out.println(stream);
+
+
                 }
 
-                if(data[0].equals(declined)){
+                if (data[0].equals(declined)) {
                     System.out.println("User has declined");
                     System.out.println(stream);
                 }
-
             }
-        }catch(Exception ex) {
-            ex.printStackTrace();
-        }
+            }catch(Exception ex){
+                ex.printStackTrace();
+            }
     }
 }
