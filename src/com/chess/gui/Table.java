@@ -750,8 +750,7 @@ public final class Table extends Observable {
                             if (MoveFactory.getBollean().equals(true)) {
 
                                 try {
-
-                                    connectListenHandler.writer.println("Move" + ":" +moveBuffer.getChallenger()+":"+moveBuffer.getChallenged()+":" + SourceT + ":" + DestT);
+                                    connectListenHandler.writer.println("Move" + ":" +moveBuffer.getSend()+":"+moveBuffer.getFrom()+":" + SourceT + ":" + DestT);
 
                                     connectListenHandler.writer.flush();
 

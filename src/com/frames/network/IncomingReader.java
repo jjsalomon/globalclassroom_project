@@ -111,7 +111,6 @@ public class IncomingReader implements Runnable {
                     System.out.println(board);
                     Table.get().show();
 
-
                 }
 
                 if (data[0].equals(declined)) {
@@ -133,8 +132,7 @@ public class IncomingReader implements Runnable {
                     System.out.println("source "+sourceTile);
                     System.out.println("Dest "+destinationTile);
 
-                    moveBuffer.addIncomingMove(fromClient,toClient,
-                                                sourceTile,destinationTile);
+                    moveBuffer.addIncomingMove(fromClient, toClient,sourceTile,destinationTile);
                 }
             }
             }catch(Exception ex){

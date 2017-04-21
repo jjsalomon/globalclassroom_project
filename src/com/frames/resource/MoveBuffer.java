@@ -16,8 +16,8 @@ public final class MoveBuffer{
 
     String sourceTile = null;
     String destinationTile = null;
-    String challenger = null;
-    String challenged = null;
+    String sendTo = null;
+    String sendFrom = null;
 
     //empty constructor
     private MoveBuffer(){}
@@ -49,12 +49,12 @@ public final class MoveBuffer{
 
     //adds the move strings here / sets the data into this buffer
     //each addition overwrites the existing one
-    public void addIncomingMove(String readChallenger,
-                                String readChallenged,
+    public void addIncomingMove(String to, String from,
                                 String readSourceTile,
                                 String readDestinationTile){
-        challenger = readChallenger;
-        challenged = readChallenged;
+        //helps alternation
+        sendTo = from;
+        sendFrom = to;
         sourceTile = readSourceTile;
         destinationTile = readDestinationTile;
         System.out.println("Added sourceTile: "+sourceTile+
@@ -63,9 +63,9 @@ public final class MoveBuffer{
     }
 
 
-    public void addPlayers(String inChallenger, String inChallenged){
-        challenger = inChallenger;
-        challenged = inChallenged;
+    public void addPlayers(String to, String from){
+        sendTo = to;
+        sendFrom = from;
     }
 
     //function to fetch buffer data
@@ -73,8 +73,8 @@ public final class MoveBuffer{
 
     public String getDestinationTile(){return destinationTile;}
 
-    public String getChallenger(){return challenger;}
+    public String getSend(){return sendTo;}
 
-    public String getChallenged(){return challenged;}
+    public String getFrom(){return sendFrom;}
 
 }
