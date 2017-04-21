@@ -153,6 +153,9 @@ public class Account extends JFrame {
         for(int i =0; i<onlineBuff.getOnlineBuff().size();i++){
             lmodel.addElement(onlineBuffer.getOnlineBuff().get(i));
         }
+        //removes the user's name in the list
+        lmodel.removeElement(username.getText());
+
         //add into the JList
         online = new JList(lmodel);
         //how many options can they see
@@ -161,6 +164,7 @@ public class Account extends JFrame {
         online.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         online.setForeground(new Color(245, 245, 245));
         online.setBackground(new Color(0, 0, 0));
+        online.setFont(new Font("San Serif",Font.PLAIN, 20));
         jspane = new JScrollPane(online);
         jspane.setBounds(270,120,400,170);
         container.add(jspane);
@@ -216,9 +220,11 @@ public class Account extends JFrame {
                         System.out.println("You cannot log out, Try again");
                         ex.printStackTrace();
                     }
-
                 }
                 if (confirm == JOptionPane.NO_OPTION) {
+                    setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+                }
+                if (confirm == JOptionPane.CLOSED_OPTION) {
                     setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
                 }
             }
@@ -262,6 +268,10 @@ public class Account extends JFrame {
        for(int i = 0;i<onlineBuffer.getOnlineBuff().size();i++){
            lmodel.addElement(onlineBuffer.getOnlineBuff().get(i));
        }
+
+       //removes the user's name in the list
+       lmodel.removeElement(username.getText());
+
        //re-set the listmodel
        online.setModel(lmodel);
        Play.setEnabled(false);

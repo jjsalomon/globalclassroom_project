@@ -1,5 +1,6 @@
 package com.frames.network;
 
+import com.ChessMaster;
 import com.chess.engine.board.Board;
 import com.chess.gui.Table;
 import com.frames.gui.*;
@@ -73,7 +74,8 @@ public class IncomingReader implements Runnable {
                 disconnect = "Disconnect", chat = "Message",
                 login = "Login", add = "Add", sending = "Sending",
                 remove = "Remove", invite = "Invite", start = "START",
-                declined = "DECLINED"  , move = "Move";
+                declined = "DECLINED"  , move = "Move" /*,islogin= "islogin"*/;
+
         try {
             while ((stream = breader.readLine()) != null) {
                 data = stream.split(":");
@@ -113,7 +115,18 @@ public class IncomingReader implements Runnable {
                     accounts.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                     accounts.setSize(700, 500);
                     accounts.setVisible(true);
+
                 }
+/*
+
+                if (data[1].equals(islogin)) {
+                    JOptionPane.showMessageDialog(//should be the login gui frame,
+                             " is already log in",
+                            "Login Error",
+                            JOptionPane.ERROR_MESSAGE);
+                            //how to set login gui to setvisible true
+                }
+*/
 
                 if (data[0].equals(invite)) {
                     //PARAM: challenged, challenger
@@ -121,7 +134,8 @@ public class IncomingReader implements Runnable {
                     String challenger = data[2];
                     ShowInvitePane invitePane = new ShowInvitePane(challenged, challenger);
                     invitePane.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                    invitePane.setSize(300, 250);
+//                    invitePane.setSize(300, 250);
+                    invitePane.pack();
                     invitePane.setVisible(true);
 
 
@@ -142,6 +156,7 @@ public class IncomingReader implements Runnable {
                     System.out.println("I am challenger!: "+ getChallenger());
                     System.out.println("I am the challenged!: "+getChallenged());
                     System.out.println(stream);
+
                     //Create board here
                     Board board = Board.createStandardBoard();
                    System.out.println(board);

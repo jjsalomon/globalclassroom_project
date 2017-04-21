@@ -18,9 +18,11 @@ import static javax.swing.JFrame.setDefaultLookAndFeelDecorated;
 import static javax.swing.SwingUtilities.invokeLater;
 import static javax.swing.SwingUtilities.isLeftMouseButton;
 import static javax.swing.SwingUtilities.isRightMouseButton;
+import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE;
 
 import com.chess.engine.board.Move.MoveFactory;
 import com.chess.engine.player.Player;
+import com.frames.gui.Account;
 import com.frames.network.ConnectListenHandler;
 import com.frames.network.IncomingReader;
 import com.google.common.collect.Lists;
@@ -109,7 +111,37 @@ public final class Table extends Observable {
         center(this.gameFrame);
         this.gameFrame.setVisible(true);
 
+        //when user wants to log out by X close button
+        this.gameFrame.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
 
+                int confirm = JOptionPane.showOptionDialog(gameFrame,
+                        "Are you sure you want exit game",
+                        "Exit Confirmation", JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE, null, null, null);
+                if (confirm == JOptionPane.YES_OPTION) {
+                    System.out.println("CLOSING GAME");
+                    System.exit(0);
+                    /* try {
+                        connectListenHandler.writer.println(username.getText() + ":to" + ":Disconnect");
+                        connectListenHandler.writer.flush();
+                        //Read response information from server
+                        connectListenHandler.ListenThread();
+                        System.exit(0);
+                    } catch (Exception ex) {
+                        System.out.println("You cannot log out, Try again");
+                        ex.printStackTrace();
+                    }*/
+                }
+                if (confirm == JOptionPane.NO_OPTION) {
+                    gameFrame.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+                }
+                if (confirm == JOptionPane.CLOSED_OPTION) {
+                    gameFrame.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+                }
+            }
+        });
 
        // System.out.println("Challenger"+Challenger);
         //System.out.println("Challenged"+Challenged);
