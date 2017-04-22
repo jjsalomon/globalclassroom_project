@@ -18,13 +18,12 @@ import static javax.swing.JFrame.setDefaultLookAndFeelDecorated;
 import static javax.swing.SwingUtilities.invokeLater;
 import static javax.swing.SwingUtilities.isLeftMouseButton;
 import static javax.swing.SwingUtilities.isRightMouseButton;
-import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE;
 
 import com.chess.engine.board.Move.MoveFactory;
 import com.chess.engine.player.Player;
-import com.frames.gui.Account;
 import com.frames.network.ConnectListenHandler;
 import com.frames.network.IncomingReader;
+import com.frames.resource.MoveBuffer;
 import com.google.common.collect.Lists;
 
 import java.awt.event.KeyEvent;
@@ -51,7 +50,6 @@ public final class Table extends Observable {
     private Board chessBoard;
     private Move computerMove;
 
-
     private Tile sourceTile;
 
     private Tile destinationTile;
@@ -77,9 +75,7 @@ public final class Table extends Observable {
 
     private static final Table INSTANCE = new Table();
     ConnectListenHandler connectListenHandler;
-    IncomingReader IncomingReader = new IncomingReader();
-
-
+    MoveBuffer moveBuffer = MoveBuffer.getFirstInstance();
 
 
     private Table() {
@@ -110,43 +106,6 @@ public final class Table extends Observable {
         this.gameFrame.setSize(OUTER_FRAME_DIMENSION);
         center(this.gameFrame);
         this.gameFrame.setVisible(true);
-
-        //when user wants to log out by X close button
-        this.gameFrame.addWindowListener(new java.awt.event.WindowAdapter() {
-            @Override
-            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
-
-                int confirm = JOptionPane.showOptionDialog(gameFrame,
-                        "Are you sure you want exit game",
-                        "Exit Confirmation", JOptionPane.YES_NO_OPTION,
-                        JOptionPane.QUESTION_MESSAGE, null, null, null);
-                if (confirm == JOptionPane.YES_OPTION) {
-                    System.out.println("CLOSING GAME");
-                    System.exit(0);
-                    /* try {
-                        connectListenHandler.writer.println(username.getText() + ":to" + ":Disconnect");
-                        connectListenHandler.writer.flush();
-                        //Read response information from server
-                        connectListenHandler.ListenThread();
-                        System.exit(0);
-                    } catch (Exception ex) {
-                        System.out.println("You cannot log out, Try again");
-                        ex.printStackTrace();
-                    }*/
-                }
-                if (confirm == JOptionPane.NO_OPTION) {
-                    gameFrame.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-                }
-                if (confirm == JOptionPane.CLOSED_OPTION) {
-                    gameFrame.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
-                }
-            }
-        });
-
-       // System.out.println("Challenger"+Challenger);
-        //System.out.println("Challenged"+Challenged);
-
-
 
     }
 
@@ -544,11 +503,6 @@ public final class Table extends Observable {
         Table.get().getDebugPanel().redo();
     }
 
-
-
-
-
-
     private void undoLastMove() {
         final Move lastMove = Table.get().getMoveLog().removeMove(Table.get().getMoveLog().size() - 1);
         this.chessBoard = this.chessBoard.currentPlayer().unMakeMove(lastMove).getToBoard();
@@ -570,14 +524,10 @@ public final class Table extends Observable {
         notifyObservers(gameSetup);
     }
 
-
-
     enum PlayerType {
         HUMAN,
         COMPUTER
     }
-
-
 
     private class BoardPanel extends JPanel {
 
@@ -692,8 +642,6 @@ public final class Table extends Observable {
 
         private final int tileId;
 
-
-
         TilePanel(final BoardPanel boardPanel,
                   final int tileId) {
             super(new GridBagLayout());
@@ -709,19 +657,12 @@ public final class Table extends Observable {
             //sourceTile = chessBoard.getTile(52);
             //destinationTile = chessBoard.getTile(36);
 
-            //Challenger=  IncomingReader.GetChallenger();
-           // Challenged =  IncomingReader.GetChallenged();
-            System.out.println("heyyyy"+IncomingReader.GetChallenged());
-            System.out.println("heyyyy"+IncomingReader.GetChallenger());
-
-
+            //System.out.println("heyyyy"+moveBuffer.getChallenged());
+            //System.out.println("heyyyy"+moveBuffer.getChallenger());
 
             addMouseListener(new MouseListener() {
                 @Override
                 public void mouseClicked(final MouseEvent event) {
-
-
-
 
                     if (isRightMouseButton(event)) {
 
@@ -731,7 +672,6 @@ public final class Table extends Observable {
                         humanMovedPiece = null;
                     } else if (isLeftMouseButton(event)) {
 
-
                         if (sourceTile == null ) {
 
                             //sourcetile equal the
@@ -740,7 +680,7 @@ public final class Table extends Observable {
                             // takes on parameter thats gonna be the position of the tile clicked
                             sourceTile = chessBoard.getTile(tileId);
 
-                             SourceT = tileId;
+                            SourceT = tileId;
 
                             //getPosition =tileId;
 
@@ -770,8 +710,7 @@ public final class Table extends Observable {
 
 
                         }
-                        else
-                        {
+                        else {
 
                             // uncomment this piece of code to get the chess engine running properly
 
@@ -779,76 +718,66 @@ public final class Table extends Observable {
                             DestT = tileId;
 
 
-                            System.out.println("Destination"+tileId);
+                            System.out.println("Destination: " + tileId);
 
 
                             //it checks if destination tile is equal to source tile if yah then set the instances do null
 
+                            System.out.println("Piece Clicked: " + getCurrentPlayer);
+                            System.out.println("Current Player: " + getPieceAllegianceClicked);
 
 
-
-                                System.out.println("Piece Clicked"+getCurrentPlayer);
-                                System.out.println("Current Player"+getPieceAllegianceClicked);
-
-
-
-                                // MoveFactory this class will check for all the legal moves when you clickn on a piece
-                                // if user chooses a legal move the it returns the move if not the it returns a
-                                // nullVale theres a boolean ismovelegal if thats true it draws the piece o the
-                                // board  if not it deselect the sourcetile instance and other instances
+                            // MoveFactory this class will check for all the legal moves when you clickn on a piece
+                            // if user chooses a legal move the it returns the move if not the it returns a
+                            // nullVale theres a boolean ismovelegal if thats true it draws the piece o the
+                            // board  if not it deselect the sourcetile instance and other instances
 
 
 //                                System.out.println("Tile Dest" +destinationTile.getTileCoordinate());
 
-                               // System.out.println("Tile Sourc" +sourceTile.getTileCoordinate());
-                                    final Move move = MoveFactory.createMove(chessBoard, sourceTile.getTileCoordinate(),
-                                            destinationTile.getTileCoordinate());
+                            // System.out.println("Tile Source: " +sourceTile.getTileCoordinate());
+                            final Move move = MoveFactory.createMove(chessBoard, sourceTile.getTileCoordinate(),
+                                    destinationTile.getTileCoordinate());
 
 
-                                System.out.println("Get Boolean"+MoveFactory.getBollean());
-                                System.out.println("This is the legalMoveChosen  "+move);
+                            System.out.println("Get Boolean: " + MoveFactory.getBollean());
+                            System.out.println("This is the legalMoveChosen: " + move);
 
-                                //String moveee =  move.toString();
-                                //  System.out.println("nullmoveeee"+chessBoard.getAllLegalMoves());
-                                // that checks if the boolean is true of false if true then the move can be done if not #
-                                // then it will set the sourceTile destinationtile and humanmovePiece to null
-                                    if(MoveFactory.getBollean().equals(true)) {
+                            //String moveee =  move.toString();
+                            // System.out.println("nullmoveeee"+chessBoard.getAllLegalMoves());
+                            // that checks if the boolean is true of false if true then the move can be done if not #
+                            // then it will set the sourceTile destinationtile and humanmovePiece to null
+                            if (MoveFactory.getBollean().equals(true)) {
 
-                                        try {
-                                            System.out.println("heyyyy"+IncomingReader.GetChallenged());
-                                            System.out.println("heyyyy"+IncomingReader.GetChallenger());
-                                            connectListenHandler.writer.println("Move"+ ":"+ IncomingReader.getChallenger() + ":" +IncomingReader.GetChallenged()+ ":"+ SourceT + ":" + DestT );
+                                try {
+                                    connectListenHandler.writer.println("Move" + ":" +moveBuffer.getSend()+":"+moveBuffer.getFrom()+":" + SourceT + ":" + DestT);
 
-                                            connectListenHandler.writer.flush();
+                                    connectListenHandler.writer.flush();
 
-                                        } catch (Exception ex) {
-                                            System.out.println("You Cannot send data try again");
-                                            ex.printStackTrace();
-                                        }
-                                        //Read response information from server
-                                        connectListenHandler.ListenThread();
+                                } catch (Exception ex) {
+                                    System.out.println("You Cannot send data try again");
+                                    ex.printStackTrace();
+                                }
+                                //Read response information from server
+                                connectListenHandler.ListenThread();
 
-                                        final MoveTransition transition = chessBoard.currentPlayer().makeMove(move);
+                                final MoveTransition transition = chessBoard.currentPlayer().makeMove(move);
 
 
-                                        System.out.println("allianve"+chessBoard.currentPlayer().getAlliance());
-                                        if (transition.getMoveStatus().isDone()) {
+                                System.out.println("Alliance: " + chessBoard.currentPlayer().getAlliance());
+                                if (transition.getMoveStatus().isDone()) {
 
+                                    // board will be rendered again and will add move
+                                    chessBoard = transition.getToBoard();
 
-                                            // board will be rendered again and will add move
-                                            chessBoard = transition.getToBoard();
-
-                                            //this add the move to the movelog
-                                            moveLog.addMove(move);
-                                        }
-                                    }
-                                sourceTile = null;
-                                destinationTile = null;
-                                humanMovedPiece = null;
-
-
+                                    //this add the move to the movelog
+                                    moveLog.addMove(move);
+                                }
                             }
-
+                            sourceTile = null;
+                            destinationTile = null;
+                            humanMovedPiece = null;
+                        }
                     }
                     invokeLater(new Runnable() {
                         public void run() {
@@ -857,7 +786,6 @@ public final class Table extends Observable {
                             if (gameSetup.isAIPlayer(chessBoard.currentPlayer())) {
                                 Table.get().moveMadeUpdate(PlayerType.HUMAN);
                             }
-
                             //this will redraw the board
                             boardPanel.drawBoard(chessBoard);
                             debugPanel.redo();
