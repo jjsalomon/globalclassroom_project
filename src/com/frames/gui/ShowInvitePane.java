@@ -1,6 +1,7 @@
 package com.frames.gui;
 
 import com.frames.network.ConnectListenHandler;
+import com.frames.resource.UserOnline;
 
 import javax.swing.*;
 import java.awt.*;
@@ -13,6 +14,7 @@ import java.awt.event.ActionListener;
 public class ShowInvitePane extends JFrame {
 
     private JLabel message;
+    private JLabel inviter;
     private JPanel container;
     private JButton yesBtn;
     private JButton noBtn;
@@ -27,18 +29,29 @@ public class ShowInvitePane extends JFrame {
         this.challenger = challenger;
 
         connectListenHandler = new ConnectListenHandler();
+        UserOnline usersOnlineInstance = UserOnline.getInstance();
+        SingletonAccount sgaccount = SingletonAccount.getFirstInstance(usersOnlineInstance.getStream());
+
         //Adding and setting up components
         setResizable(false);
+        setLocationRelativeTo(sgaccount);
 
-        setLayout(new GridLayout(0,1,3,3));
-        message = new JLabel("You have been invited to play by: " + challenger);
-        message.setFont(new Font("San Serif", Font.PLAIN, 14));
+        setLayout(new GridLayout(0,1,7,7));
+        inviter = new JLabel(challenger);
+        inviter.setHorizontalAlignment(SwingConstants.CENTER);
+        inviter.setFont(new Font("San Serif", Font.BOLD, 14));
+        add(inviter);
+
+        message = new JLabel("Challenge you!");
+        message.setHorizontalAlignment(SwingConstants.CENTER);
+        message.setFont(new Font("San Serif", Font.BOLD, 20));
         add(message);
 
         yesBtn = new JButton("Accept");
         noBtn = new JButton("Decline");
         add(yesBtn);
         add(noBtn);
+
         //handler class
         Handlers handler = new Handlers();
 
