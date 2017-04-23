@@ -10,11 +10,8 @@ import com.frames.gui.*;
 import com.frames.resource.MoveBuffer;
 import com.frames.gui.SingletonLogin;
 import com.frames.resource.UserOnline;
-<<<<<<< HEAD
 import com.sun.org.glassfish.gmbal.ParameterNames;
 import javafx.scene.control.Tab;
-=======
->>>>>>> e9522fba73efc2b3d57462d4195ccd300d1adacf
 
 import javax.swing.*;
 import java.io.BufferedReader;

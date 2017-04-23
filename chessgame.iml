@@ -26,10 +26,8 @@
       </library>
     </orderEntry>
     <orderEntry type="library" name="guava-21" level="application" />
-<<<<<<< HEAD
     <orderEntry type="library" name="guava-211" level="project" />
-=======
     <orderEntry type="library" name="guava-21.0" level="project" />
->>>>>>> e9522fba73efc2b3d57462d4195ccd300d1adacf
+
   </component>
 </module>

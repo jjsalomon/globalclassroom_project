@@ -11,15 +11,12 @@ public class ChessMaster {
 
     public static void main(String[] args) {
 
-<<<<<<< HEAD
      // Board board = Board.createStandardBoard();
 
         //System.out.println(board);
 
         //Table.get().show();
 
-=======
->>>>>>> e9522fba73efc2b3d57462d4195ccd300d1adacf
         UserOnline usersOnlineInstance = UserOnline.getInstance();
         MoveBuffer moveBuffer = MoveBuffer.getFirstInstance();
         System.out.println("Main: Instance ID" + System.identityHashCode(usersOnlineInstance));
