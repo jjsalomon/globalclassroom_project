@@ -18,12 +18,16 @@ import static javax.swing.JFrame.setDefaultLookAndFeelDecorated;
 import static javax.swing.SwingUtilities.invokeLater;
 import static javax.swing.SwingUtilities.isLeftMouseButton;
 import static javax.swing.SwingUtilities.isRightMouseButton;
+import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
+import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE;
 
 import com.chess.engine.board.Move.MoveFactory;
 import com.chess.engine.player.Player;
+import com.frames.gui.SingletonAccount;
 import com.frames.network.ConnectListenHandler;
 import com.frames.network.IncomingReader;
 import com.frames.resource.MoveBuffer;
+import com.frames.resource.UserOnline;
 import com.google.common.collect.Lists;
 
 import java.awt.event.KeyEvent;
@@ -82,7 +86,11 @@ public final class Table extends Observable implements  Runnable {
 
     private Table() {
         connectListenHandler = new ConnectListenHandler();
-        this.gameFrame = new JFrame("BlackWidow");
+        UserOnline usersOnlineInstance = UserOnline.getInstance();
+        SingletonAccount sgaccount = SingletonAccount.getFirstInstance(usersOnlineInstance.getStream());
+        this.gameFrame = new JFrame("Chess Master ~ " + sgaccount.username.getText());
+//        sgaccount.setVisible(false);
+        this.gameFrame.setLocationRelativeTo(sgaccount);
         final JMenuBar tableMenuBar = new JMenuBar();
         populateMenuBar(tableMenuBar);
         this.gameFrame.setJMenuBar(tableMenuBar);
@@ -106,10 +114,43 @@ public final class Table extends Observable implements  Runnable {
         setDefaultLookAndFeelDecorated(true);
         this.gameFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.gameFrame.setSize(OUTER_FRAME_DIMENSION);
-        center(this.gameFrame);
+        //center(this.gameFrame);
         this.gameFrame.setVisible(true);
         isMoveSent = false;
 
+        //when user wants to log out by X close button
+        this.gameFrame.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+
+                int confirm = JOptionPane.showOptionDialog(gameFrame,
+                        "Are you sure you want exit game",
+                        "Exit Confirmation", JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE, null, null, null);
+                if (confirm == JOptionPane.YES_OPTION) {
+                    System.out.println("CLOSING GAME");
+                    sgaccount.setVisible(true);
+                    gameFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+                    //for some reason it wont show new board when invited again
+                    /* try {
+                        connectListenHandler.writer.println(username.getText() + ":to" + ":Disconnect");
+                        connectListenHandler.writer.flush();
+                        //Read response information from server
+                        connectListenHandler.ListenThread();
+                        System.exit(0);
+                    } catch (Exception ex) {
+                        System.out.println("You cannot log out, Try again");
+                        ex.printStackTrace();
+                    }*/
+                }
+                if (confirm == JOptionPane.NO_OPTION) {
+                    gameFrame.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+                }
+                if (confirm == JOptionPane.CLOSED_OPTION) {
+                    gameFrame.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+                }
+            }
+        });
     }
 
 

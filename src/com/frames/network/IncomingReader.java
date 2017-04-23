@@ -116,7 +116,7 @@ public class IncomingReader implements Runnable {
                 disconnect = "Disconnect", chat = "Message",
                 login = "Login", add = "Add", sending = "Sending",
                 remove = "Remove", invite = "Invite", start = "START",
-                declined = "DECLINED"  , move = "Move" ,checklogin= "CheckLogin";
+                declined = "DECLINED"  , move = "Move" ,checklogin= "CheckLogin", checkRegister="CheckRegister";
 
         try {
             while ((stream = breader.readLine()) != null) {
@@ -171,8 +171,16 @@ public class IncomingReader implements Runnable {
                 if (data[1].equals(checklogin)) {
                     //opens up a messageDialog if user is already log in.
                     JOptionPane.showMessageDialog(sglogin,
-                             data[0] + " is already log in",
+                             data[0] + " is already log in \nor account is not created",
                             "Login Error",
+                            JOptionPane.ERROR_MESSAGE);
+                }
+
+                if (data[1].equals(checkRegister)) {
+                    //opens up a messageDialog if user  fail registering
+                    JOptionPane.showMessageDialog(sglogin,
+                             "Username is already taken",
+                            "Register Error",
                             JOptionPane.ERROR_MESSAGE);
                 }
 

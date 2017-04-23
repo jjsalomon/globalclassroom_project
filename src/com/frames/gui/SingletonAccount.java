@@ -25,7 +25,7 @@ public class SingletonAccount extends JFrame {
     public JPanel container;
     public JList online;
     public JScrollPane jspane;
-    private JLabel username;
+    public JLabel username;
     private JLabel loss;
     private JLabel coins;
     private JButton skinsButton;
