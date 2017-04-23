@@ -8,13 +8,16 @@ import com.chess.engine.board.Tile;
 import com.chess.gui.Table;
 import com.frames.gui.*;
 import com.frames.resource.MoveBuffer;
+import com.frames.gui.SingletonLogin;
 import com.frames.resource.UserOnline;
+<<<<<<< HEAD
 import com.sun.org.glassfish.gmbal.ParameterNames;
 import javafx.scene.control.Tab;
+=======
+>>>>>>> e9522fba73efc2b3d57462d4195ccd300d1adacf
 
 import javax.swing.*;
 import java.io.BufferedReader;
-import java.io.PrintWriter;
 
 import static javax.swing.SwingUtilities.invokeLater;
 
@@ -105,6 +108,8 @@ public class IncomingReader implements Runnable {
 
         UserOnline usersOnlineInstance = UserOnline.getInstance();
         MoveBuffer moveBuffer = MoveBuffer.getFirstInstance();
+        SingletonLogin sglogin = SingletonLogin.getFirstInstance();
+        SingletonAccount sgaccount;
         System.out.println("IncomingReader: Instance ID: " + System.identityHashCode(usersOnlineInstance));
 
         System.out.println("Thread running");
@@ -114,7 +119,8 @@ public class IncomingReader implements Runnable {
                 disconnect = "Disconnect", chat = "Message",
                 login = "Login", add = "Add", sending = "Sending",
                 remove = "Remove", invite = "Invite", start = "START",
-                declined = "DECLINED"  , move = "Move";
+                declined = "DECLINED"  , move = "Move" ,checklogin= "CheckLogin";
+
         try {
             while ((stream = breader.readLine()) != null) {
                 data = stream.split(":");
@@ -145,15 +151,32 @@ public class IncomingReader implements Runnable {
                 }
 
                 if (data[1].equals(login)) {
-
+                    sglogin.setVisible(false); //set login gui false/hide it
                     //Show new account activity
                     System.out.println(stream);
-                    //create GUI and pass account information.
-                    Account accounts = new Account(stream);
+                    /*stores in the users data information from the server to the singleton usersOnlineInstance.setStream(stream);
+                        to give easier access when using SingletonAccount in different java classes */
+                    usersOnlineInstance.setStream(stream);
+
+                    //access user info. in the usersOnlineInstance.getStream() and pass it to the SingletonAccount, then create the account gui
+                    sgaccount = SingletonAccount.getFirstInstance(usersOnlineInstance.getStream());
+
+                    sgaccount.setGuiWindow();       //set up the gui visible and size
+
+                    //this comment are the gui class not singleton
+                    /*Account accounts = new Account(stream);
                     //whenever x button then terminate
                     accounts.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                     accounts.setSize(700, 500);
-                    accounts.setVisible(true);
+                    accounts.setVisible(true);*/
+                }
+
+                if (data[1].equals(checklogin)) {
+                    //opens up a messageDialog if user is already log in.
+                    JOptionPane.showMessageDialog(sglogin,
+                             data[0] + " is already log in",
+                            "Login Error",
+                            JOptionPane.ERROR_MESSAGE);
                 }
 
                 if (data[0].equals(invite)) {
@@ -162,10 +185,8 @@ public class IncomingReader implements Runnable {
                     String challenger = data[2];
                     ShowInvitePane invitePane = new ShowInvitePane(challenged, challenger);
                     invitePane.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                    invitePane.setSize(300, 250);
+                    invitePane.pack();
                     invitePane.setVisible(true);
-
-
                     System.out.println("You have been invited by: " + data[1]);
                     System.out.println(stream);
                 }
@@ -180,6 +201,7 @@ public class IncomingReader implements Runnable {
                    //System.out.println("I am challenger!: "+ getChallenger());
                     //System.out.println("I am the challenged!: "+getChallenged());
                     System.out.println(stream);
+
                     //Create board here
                     Board board = Board.createStandardBoard();
                     System.out.println(board);

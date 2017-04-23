@@ -1,7 +1,6 @@
 package com.frames.gui;
 
 import com.frames.network.ConnectListenHandler;
-import com.frames.resource.UserOnline;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,15 +8,15 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 /**
- * Created by Francis   on 3/18/2017.
- * This class contains the GUI components which connectListenHandler to
- * network handlers that  send data to the server and handle
- * response from server
+ * Created by Francis on 4/22/2017.
  */
+public final class SingletonLogin extends JFrame {
 
+    //to ensure first instance only
+    private static SingletonLogin firstInstance = null;
+    static boolean firstThread = true;
 
-public class LoginRegister extends JFrame {
-
+    //variable here
     String user, pw;
 
     //GUI components
@@ -34,12 +33,36 @@ public class LoginRegister extends JFrame {
 
     ConnectListenHandler connectListenHandler;
 
-    //Initialize components
-    public LoginRegister() {
+    public static SingletonLogin getFirstInstance() {
+        if (firstInstance == null) {
+            if (firstThread) {
+                firstThread = false;
+                try {
+                    Thread.currentThread();
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            //Here we sync when the first object is created
+            synchronized (SingletonLogin.class) {
+                //if the first instance isnt needed it isnt created
+                if (firstInstance == null) {
+                    firstInstance = new SingletonLogin();
+                }
+            }
+        }
+
+        return firstInstance;
+    }
+
+    // constructor
+    private SingletonLogin() {
         connectListenHandler = new ConnectListenHandler();
 
         //Adding and setting up components
-        setResizable(false);
+
         //Container panel = main panel
         container = new JPanel();
         container.setLayout(null);
@@ -101,7 +124,7 @@ public class LoginRegister extends JFrame {
         //add panel login to Jframe
         add(container);
 
-        LoginRegister.Handlers handler = new LoginRegister.Handlers();
+        SingletonLogin.Handlers handler = new SingletonLogin.Handlers();
         registerButton.addActionListener(handler);
         loginButton.addActionListener(handler);
         textField1.addActionListener(handler);
@@ -120,7 +143,6 @@ public class LoginRegister extends JFrame {
                 try {
                     connectListenHandler.writer.println(user + ":" + pw + ":Login");
                     connectListenHandler.writer.flush();
-                    setVisible(false);
                 } catch (Exception ex) {
                     System.out.println("You cannot login, Try again");
                     ex.printStackTrace();
@@ -128,7 +150,6 @@ public class LoginRegister extends JFrame {
                 //Read response information from server
                 connectListenHandler.ListenThread();
             }
-
 
             //if user clicks on register button
             if (e.getSource() == registerButton) {
@@ -147,4 +168,19 @@ public class LoginRegister extends JFrame {
             }
         }
     }
+
+    //sets the window to visible
+    public void setGuiWindow() {
+        setSize(500, 500);
+        final Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        final int w = this.getSize().width;
+        final int h = this.getSize().height;
+        final int x = (dim.width - w) / 2;
+        final int y = (dim.height - h) / 2;
+        this.setLocation(x, y);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setResizable(false);
+        setVisible(true);
+    }
+
 }

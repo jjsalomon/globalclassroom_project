@@ -6,22 +6,21 @@ import com.frames.resource.UserOnline;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
- * Created by azkei on 01/04/2017.
- * Changes by Francis on 08/04/2017
+ * Created by Francis on 4/22/2017.
  */
-public class Account extends JFrame {
+public class SingletonAccount extends JFrame {
+    //to ensure first instance only
+    private static SingletonAccount firstInstance = null;
+    static boolean firstThread = true;
 
+    //variable here
+    String user, pw;
     UserOnline onlineBuffer;
     DefaultListModel lmodel;
 
-    //network
-    ConnectListenHandler connectListenHandler;
-
+    //GUI components
     private  JLabel background;
     public JPanel container;
     public JList online;
@@ -40,29 +39,50 @@ public class Account extends JFrame {
     private JButton Play;
     private JLabel OnlinePlayers;
 
+    //network
+    ConnectListenHandler connectListenHandler;
 
-    public Account(String stream){
+    public static SingletonAccount getFirstInstance(String stream) {
+        if (firstInstance == null) {
+            if (firstThread) {
+                firstThread = false;
+                try {
+                    Thread.currentThread();
+                    Thread.sleep(1000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            //Here we sync when the first object is created
+            synchronized (SingletonAccount.class) {
+                //if the first instance isnt needed it isnt created
+                if (firstInstance == null) {
+                    firstInstance = new SingletonAccount(stream);
+                }
+            }
+        }
+        return firstInstance;
+    }
+
+    //Constructor
+    private SingletonAccount(String stream) {
         super("Chess Master - ");
         UserOnline onlineBuff = UserOnline.getInstance();
         this.onlineBuffer = onlineBuff;
         //network
-
+        connectListenHandler = new ConnectListenHandler();
 
         DefaultListModel listModel = new DefaultListModel();
         this.lmodel = listModel;
         //splits stream into data[] username starts at data[2]
         String[] data = stream.split(":");
 
-        // pass down validated message and the username for mapping
-        connectListenHandler = new ConnectListenHandler();
-
         //Adding and setting up components
-        setResizable(false);
 
         container = new JPanel();
         container.setLayout(null);
 
-//        username = new JLabel(data[2]);
         username = new JLabel(data[2]);
         username.setBounds(20,30,300,35);
         username.setFont(new Font("Lucida Handwriting", Font.BOLD, 30));
@@ -176,7 +196,7 @@ public class Account extends JFrame {
         //add panel container to Jframe
         add(container);
 
-        Account.Handlers handler = new Account.Handlers();
+        SingletonAccount.Handlers handler = new SingletonAccount.Handlers();
         Refresh.addActionListener(handler);
         Play.addActionListener(handler);
 
@@ -205,7 +225,7 @@ public class Account extends JFrame {
             @Override
             public void windowClosing(java.awt.event.WindowEvent windowEvent) {
 
-                int confirm = JOptionPane.showOptionDialog(Account.this,
+                int confirm = JOptionPane.showOptionDialog(SingletonAccount.this,
                         "Are you sure you want to log out?",
                         "Exit Confirmation", JOptionPane.YES_NO_OPTION,
                         JOptionPane.QUESTION_MESSAGE, null, null, null);
@@ -260,20 +280,33 @@ public class Account extends JFrame {
     //
     public void refreshList(){
         lmodel.removeAllElements();
-       /* String strArray[] = new String[onlineBuffer.getOnlineBuff().size()];
-        for(int i =0;i<strArray.length;i++){
-            strArray[i] = onlineBuffer.getOnlineBuff().toString();
-            System.out.println(strArray[i]+"Added to lmodel");
-        }*/
-       for(int i = 0;i<onlineBuffer.getOnlineBuff().size();i++){
-           lmodel.addElement(onlineBuffer.getOnlineBuff().get(i));
-       }
 
-       //removes the user's name in the list
-       lmodel.removeElement(username.getText());
+        for(int i = 0;i<onlineBuffer.getOnlineBuff().size();i++){
+            lmodel.addElement(onlineBuffer.getOnlineBuff().get(i));
+        }
 
-       //re-set the listmodel
-       online.setModel(lmodel);
-       Play.setEnabled(false);
+        //removes the user's name in the list
+        lmodel.removeElement(username.getText());
+
+        //re-set the listmodel
+        online.setModel(lmodel);
+        Play.setEnabled(false);
     }
+
+    //sets the window to visible
+    public void setGuiWindow() {
+        setSize(700, 500);
+        final Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
+        final int w = getSize().width;
+        final int h = getSize().height;
+        final int x = (dim.width - w) / 2;
+        final int y = (dim.height - h) / 2;
+        setLocation(x, y);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setResizable(false);
+        setVisible(true);
+    }
+
 }
+
+

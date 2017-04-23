@@ -10,6 +10,7 @@ public final class UserOnline {
 
     private static UserOnline firstInstance = null;
     private ArrayList<String> onlineBuff = new ArrayList<>();
+    private String stream = "null;null;null;null;null;null;null;null";
 
     static boolean firstThread = true;
     private UserOnline(){}
@@ -54,6 +55,11 @@ public final class UserOnline {
     }
 
     public void clearBuffer(){ onlineBuff.clear();}
+
+    //storing user profile data from server
+    public void setStream(String data){stream = data;}
+
+    public String getStream(){return stream;}
 
 
 }
