@@ -1,15 +1,22 @@
 package com.frames.network;
 
 import com.chess.engine.board.Board;
+import com.chess.engine.board.Move;
+import com.chess.engine.board.MoveTransition;
+import com.chess.engine.board.Move.MoveFactory;
+import com.chess.engine.board.Tile;
 import com.chess.gui.Table;
 import com.frames.gui.*;
 import com.frames.resource.MoveBuffer;
 import com.frames.resource.UserOnline;
 import com.sun.org.glassfish.gmbal.ParameterNames;
+import javafx.scene.control.Tab;
 
 import javax.swing.*;
 import java.io.BufferedReader;
 import java.io.PrintWriter;
+
+import static javax.swing.SwingUtilities.invokeLater;
 
 /**
  * Created by azkei on 02/04/2017.
@@ -20,15 +27,82 @@ import java.io.PrintWriter;
 
 public class IncomingReader implements Runnable {
 
+
+    Board chessBoard;
+
+    Table table;
+
     BufferedReader breader;
+    public Tile sourceTile;
+
+    public Tile destinationTile;
 
     public IncomingReader(BufferedReader reader) {
+
+
+
         this.breader = reader;
+    }
+
+
+    public void RedrawBoardOnotherClient(int source, int dest)
+    {
+
+        //sourc = Integer.parseInt(moveBuffer.getSourceTile());
+        //dest = Integer.parseInt(moveBuffer.getDestinationTile());
+
+
+        //System.out.println("sourc"+sourc);
+        sourceTile = chessBoard.getTile(source);
+        destinationTile = chessBoard.getTile(dest);
+
+        // System.out.println("Tile Source: " +sourceTile.getTileCoordinate());
+        final Move move1 = Move.MoveFactory.createMove(chessBoard, sourceTile.getTileCoordinate(),
+                destinationTile.getTileCoordinate());
+
+
+        System.out.println("Get Boolean: " + Move.MoveFactory.getBollean());
+        System.out.println("This is the legalMoveChosen: " + move1);
+
+        //String moveee =  move.toString();
+        // System.out.println("nullmoveeee"+chessBoard.getAllLegalMoves());
+        // that checks if the boolean is true of false if true then the move can be done if not #
+        // then it will set the sourceTile destinationtile and humanmovePiece to null
+        if (Move.MoveFactory.getBollean().equals(true)) {
+
+            //Read response information from server
+            final MoveTransition transition = chessBoard.currentPlayer().makeMove(move1);
+
+
+            System.out.println("Alliance: " + chessBoard.currentPlayer().getAlliance());
+            if (transition.getMoveStatus().isDone()) {
+
+                // board will be rendered again and will add move
+                chessBoard = transition.getToBoard();
+
+                //this add the move to the movelog
+                //  moveLog.addMove(move);
+
+                System.out.println("It works: " + chessBoard.currentPlayer().getAlliance());
+            }
+        }
+
+        sourceTile = null;
+        destinationTile = null;
+       // humanMovedPiece = null;
+
+
+
+
+
     }
 
 
     @Override
     public void run() {
+
+
+
         UserOnline usersOnlineInstance = UserOnline.getInstance();
         MoveBuffer moveBuffer = MoveBuffer.getFirstInstance();
         System.out.println("IncomingReader: Instance ID: " + System.identityHashCode(usersOnlineInstance));
@@ -132,7 +206,22 @@ public class IncomingReader implements Runnable {
                     System.out.println("source "+sourceTile);
                     System.out.println("Dest "+destinationTile);
 
+                    moveBuffer.setSwitchboolean(true);
+                    System.out.println("bool "+ MoveBuffer.getBoolean());
                     moveBuffer.addIncomingMove(fromClient, toClient,sourceTile,destinationTile);
+
+
+                   // int source = Integer.parseInt(sourceTile);
+                    //int dest = Integer.parseInt(destinationTile);
+
+                    //RedrawBoardOnotherClient(source,dest);
+                    //we start a thread
+                    Thread render = new Thread(new Table.RenderBoard(fromClient,toClient,sourceTile,destinationTile));
+                    render.start();
+
+
+
+
                 }
             }
             }catch(Exception ex){

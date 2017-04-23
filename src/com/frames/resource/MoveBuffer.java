@@ -18,9 +18,14 @@ public final class MoveBuffer{
     String destinationTile = null;
     String sendTo = null;
     String sendFrom = null;
+    static boolean hasboardupdated;
+
 
     //empty constructor
-    private MoveBuffer(){}
+    private MoveBuffer(){
+
+        hasboardupdated =false;
+    }
 
     //lazy instantiation
     public static MoveBuffer getFirstInstance(){
@@ -66,6 +71,17 @@ public final class MoveBuffer{
     public void addPlayers(String to, String from){
         sendTo = to;
         sendFrom = from;
+    }
+
+    public void setSwitchboolean(boolean switchE)
+    {
+
+        hasboardupdated =switchE;
+    }
+
+    public static boolean getBoolean()
+    {
+        return hasboardupdated;
     }
 
     //function to fetch buffer data

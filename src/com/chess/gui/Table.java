@@ -38,7 +38,7 @@ import javax.swing.filechooser.FileFilter;
 
 
 
-public final class Table extends Observable {
+public final class Table extends Observable implements  Runnable {
 
     private final JFrame gameFrame;
     private final GameHistoryPanel gameHistoryPanel;
@@ -51,8 +51,9 @@ public final class Table extends Observable {
     private Move computerMove;
 
     private Tile sourceTile;
-
     private Tile destinationTile;
+
+
     private int SourceT;
     private int DestT;
 
@@ -76,6 +77,7 @@ public final class Table extends Observable {
     private static final Table INSTANCE = new Table();
     ConnectListenHandler connectListenHandler;
     MoveBuffer moveBuffer = MoveBuffer.getFirstInstance();
+    private boolean isMoveSent;
 
 
     private Table() {
@@ -106,6 +108,7 @@ public final class Table extends Observable {
         this.gameFrame.setSize(OUTER_FRAME_DIMENSION);
         center(this.gameFrame);
         this.gameFrame.setVisible(true);
+        isMoveSent = false;
 
     }
 
@@ -654,23 +657,107 @@ public final class Table extends Observable {
             // this instance passes the data so if you hard code 52 it'll get the sourcetile of the 5th pawn behind the king
             // uncomment these two piece of code and click on the gui to see the change automatically because the tileid was entered
 
-            //sourceTile = chessBoard.getTile(52);
-            //destinationTile = chessBoard.getTile(36);
+
 
             //System.out.println("heyyyy"+moveBuffer.getChallenged());
             //System.out.println("heyyyy"+moveBuffer.getChallenger());
+            System.out.println("heyyyy"+ moveBuffer.getSourceTile());
+
+
+
 
             addMouseListener(new MouseListener() {
                 @Override
                 public void mouseClicked(final MouseEvent event) {
 
+
+                   // sourceTile = chessBoard.getTile(52);
+                   // destinationTile = chessBoard.getTile(36);
+
+
                     if (isRightMouseButton(event)) {
 
                         // SourceTile is a instance of tile
+                       // sourceTile = null;
+                        //destinationTile = null;
+                       // humanMovedPiece = null;
+
+
+                        System.out.println("source"+ moveBuffer.getSourceTile());
+                        int sourc;
+                        int dest;
+
+                        sourc = Integer.parseInt(moveBuffer.getSourceTile());
+                        dest = Integer.parseInt(moveBuffer.getDestinationTile());
+
+
+                        //System.out.println("heyyyy"+ moveBuffer.getSourceTile());
+                        sourceTile = chessBoard.getTile(sourc);
+                        destinationTile = chessBoard.getTile(dest);
+
+                        // System.out.println("Tile Source: " +sourceTile.getTileCoordinate());
+                        final Move move = MoveFactory.createMove(chessBoard, sourceTile.getTileCoordinate(),
+                                destinationTile.getTileCoordinate());
+
+
+                        System.out.println("Get Boolean: "+ MoveBuffer.getBoolean());
+
+                        System.out.println("This is the legalMoveChosen: " + move);
+
+                        //String moveee =  move.toString();
+                        // System.out.println("nullmoveeee"+chessBoard.getAllLegalMoves());
+                        // that checks if the boolean is true of false if true then the move can be done if not #
+                        // then it will set the sourceTile destinationtile and humanmovePiece to null
+                        if (MoveFactory.getBollean().equals(true)) {
+
+                            try {
+
+                                connectListenHandler.writer.println("Move" + ":"  +moveBuffer.getSend()+":"+moveBuffer.getFrom()+":" + SourceT + ":" + DestT);
+                                connectListenHandler.writer.flush();
+
+
+
+                            } catch (Exception ex) {
+                                System.out.println("You Cannot send data try again");
+                                ex.printStackTrace();
+                            }
+                            //Read response information from server
+                            connectListenHandler.ListenThread();
+
+                            final MoveTransition transition = chessBoard.currentPlayer().makeMove(move);
+
+
+                            System.out.println("Alliance: " + chessBoard.currentPlayer().getAlliance());
+                            if (transition.getMoveStatus().isDone()) {
+
+                                // board will be rendered again and will add move
+                                chessBoard = transition.getToBoard();
+
+                                //this add the move to the movelog
+                                moveLog.addMove(move);
+                            }
+
+                            moveBuffer.setSwitchboolean(false);
+                            System.out.println("Get Boolean: "+ MoveBuffer.getBoolean());
+                        }
+
+
                         sourceTile = null;
                         destinationTile = null;
                         humanMovedPiece = null;
+
+
+
+
+                        boardPanel.drawBoard(chessBoard);
+
+
+
+
+
                     } else if (isLeftMouseButton(event)) {
+
+
 
                         if (sourceTile == null ) {
 
@@ -700,8 +787,8 @@ public final class Table extends Observable {
 
 
                             // transformed those two values to string
-                            getCurrentPlayer  = humanMovedPiece.getPieceAllegiance().toString();
-                            getPieceAllegianceClicked = chessBoard.currentPlayer().toString();
+                            //getCurrentPlayer  = humanMovedPiece.getPieceAllegiance().toString();
+                           // getPieceAllegianceClicked = chessBoard.currentPlayer().toString();
 
 
                             System.out.println("Piece Clicked"+getCurrentPlayer);
@@ -750,9 +837,11 @@ public final class Table extends Observable {
                             if (MoveFactory.getBollean().equals(true)) {
 
                                 try {
-                                    connectListenHandler.writer.println("Move" + ":" +moveBuffer.getSend()+":"+moveBuffer.getFrom()+":" + SourceT + ":" + DestT);
 
+                                    connectListenHandler.writer.println("Move" + ":"  +moveBuffer.getSend()+":"+moveBuffer.getFrom()+":" + SourceT + ":" + DestT);
                                     connectListenHandler.writer.flush();
+
+
 
                                 } catch (Exception ex) {
                                     System.out.println("You Cannot send data try again");
@@ -774,20 +863,22 @@ public final class Table extends Observable {
                                     moveLog.addMove(move);
                                 }
                             }
+
+
                             sourceTile = null;
                             destinationTile = null;
                             humanMovedPiece = null;
                         }
                     }
+
+
                     invokeLater(new Runnable() {
                         public void run() {
                             gameHistoryPanel.redo(chessBoard, moveLog);
                             takenPiecesPanel.redo(moveLog);
-                            if (gameSetup.isAIPlayer(chessBoard.currentPlayer())) {
-                                Table.get().moveMadeUpdate(PlayerType.HUMAN);
-                            }
+
                             //this will redraw the board
-                            boardPanel.drawBoard(chessBoard);
+                           boardPanel.drawBoard(chessBoard);
                             debugPanel.redo();
                         }
                     });
@@ -811,6 +902,10 @@ public final class Table extends Observable {
             });
             validate();
         }
+
+
+
+
 
         public void drawTile(final Board board) {
             assignTileColor();
@@ -899,6 +994,147 @@ public final class Table extends Observable {
                     BoardUtils.INSTANCE.EIGHTH_ROW.get(this.tileId)) {
                 setBackground(this.tileId % 2 != 0 ? lightTileColor : darkTileColor);
             }
+        }
+    }
+
+
+
+    @Override
+    public void run(){
+        System.out.println("Source"+moveBuffer.getSourceTile());
+        System.out.println("DestinInrun"+moveBuffer.getDestinationTile());
+
+
+
+    }
+
+
+
+
+    public static class RenderBoard implements Runnable{
+
+        String client1,client2,
+                src, desti;
+
+
+        private Piece humanMovedPiece;
+
+
+
+        public RenderBoard(String client1,String client2, String src, String dest){
+            this.client1 = client1;
+            this.client2 = client2 ;
+            this.src = src;
+            this.desti = dest;
+
+
+        }
+        @Override
+        public void run(){
+
+            //render board method
+
+
+            System.out.println("Say Hey it worked"+src);
+
+
+            //sourc = Integer.parseInt(src);
+            //dest = Integer.parseInt(desti);
+            int sourc;
+            int dest;
+
+
+
+            sourc = Integer.parseInt(Table.get().moveBuffer.getSourceTile());
+            dest = Integer.parseInt(Table.get().moveBuffer.getDestinationTile());
+
+
+           System.out.println("SourceT"+ sourc);
+            System.out.println("dest: "+ dest);
+
+
+                Table.get().sourceTile = Table.get().chessBoard.getTile(sourc);
+                Table.get().destinationTile = Table.get().chessBoard.getTile(dest);
+
+            System.out.println("SourceT"+ Table.get().sourceTile);
+            System.out.println("dest: "+ Table.get().destinationTile);
+
+            //sourceTile = chessBoard.getTile(52);
+            //destinationTile = chessBoard.getTile(36);
+
+            // System.out.println("Tile Source: " +sourceTile.getTileCoordinate());
+
+            final Move move = MoveFactory.createMove(Table.get().chessBoard, Table.get().sourceTile.getTileCoordinate(),
+                    Table.get().destinationTile.getTileCoordinate());
+
+
+            System.out.println("F Move: "+ move);
+
+            System.out.println("This is the legalMoveChosen: " + Table.get().destinationTile);
+            //chessBoard.currentPlayer();
+
+            //String moveee =  move.toString();
+            // System.out.println("nullmoveeee"+chessBoard.getAllLegalMoves());
+            // that checks if the boolean is true of false if true then the move can be done if not #
+            // then it will set the sourceTile destinationtile and humanmovePiece to null
+
+
+            if (MoveFactory.getBollean().equals(true)) {
+
+                try {
+
+                    //connectListenHandler.writer.println("Move" + ":"  +moveBuffer.getSend()+":"+moveBuffer.getFrom()+":" + SourceT + ":" + DestT);
+                    //connectListenHandler.writer.flush();
+
+
+
+                } catch (Exception ex) {
+                    System.out.println("You Cannot send data try again");
+                    ex.printStackTrace();
+                }
+                //Read response information from server
+
+
+                final MoveTransition transition = Table.get().chessBoard.currentPlayer().makeMove(move);
+
+
+                System.out.println("Alliance: " + Table.get().chessBoard.currentPlayer().getAlliance());
+                if (transition.getMoveStatus().isDone()) {
+
+                    // board will be rendered again and will add move
+                    Table.get().chessBoard = transition.getToBoard();
+
+                    //this add the move to the movelog
+                   // moveLog.addMove(move);
+                }
+
+                //moveBuffer.setSwitchboolean(false);
+                System.out.println("Get Boolean: "+ MoveBuffer.getBoolean());
+            }
+
+
+            Table.get().sourceTile = null;
+            Table.get().destinationTile = null;
+            Table.get().humanMovedPiece = null;
+
+
+
+
+            //boardPanel.drawBoard(chessBoard);
+
+
+            invokeLater(new Runnable() {
+                public void run() {
+
+                    //this will redraw the board
+                    Table.get().getBoardPanel().drawBoard(Table.get().chessBoard);
+
+                }
+            });
+
+
+
+
         }
     }
 }
