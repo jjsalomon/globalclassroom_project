@@ -16,9 +16,10 @@ public class SingletonAccount extends JFrame {
     static boolean firstThread = true;
 
     //variable here
-    String user, pw;
-    UserOnline onlineBuffer;
+    UserOnline onlineBuff = UserOnline.getInstance();
+    SingletonLogin sglogin = SingletonLogin.getFirstInstance();
     DefaultListModel lmodel;
+    private String stream; //holds the user account details
 
     //GUI components
     private  JLabel background;
@@ -37,12 +38,14 @@ public class SingletonAccount extends JFrame {
     private JLabel dbloss;
     private JButton Refresh;
     private JButton Play;
+    private JButton logout;
     private JLabel OnlinePlayers;
 
     //network
     ConnectListenHandler connectListenHandler;
 
-    public static SingletonAccount getFirstInstance(String stream) {
+
+    public static SingletonAccount getFirstInstance() {
         if (firstInstance == null) {
             if (firstThread) {
                 firstThread = false;
@@ -58,7 +61,7 @@ public class SingletonAccount extends JFrame {
             synchronized (SingletonAccount.class) {
                 //if the first instance isnt needed it isnt created
                 if (firstInstance == null) {
-                    firstInstance = new SingletonAccount(stream);
+                    firstInstance = new SingletonAccount();
                 }
             }
         }
@@ -66,24 +69,19 @@ public class SingletonAccount extends JFrame {
     }
 
     //Constructor
-    private SingletonAccount(String stream) {
+    private SingletonAccount() {
         super("Chess Master - ");
-        UserOnline onlineBuff = UserOnline.getInstance();
-        this.onlineBuffer = onlineBuff;
         //network
         connectListenHandler = new ConnectListenHandler();
 
         DefaultListModel listModel = new DefaultListModel();
         this.lmodel = listModel;
-        //splits stream into data[] username starts at data[2]
-        String[] data = stream.split(":");
 
         //Adding and setting up components
-
         container = new JPanel();
         container.setLayout(null);
 
-        username = new JLabel(data[2]);
+        username = new JLabel();
         username.setBounds(20,30,300,35);
         username.setFont(new Font("Lucida Handwriting", Font.BOLD, 30));
         username.setForeground(new Color(245, 245, 245));
@@ -108,7 +106,7 @@ public class SingletonAccount extends JFrame {
         rank.setForeground(new Color(245, 245, 245));
         container.add(rank);
 
-        dbrank = new JLabel("#"+data[3]); //user rank data from database
+        dbrank = new JLabel(); //user rank data from database
 //        dbrank = new JLabel("12"); //dummy data
         dbrank.setBounds(120,120,100,20);
         dbrank.setFont(new Font("Lucida Handwriting", Font.PLAIN, 18));
@@ -122,7 +120,7 @@ public class SingletonAccount extends JFrame {
         container.add(win);
 
 //        dbwin = new JLabel("15"); //dummy data
-        dbwin = new JLabel(data[4]); //user win data from database
+        dbwin = new JLabel(); //user win data from database
         dbwin.setBounds(120,170,100,20);
         dbwin.setFont(new Font("Lucida Handwriting", Font.PLAIN, 18));
         dbwin.setForeground(new Color(245, 245, 245));
@@ -135,7 +133,7 @@ public class SingletonAccount extends JFrame {
         container.add(loss);
 
 //        dbloss = new JLabel("55"); //dummy data
-        dbloss = new JLabel(data[5]); //user loss data from database
+        dbloss = new JLabel(); //user loss data from database
         dbloss.setBounds(120,220,100,20);
         dbloss.setFont(new Font("Lucida Handwriting", Font.PLAIN, 18));
         dbloss.setForeground(new Color(245, 245, 245));
@@ -148,7 +146,7 @@ public class SingletonAccount extends JFrame {
         container.add(coins);
 
 //        dbcoin = new JLabel("13224"); //dummy data
-        dbcoin = new JLabel(data[6]); //user coin data from database
+        dbcoin = new JLabel(); //user coin data from database
         dbcoin.setBounds(120,270,100,20);
         dbcoin.setFont(new Font("Lucida Handwriting", Font.PLAIN, 18));
         dbcoin.setForeground(new Color(245, 245, 245));
@@ -162,22 +160,15 @@ public class SingletonAccount extends JFrame {
         Play.setToolTipText("Select a player to challenge and then press play");
         container.add(Play);
 
-/*        skin = new JLabel("Skins"); //server can only send to data[6]? give null pointer.. + this feature don't know how it works
-        gridConstraints.gridy = 6;
-        gridConstraints.gridx = 1;
-        container.add(skins);*/
-
-        //remove current elements to make sure its clear before adding
-        lmodel.removeAllElements();
-        //add global user online data to Listmodel
-        for(int i =0; i<onlineBuff.getOnlineBuff().size();i++){
-            lmodel.addElement(onlineBuffer.getOnlineBuff().get(i));
-        }
-        //removes the user's name in the list
-        lmodel.removeElement(username.getText());
+        logout = new JButton("Log out");
+        logout.setBounds(520,440,150,25);
+        logout.setHorizontalAlignment(SwingConstants.CENTER);
+        logout.setFont(new Font("Lucida Handwriting", Font.PLAIN, 20));
+        logout.setToolTipText("Return you to login");
+        container.add(logout);
 
         //add into the JList
-        online = new JList(lmodel);
+        online = new JList();
         //how many options can they see
         online.setVisibleRowCount(5);
         //can only select one thing on the list at the time
@@ -199,6 +190,7 @@ public class SingletonAccount extends JFrame {
         SingletonAccount.Handlers handler = new SingletonAccount.Handlers();
         Refresh.addActionListener(handler);
         Play.addActionListener(handler);
+        logout.addActionListener(handler);
 
         //user wants to challenge other user
         MouseListener mouselistener = new MouseAdapter() {
@@ -226,7 +218,7 @@ public class SingletonAccount extends JFrame {
             public void windowClosing(java.awt.event.WindowEvent windowEvent) {
 
                 int confirm = JOptionPane.showOptionDialog(SingletonAccount.this,
-                        "Are you sure you want to log out?",
+                        "Are you sure you want to exit chess master?",
                         "Exit Confirmation", JOptionPane.YES_NO_OPTION,
                         JOptionPane.QUESTION_MESSAGE, null, null, null);
                 if (confirm == JOptionPane.YES_OPTION) {
@@ -259,6 +251,7 @@ public class SingletonAccount extends JFrame {
             if(e.getSource() == Refresh){
                 refreshList();
             }
+
             //if user clicks on play button
             if(e.getSource() == Play){
                 String selectedItem = (String) online.getSelectedValue();
@@ -274,6 +267,35 @@ public class SingletonAccount extends JFrame {
                     ex.printStackTrace();
                 }
             }
+
+            //if user clicks on log out button
+            if(e.getSource() == logout){
+                int confirm = JOptionPane.showOptionDialog(SingletonAccount.this,
+                        "Are you sure you want to log out?",
+                        "Exit Confirmation", JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE, null, null, null);
+                if (confirm == JOptionPane.YES_OPTION) {
+                    try {
+                        connectListenHandler.writer.println(username.getText() + ":to" + ":Disconnect");
+                        connectListenHandler.writer.flush();
+                        //Read response information from server
+                        connectListenHandler.ListenThread();
+                        sglogin.setVisible(true);
+                        System.out.println("afterlogout"+onlineBuff.getOnlineBuff());
+                        dispose();
+                    } catch (Exception ex) {
+                        System.out.println("You cannot log out, Try again");
+                        ex.printStackTrace();
+                    }
+                }
+                if (confirm == JOptionPane.NO_OPTION) {
+                    setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+                }
+                if (confirm == JOptionPane.CLOSED_OPTION) {
+                    setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+                }
+            }
+
         }
     }
 
@@ -281,8 +303,8 @@ public class SingletonAccount extends JFrame {
     public void refreshList(){
         lmodel.removeAllElements();
 
-        for(int i = 0;i<onlineBuffer.getOnlineBuff().size();i++){
-            lmodel.addElement(onlineBuffer.getOnlineBuff().get(i));
+        for(int i = 0;i<onlineBuff.getOnlineBuff().size();i++){
+            lmodel.addElement(onlineBuff.getOnlineBuff().get(i));
         }
 
         //removes the user's name in the list
@@ -295,6 +317,8 @@ public class SingletonAccount extends JFrame {
 
     //sets the window to visible
     public void setGuiWindow() {
+        setAccountComponents();
+
         setSize(700, 500);
         final Dimension dim = Toolkit.getDefaultToolkit().getScreenSize();
         final int w = getSize().width;
@@ -307,6 +331,32 @@ public class SingletonAccount extends JFrame {
         setVisible(true);
     }
 
+    //sets the account components
+    public void setAccountComponents(){
+        //splits stream into data[] username starts at data[2]
+        String[] data = stream.split(":");
+        username.setText(data[2]);
+        dbrank.setText(data[3]);
+        dbwin.setText(data[4]);
+        dbloss.setText(data[5]);
+        dbcoin.setText(data[6]);
+        System.out.println("settingup"+onlineBuff.getOnlineBuff());
+        //remove current elements to make sure its clear before adding
+        lmodel.removeAllElements();
+        //add global user online data to Listmodel
+        for(int i =0; i<onlineBuff.getOnlineBuff().size();i++){
+            lmodel.addElement(onlineBuff.getOnlineBuff().get(i));
+        }
+        //removes the user's name in the list
+        lmodel.removeElement(username.getText());
+        online.setModel(lmodel);
+
+    }
+
+    //storing user profile data from server
+    public void setStream(String data){stream = data;}
+
+    public String getStream(){return stream;}
 }
 
 

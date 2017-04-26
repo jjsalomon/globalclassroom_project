@@ -56,10 +56,4 @@ public final class UserOnline {
 
     public void clearBuffer(){ onlineBuff.clear();}
 
-    //storing user profile data from server
-    public void setStream(String data){stream = data;}
-
-    public String getStream(){return stream;}
-
-
 }

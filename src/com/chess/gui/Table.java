@@ -86,8 +86,7 @@ public final class Table extends Observable implements  Runnable {
 
     private Table() {
         connectListenHandler = new ConnectListenHandler();
-        UserOnline usersOnlineInstance = UserOnline.getInstance();
-        SingletonAccount sgaccount = SingletonAccount.getFirstInstance(usersOnlineInstance.getStream());
+        SingletonAccount sgaccount = SingletonAccount.getFirstInstance();
         this.gameFrame = new JFrame("Chess Master ~ " + sgaccount.username.getText());
 //        sgaccount.setVisible(false);
         this.gameFrame.setLocationRelativeTo(sgaccount);

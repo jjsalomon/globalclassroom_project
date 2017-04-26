@@ -100,13 +100,12 @@ public class IncomingReader implements Runnable {
 
     @Override
     public void run() {
-
-
-
+        //instance of singletons
         UserOnline usersOnlineInstance = UserOnline.getInstance();
         MoveBuffer moveBuffer = MoveBuffer.getFirstInstance();
         SingletonLogin sglogin = SingletonLogin.getFirstInstance();
-        SingletonAccount sgaccount;
+        SingletonAccount sgaccount = SingletonAccount.getFirstInstance();
+
         System.out.println("IncomingReader: Instance ID: " + System.identityHashCode(usersOnlineInstance));
 
         System.out.println("Thread running");
@@ -148,17 +147,13 @@ public class IncomingReader implements Runnable {
                 }
 
                 if (data[1].equals(login)) {
-                    sglogin.setVisible(false); //set login gui false/hide it
+                    sglogin.dispose(); //set login gui false/hide it
                     //Show new account activity
                     System.out.println(stream);
-                    /*stores in the users data information from the server to the singleton usersOnlineInstance.setStream(stream);
+                    /*stores in the users data information from the server to the singletonAccount.setStream(stream);
                         to give easier access when using SingletonAccount in different java classes */
-                    usersOnlineInstance.setStream(stream);
-
-                    //access user info. in the usersOnlineInstance.getStream() and pass it to the SingletonAccount, then create the account gui
-                    sgaccount = SingletonAccount.getFirstInstance(usersOnlineInstance.getStream());
-
-                    sgaccount.setGuiWindow();       //set up the gui visible and size
+                    sgaccount.setStream(stream);
+                    sgaccount.setGuiWindow();       //set up the Account Gui and user information
 
                     //this comment are the gui class not singleton
                     /*Account accounts = new Account(stream);

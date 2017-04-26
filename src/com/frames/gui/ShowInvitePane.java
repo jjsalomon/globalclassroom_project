@@ -29,8 +29,7 @@ public class ShowInvitePane extends JFrame {
         this.challenger = challenger;
 
         connectListenHandler = new ConnectListenHandler();
-        UserOnline usersOnlineInstance = UserOnline.getInstance();
-        SingletonAccount sgaccount = SingletonAccount.getFirstInstance(usersOnlineInstance.getStream());
+        SingletonAccount sgaccount = SingletonAccount.getFirstInstance();
 
         //Adding and setting up components
         setResizable(false);
