@@ -147,7 +147,7 @@ public class IncomingReader implements Runnable {
                 }
 
                 if (data[1].equals(login)) {
-                    sglogin.dispose(); //set login gui false/hide it
+                    sglogin.setVisible(false); //set login gui false/hide it
                     //Show new account activity
                     System.out.println(stream);
                     /*stores in the users data information from the server to the singletonAccount.setStream(stream);

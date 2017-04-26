@@ -26,6 +26,7 @@ import com.chess.engine.player.Player;
 import com.frames.gui.SingletonAccount;
 import com.frames.network.ConnectListenHandler;
 import com.frames.network.IncomingReader;
+import com.frames.network.sConnectListenHandler;
 import com.frames.resource.MoveBuffer;
 import com.frames.resource.UserOnline;
 import com.google.common.collect.Lists;
@@ -79,16 +80,17 @@ public final class Table extends Observable implements  Runnable {
     private static String Challenged;
 
     private static final Table INSTANCE = new Table();
-    ConnectListenHandler connectListenHandler;
+    sConnectListenHandler sclh = sConnectListenHandler.getInstance();
+//    ConnectListenHandler connectListenHandler;
     MoveBuffer moveBuffer = MoveBuffer.getFirstInstance();
     private boolean isMoveSent;
 
 
     private Table() {
-        connectListenHandler = new ConnectListenHandler();
+//        connectListenHandler = new ConnectListenHandler();
         SingletonAccount sgaccount = SingletonAccount.getFirstInstance();
         this.gameFrame = new JFrame("Chess Master ~ " + sgaccount.username.getText());
-//        sgaccount.setVisible(false);
+        sgaccount.setVisible(false);
         this.gameFrame.setLocationRelativeTo(sgaccount);
         final JMenuBar tableMenuBar = new JMenuBar();
         populateMenuBar(tableMenuBar);
@@ -752,8 +754,8 @@ public final class Table extends Observable implements  Runnable {
 
                             try {
 
-                                connectListenHandler.writer.println("Move" + ":"  +moveBuffer.getSend()+":"+moveBuffer.getFrom()+":" + SourceT + ":" + DestT);
-                                connectListenHandler.writer.flush();
+                                sclh.writer.println("Move" + ":"  +moveBuffer.getSend()+":"+moveBuffer.getFrom()+":" + SourceT + ":" + DestT);
+                                sclh.writer.flush();
 
 
 
@@ -762,7 +764,7 @@ public final class Table extends Observable implements  Runnable {
                                 ex.printStackTrace();
                             }
                             //Read response information from server
-                            connectListenHandler.ListenThread();
+                            sclh.ListenThread();
 
                             final MoveTransition transition = chessBoard.currentPlayer().makeMove(move);
 
@@ -878,8 +880,8 @@ public final class Table extends Observable implements  Runnable {
 
                                 try {
 
-                                    connectListenHandler.writer.println("Move" + ":"  +moveBuffer.getSend()+":"+moveBuffer.getFrom()+":" + SourceT + ":" + DestT);
-                                    connectListenHandler.writer.flush();
+                                    sclh.writer.println("Move" + ":"  +moveBuffer.getSend()+":"+moveBuffer.getFrom()+":" + SourceT + ":" + DestT);
+                                    sclh.writer.flush();
 
 
 
@@ -888,7 +890,7 @@ public final class Table extends Observable implements  Runnable {
                                     ex.printStackTrace();
                                 }
                                 //Read response information from server
-                                connectListenHandler.ListenThread();
+                                sclh.ListenThread();
 
                                 final MoveTransition transition = chessBoard.currentPlayer().makeMove(move);
 

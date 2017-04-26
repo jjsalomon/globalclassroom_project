@@ -1,6 +1,7 @@
 package com.frames.gui;
 
 import com.frames.network.ConnectListenHandler;
+import com.frames.network.sConnectListenHandler;
 
 import javax.swing.*;
 import java.awt.*;
@@ -18,6 +19,7 @@ public final class SingletonLogin extends JFrame {
 
     //variable here
     String user, pw;
+    sConnectListenHandler sclh = sConnectListenHandler.getInstance();
 
     //GUI components
     public JPanel container;
@@ -31,7 +33,7 @@ public final class SingletonLogin extends JFrame {
     private JLabel password;
     private JLabel background;
 
-    ConnectListenHandler connectListenHandler;
+//    ConnectListenHandler connectListenHandler;
 
     public static SingletonLogin getFirstInstance() {
         if (firstInstance == null) {
@@ -59,7 +61,7 @@ public final class SingletonLogin extends JFrame {
 
     // constructor
     private SingletonLogin() {
-        connectListenHandler = new ConnectListenHandler();
+//        connectListenHandler = new ConnectListenHandler();
 
         //Adding and setting up components
 
@@ -141,14 +143,14 @@ public final class SingletonLogin extends JFrame {
                 user = textField1.getText();
                 pw = new String(passwordField1.getPassword());
                 try {
-                    connectListenHandler.writer.println(user + ":" + pw + ":Login");
-                    connectListenHandler.writer.flush();
+                    sclh.writer.println(user + ":" + pw + ":Login");
+                    sclh.writer.flush();
                 } catch (Exception ex) {
                     System.out.println("You cannot login, Try again");
                     ex.printStackTrace();
                 }
                 //Read response information from server
-                connectListenHandler.ListenThread();
+                sclh.ListenThread();
             }
 
             //if user clicks on register button
@@ -156,15 +158,15 @@ public final class SingletonLogin extends JFrame {
                 user = textField1.getText();
                 pw = new String(passwordField1.getPassword());
                 try {
-                    connectListenHandler.writer.println(user + ":" + pw + ":Register");
-                    connectListenHandler.writer.flush();
+                    sclh.writer.println(user + ":" + pw + ":Register");
+                    sclh.writer.flush();
 
                 } catch (Exception ex) {
                     System.out.println("You cannot register, Try again");
                     ex.printStackTrace();
                 }
                 //Read response information from server
-                connectListenHandler.ListenThread();
+                sclh.ListenThread();
             }
         }
     }

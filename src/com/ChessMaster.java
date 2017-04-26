@@ -2,6 +2,7 @@ package com;
 
 //import com.chess.engine.board.Board;
 //import com.chess.gui.Table;
+import com.frames.network.sConnectListenHandler;
 import com.frames.resource.MoveBuffer;
 import com.frames.gui.SingletonLogin;
 import com.frames.resource.UserOnline;
@@ -18,6 +19,7 @@ public class ChessMaster {
         //Table.get().show();
 
         UserOnline usersOnlineInstance = UserOnline.getInstance();
+        sConnectListenHandler sclh = sConnectListenHandler.getInstance();
         MoveBuffer moveBuffer = MoveBuffer.getFirstInstance();
         System.out.println("Main: Instance ID" + System.identityHashCode(usersOnlineInstance));
 

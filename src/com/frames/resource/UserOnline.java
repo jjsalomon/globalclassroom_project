@@ -10,7 +10,6 @@ public final class UserOnline {
 
     private static UserOnline firstInstance = null;
     private ArrayList<String> onlineBuff = new ArrayList<>();
-    private String stream = "null;null;null;null;null;null;null;null";
 
     static boolean firstThread = true;
     private UserOnline(){}

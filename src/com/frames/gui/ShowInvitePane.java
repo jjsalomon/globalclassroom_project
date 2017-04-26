@@ -1,6 +1,7 @@
 package com.frames.gui;
 
 import com.frames.network.ConnectListenHandler;
+import com.frames.network.sConnectListenHandler;
 import com.frames.resource.UserOnline;
 
 import javax.swing.*;
@@ -20,15 +21,15 @@ public class ShowInvitePane extends JFrame {
     private JButton noBtn;
     private String challenged;
     private String challenger;
-
-    ConnectListenHandler connectListenHandler;
+    sConnectListenHandler sclh = sConnectListenHandler.getInstance();
+//    ConnectListenHandler connectListenHandler;
 
     public ShowInvitePane(String challenged, String challenger) {
         super("Game Invite");
         this.challenged = challenged;
         this.challenger = challenger;
 
-        connectListenHandler = new ConnectListenHandler();
+//        connectListenHandler = new ConnectListenHandler();
         SingletonAccount sgaccount = SingletonAccount.getFirstInstance();
 
         //Adding and setting up components
@@ -72,14 +73,14 @@ public class ShowInvitePane extends JFrame {
         @Override
         public void actionPerformed(ActionEvent e) {
             if (e.getSource() == yesBtn) {
-                connectListenHandler.writer.println("Accept" + ":" + challenger + ":" + challenged);
-                connectListenHandler.writer.flush();
+                sclh.writer.println("Accept" + ":" + challenger + ":" + challenged);
+                sclh.writer.flush();
                 setVisible(false);
             }
 
             if (e.getSource() == noBtn) {
-                connectListenHandler.writer.println("Decline" + ":" + challenger + ":" + challenged);
-                connectListenHandler.writer.flush();
+                sclh.writer.println("Decline" + ":" + challenger + ":" + challenged);
+                sclh.writer.flush();
                 setVisible(false);
             }
         }

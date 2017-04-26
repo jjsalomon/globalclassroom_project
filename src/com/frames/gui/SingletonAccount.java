@@ -1,6 +1,7 @@
 package com.frames.gui;
 
 import com.frames.network.ConnectListenHandler;
+import com.frames.network.sConnectListenHandler;
 import com.frames.resource.UserOnline;
 
 import javax.swing.*;
@@ -18,6 +19,7 @@ public class SingletonAccount extends JFrame {
     //variable here
     UserOnline onlineBuff = UserOnline.getInstance();
     SingletonLogin sglogin = SingletonLogin.getFirstInstance();
+    sConnectListenHandler sclh = sConnectListenHandler.getInstance();
     DefaultListModel lmodel;
     private String stream; //holds the user account details
 
@@ -42,7 +44,7 @@ public class SingletonAccount extends JFrame {
     private JLabel OnlinePlayers;
 
     //network
-    ConnectListenHandler connectListenHandler;
+//    ConnectListenHandler connectListenHandler;
 
 
     public static SingletonAccount getFirstInstance() {
@@ -72,7 +74,7 @@ public class SingletonAccount extends JFrame {
     private SingletonAccount() {
         super("Chess Master - ");
         //network
-        connectListenHandler = new ConnectListenHandler();
+//        connectListenHandler = new ConnectListenHandler();
 
         DefaultListModel listModel = new DefaultListModel();
         this.lmodel = listModel;
@@ -223,10 +225,10 @@ public class SingletonAccount extends JFrame {
                         JOptionPane.QUESTION_MESSAGE, null, null, null);
                 if (confirm == JOptionPane.YES_OPTION) {
                     try {
-                        connectListenHandler.writer.println(username.getText() + ":to" + ":Disconnect");
-                        connectListenHandler.writer.flush();
+                        sclh.writer.println(username.getText() + ":to" + ":Disconnect");
+                        sclh.writer.flush();
                         //Read response information from server
-                        connectListenHandler.ListenThread();
+                        sclh.ListenThread();
                         System.exit(0);
                     } catch (Exception ex) {
                         System.out.println("You cannot log out, Try again");
@@ -258,10 +260,10 @@ public class SingletonAccount extends JFrame {
                 System.out.print(selectedItem);
                 Play.setEnabled(false);
                 try {
-                    connectListenHandler.writer.println(selectedItem +":"+username.getText()+ ":"+"Challenge");
-                    connectListenHandler.writer.flush();
+                    sclh.writer.println(selectedItem +":"+username.getText()+ ":"+"Challenge");
+                    sclh.writer.flush();
                     //Read response information from server
-                    connectListenHandler.ListenThread();
+                    sclh.ListenThread();
                 } catch (Exception ex) {
                     System.out.println("You cannot challenge " + selectedItem + "please try again later");
                     ex.printStackTrace();
@@ -276,10 +278,10 @@ public class SingletonAccount extends JFrame {
                         JOptionPane.QUESTION_MESSAGE, null, null, null);
                 if (confirm == JOptionPane.YES_OPTION) {
                     try {
-                        connectListenHandler.writer.println(username.getText() + ":to" + ":Disconnect");
-                        connectListenHandler.writer.flush();
+                        sclh.writer.println(username.getText() + ":to" + ":Disconnect");
+                        sclh.writer.flush();
                         //Read response information from server
-                        connectListenHandler.ListenThread();
+                        sclh.ListenThread();
                         sglogin.setVisible(true);
                         System.out.println("afterlogout"+onlineBuff.getOnlineBuff());
                         dispose();
