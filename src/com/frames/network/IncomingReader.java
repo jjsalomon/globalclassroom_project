@@ -205,6 +205,7 @@ public class IncomingReader implements Runnable {
                     //Create board here
                     Board board = Board.createStandardBoard();
                     System.out.println(board);
+                    Table.set();
                     Table.get().show();
 
                 }

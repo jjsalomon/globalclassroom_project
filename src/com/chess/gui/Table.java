@@ -42,8 +42,7 @@ import java.util.Observer;
 import javax.swing.filechooser.FileFilter;
 
 
-
-public final class Table extends Observable implements  Runnable {
+public final class Table extends Observable implements Runnable {
 
     private final JFrame gameFrame;
     private final GameHistoryPanel gameHistoryPanel;
@@ -79,18 +78,17 @@ public final class Table extends Observable implements  Runnable {
     private static String Challenger;
     private static String Challenged;
 
-    private static final Table INSTANCE = new Table();
+    private static Table INSTANCE;
     sConnectListenHandler sclh = sConnectListenHandler.getInstance();
-//    ConnectListenHandler connectListenHandler;
+    //    ConnectListenHandler connectListenHandler;
     MoveBuffer moveBuffer = MoveBuffer.getFirstInstance();
+    SingletonAccount sgaccount = SingletonAccount.getFirstInstance();
     private boolean isMoveSent;
 
 
     private Table() {
 //        connectListenHandler = new ConnectListenHandler();
-        SingletonAccount sgaccount = SingletonAccount.getFirstInstance();
         this.gameFrame = new JFrame("Chess Master ~ " + sgaccount.username.getText());
-        sgaccount.setVisible(false);
         this.gameFrame.setLocationRelativeTo(sgaccount);
         final JMenuBar tableMenuBar = new JMenuBar();
         populateMenuBar(tableMenuBar);
@@ -130,8 +128,9 @@ public final class Table extends Observable implements  Runnable {
                         JOptionPane.QUESTION_MESSAGE, null, null, null);
                 if (confirm == JOptionPane.YES_OPTION) {
                     System.out.println("CLOSING GAME");
-                    sgaccount.setVisible(true);
+                    INSTANCE = null;
                     gameFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+                    sgaccount.setVisible(true);
                     //for some reason it wont show new board when invited again
                     /* try {
                         connectListenHandler.writer.println(username.getText() + ":to" + ":Disconnect");
@@ -155,9 +154,12 @@ public final class Table extends Observable implements  Runnable {
     }
 
 
-
     public static Table get() {
         return INSTANCE;
+    }
+
+    public static void set() {
+        INSTANCE = new Table();
     }
 
     private JFrame getGameFrame() {
@@ -206,6 +208,7 @@ public final class Table extends Observable implements  Runnable {
         Table.get().getTakenPiecesPanel().redo(Table.get().getMoveLog());
         Table.get().getBoardPanel().drawBoard(Table.get().getGameBoard());
         Table.get().getDebugPanel().redo();
+        sgaccount.setVisible(false);
     }
 
     private void populateMenuBar(final JMenuBar tableMenuBar) {
@@ -262,6 +265,7 @@ public final class Table extends Observable implements  Runnable {
                     public String getDescription() {
                         return ".pgn";
                     }
+
                     @Override
                     public boolean accept(final File file) {
                         return file.isDirectory() || file.getName().toLowerCase().endsWith("pgn");
@@ -307,7 +311,7 @@ public final class Table extends Observable implements  Runnable {
         evaluateBoardMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
-               // System.out.println(new StandardBoardEvaluator().evaluate(chessBoard, gameSetup.getSearchDepth()));
+                // System.out.println(new StandardBoardEvaluator().evaluate(chessBoard, gameSetup.getSearchDepth()));
 
             }
         });
@@ -318,7 +322,7 @@ public final class Table extends Observable implements  Runnable {
             @Override
             public void actionPerformed(final ActionEvent e) {
                 final Move lastMove = moveLog.getMoves().get(moveLog.size() - 1);
-                if(lastMove != null) {
+                if (lastMove != null) {
                     System.out.println(MoveUtils.exchangeScore(lastMove));
                 }
 
@@ -342,7 +346,7 @@ public final class Table extends Observable implements  Runnable {
         undoMoveMenuItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(final ActionEvent e) {
-                if(Table.get().getMoveLog().size() > 0) {
+                if (Table.get().getMoveLog().size() > 0) {
                     undoLastMove();
                 }
             }
@@ -522,9 +526,9 @@ public final class Table extends Observable implements  Runnable {
     }
 
     private static String playerInfo(final Player player) {
-        return ("Player is: " +player.getAlliance() + "\nlegal moves =" + player.getLegalMoves() + "\ninCheck = " +
-                player.isInCheck() + "\nisInCheckMate = " +player.isInCheckMate() +
-                "\nisCastled = " +player.isCastled())+ "\n";
+        return ("Player is: " + player.getAlliance() + "\nlegal moves =" + player.getLegalMoves() + "\ninCheck = " +
+                player.isInCheck() + "\nisInCheckMate = " + player.isInCheckMate() +
+                "\nisCastled = " + player.isCastled()) + "\n";
     }
 
     private void updateGameBoard(final Board board) {
@@ -536,7 +540,7 @@ public final class Table extends Observable implements  Runnable {
     }
 
     private void undoAllMoves() {
-        for(int i = Table.get().getMoveLog().size() - 1; i >= 0; i--) {
+        for (int i = Table.get().getMoveLog().size() - 1; i >= 0; i--) {
             final Move lastMove = Table.get().getMoveLog().removeMove(Table.get().getMoveLog().size() - 1);
             this.chessBoard = this.chessBoard.currentPlayer().unMakeMove(lastMove).getToBoard();
         }
@@ -579,7 +583,7 @@ public final class Table extends Observable implements  Runnable {
         final List<TilePanel> boardTiles;
 
         BoardPanel() {
-            super(new GridLayout(8,8));
+            super(new GridLayout(8, 8));
             this.boardTiles = new ArrayList<>();
             for (int i = 0; i < BoardUtils.NUM_TILES; i++) {
                 final TilePanel tilePanel = new TilePanel(this, i);
@@ -645,6 +649,7 @@ public final class Table extends Observable implements  Runnable {
         };
 
         abstract List<TilePanel> traverse(final List<TilePanel> boardTiles);
+
         abstract BoardDirection opposite();
 
     }
@@ -700,12 +705,9 @@ public final class Table extends Observable implements  Runnable {
             // uncomment these two piece of code and click on the gui to see the change automatically because the tileid was entered
 
 
-
             //System.out.println("heyyyy"+moveBuffer.getChallenged());
             //System.out.println("heyyyy"+moveBuffer.getChallenger());
-            System.out.println("heyyyy"+ moveBuffer.getSourceTile());
-
-
+            System.out.println("heyyyy" + moveBuffer.getSourceTile());
 
 
             addMouseListener(new MouseListener() {
@@ -713,19 +715,19 @@ public final class Table extends Observable implements  Runnable {
                 public void mouseClicked(final MouseEvent event) {
 
 
-                   // sourceTile = chessBoard.getTile(52);
-                   // destinationTile = chessBoard.getTile(36);
+                    // sourceTile = chessBoard.getTile(52);
+                    // destinationTile = chessBoard.getTile(36);
 
 
                     if (isRightMouseButton(event)) {
 
                         // SourceTile is a instance of tile
-                       // sourceTile = null;
+                        // sourceTile = null;
                         //destinationTile = null;
-                       // humanMovedPiece = null;
+                        // humanMovedPiece = null;
 
 
-                        System.out.println("source"+ moveBuffer.getSourceTile());
+                        System.out.println("source" + moveBuffer.getSourceTile());
                         int sourc;
                         int dest;
 
@@ -742,7 +744,7 @@ public final class Table extends Observable implements  Runnable {
                                 destinationTile.getTileCoordinate());
 
 
-                        System.out.println("Get Boolean: "+ MoveBuffer.getBoolean());
+                        System.out.println("Get Boolean: " + MoveBuffer.getBoolean());
 
                         System.out.println("This is the legalMoveChosen: " + move);
 
@@ -754,9 +756,8 @@ public final class Table extends Observable implements  Runnable {
 
                             try {
 
-                                sclh.writer.println("Move" + ":"  +moveBuffer.getSend()+":"+moveBuffer.getFrom()+":" + SourceT + ":" + DestT);
+                                sclh.writer.println("Move" + ":" + moveBuffer.getSend() + ":" + moveBuffer.getFrom() + ":" + SourceT + ":" + DestT);
                                 sclh.writer.flush();
-
 
 
                             } catch (Exception ex) {
@@ -780,7 +781,7 @@ public final class Table extends Observable implements  Runnable {
                             }
 
                             moveBuffer.setSwitchboolean(false);
-                            System.out.println("Get Boolean: "+ MoveBuffer.getBoolean());
+                            System.out.println("Get Boolean: " + MoveBuffer.getBoolean());
                         }
 
 
@@ -789,19 +790,13 @@ public final class Table extends Observable implements  Runnable {
                         humanMovedPiece = null;
 
 
-
-
                         boardPanel.drawBoard(chessBoard);
-
-
-
 
 
                     } else if (isLeftMouseButton(event)) {
 
 
-
-                        if (sourceTile == null ) {
+                        if (sourceTile == null) {
 
                             //sourcetile equal the
                             //ChessBoard is an istanc of board
@@ -821,25 +816,21 @@ public final class Table extends Observable implements  Runnable {
 
                             }
 
-                            System.out.println("this is SourceT"+sourceTile);
-                            System.out.println("this is Tiled"+tileId);
-                            System.out.println("this is humand moved P"+humanMovedPiece);
-
-
+                            System.out.println("this is SourceT" + sourceTile);
+                            System.out.println("this is Tiled" + tileId);
+                            System.out.println("this is humand moved P" + humanMovedPiece);
 
 
                             // transformed those two values to string
                             //getCurrentPlayer  = humanMovedPiece.getPieceAllegiance().toString();
-                           // getPieceAllegianceClicked = chessBoard.currentPlayer().toString();
+                            // getPieceAllegianceClicked = chessBoard.currentPlayer().toString();
 
 
-                            System.out.println("Piece Clicked"+getCurrentPlayer);
-                            System.out.println("Current Player"+getPieceAllegianceClicked);
+                            System.out.println("Piece Clicked" + getCurrentPlayer);
+                            System.out.println("Current Player" + getPieceAllegianceClicked);
 
 
-
-                        }
-                        else {
+                        } else {
 
                             // uncomment this piece of code to get the chess engine running properly
 
@@ -880,9 +871,8 @@ public final class Table extends Observable implements  Runnable {
 
                                 try {
 
-                                    sclh.writer.println("Move" + ":"  +moveBuffer.getSend()+":"+moveBuffer.getFrom()+":" + SourceT + ":" + DestT);
+                                    sclh.writer.println("Move" + ":" + moveBuffer.getSend() + ":" + moveBuffer.getFrom() + ":" + SourceT + ":" + DestT);
                                     sclh.writer.flush();
-
 
 
                                 } catch (Exception ex) {
@@ -920,7 +910,7 @@ public final class Table extends Observable implements  Runnable {
                             takenPiecesPanel.redo(moveLog);
 
                             //this will redraw the board
-                           boardPanel.drawBoard(chessBoard);
+                            boardPanel.drawBoard(chessBoard);
                             debugPanel.redo();
                         }
                     });
@@ -946,9 +936,6 @@ public final class Table extends Observable implements  Runnable {
         }
 
 
-
-
-
         public void drawTile(final Board board) {
             assignTileColor();
             assignTilePieceIcon(board);
@@ -968,7 +955,7 @@ public final class Table extends Observable implements  Runnable {
         }
 
         private void highlightTileBorder(final Board board) {
-            if(humanMovedPiece != null &&
+            if (humanMovedPiece != null &&
                     humanMovedPiece.getPieceAllegiance() == board.currentPlayer().getAlliance() &&
                     humanMovedPiece.getPiecePosition() == this.tileId) {
                 setBorder(BorderFactory.createLineBorder(Color.cyan));
@@ -978,10 +965,10 @@ public final class Table extends Observable implements  Runnable {
         }
 
         private void highlightAIMove() {
-            if(computerMove != null) {
-                if(this.tileId == computerMove.getCurrentCoordinate()) {
+            if (computerMove != null) {
+                if (this.tileId == computerMove.getCurrentCoordinate()) {
                     setBackground(Color.pink);
-                } else if(this.tileId == computerMove.getDestinationCoordinate()) {
+                } else if (this.tileId == computerMove.getDestinationCoordinate()) {
                     setBackground(Color.red);
                 }
             }
@@ -993,8 +980,7 @@ public final class Table extends Observable implements  Runnable {
                     if (move.getDestinationCoordinate() == this.tileId) {
                         try {
                             add(new JLabel(new ImageIcon(ImageIO.read(new File("art/misc/green_dot.png")))));
-                        }
-                        catch (final IOException e) {
+                        } catch (final IOException e) {
                             e.printStackTrace();
                         }
                     }
@@ -1003,7 +989,7 @@ public final class Table extends Observable implements  Runnable {
         }
 
         private Collection<Move> pieceLegalMoves(final Board board) {
-            if(humanMovedPiece != null && humanMovedPiece.getPieceAllegiance() == board.currentPlayer().getAlliance()) {
+            if (humanMovedPiece != null && humanMovedPiece.getPieceAllegiance() == board.currentPlayer().getAlliance()) {
                 return humanMovedPiece.calculateLegalMoves(board);
             }
             return Collections.emptyList();
@@ -1011,14 +997,14 @@ public final class Table extends Observable implements  Runnable {
 
         private void assignTilePieceIcon(final Board board) {
             this.removeAll();
-            if(board.getTile(this.tileId).isTileOccupied()) {
-                try{
+            if (board.getTile(this.tileId).isTileOccupied()) {
+                try {
                     final BufferedImage image = ImageIO.read(new File(pieceIconPath +
                             board.getTile(this.tileId).getPiece().getPieceAllegiance().toString().substring(0, 1) + "" +
                             board.getTile(this.tileId).getPiece().toString() +
                             ".gif"));
                     add(new JLabel(new ImageIcon(image)));
-                } catch(final IOException e) {
+                } catch (final IOException e) {
                     e.printStackTrace();
                 }
             }
@@ -1030,9 +1016,9 @@ public final class Table extends Observable implements  Runnable {
                     BoardUtils.INSTANCE.FIFTH_ROW.get(this.tileId) ||
                     BoardUtils.INSTANCE.SEVENTH_ROW.get(this.tileId)) {
                 setBackground(this.tileId % 2 == 0 ? lightTileColor : darkTileColor);
-            } else if(BoardUtils.INSTANCE.SECOND_ROW.get(this.tileId) ||
+            } else if (BoardUtils.INSTANCE.SECOND_ROW.get(this.tileId) ||
                     BoardUtils.INSTANCE.FOURTH_ROW.get(this.tileId) ||
-                    BoardUtils.INSTANCE.SIXTH_ROW.get(this.tileId)  ||
+                    BoardUtils.INSTANCE.SIXTH_ROW.get(this.tileId) ||
                     BoardUtils.INSTANCE.EIGHTH_ROW.get(this.tileId)) {
                 setBackground(this.tileId % 2 != 0 ? lightTileColor : darkTileColor);
             }
@@ -1040,44 +1026,40 @@ public final class Table extends Observable implements  Runnable {
     }
 
 
-
     @Override
-    public void run(){
-        System.out.println("Source"+moveBuffer.getSourceTile());
-        System.out.println("DestinInrun"+moveBuffer.getDestinationTile());
-
+    public void run() {
+        System.out.println("Source" + moveBuffer.getSourceTile());
+        System.out.println("DestinInrun" + moveBuffer.getDestinationTile());
 
 
     }
 
 
+    public static class RenderBoard implements Runnable {
 
-
-    public static class RenderBoard implements Runnable{
-
-        String client1,client2,
+        String client1, client2,
                 src, desti;
 
 
         private Piece humanMovedPiece;
 
 
-
-        public RenderBoard(String client1,String client2, String src, String dest){
+        public RenderBoard(String client1, String client2, String src, String dest) {
             this.client1 = client1;
-            this.client2 = client2 ;
+            this.client2 = client2;
             this.src = src;
             this.desti = dest;
 
 
         }
+
         @Override
-        public void run(){
+        public void run() {
 
             //render board method
 
 
-            System.out.println("Say Hey it worked"+src);
+            System.out.println("Say Hey it worked" + src);
 
 
             //sourc = Integer.parseInt(src);
@@ -1086,20 +1068,19 @@ public final class Table extends Observable implements  Runnable {
             int dest;
 
 
-
             sourc = Integer.parseInt(Table.get().moveBuffer.getSourceTile());
             dest = Integer.parseInt(Table.get().moveBuffer.getDestinationTile());
 
 
-           System.out.println("SourceT"+ sourc);
-            System.out.println("dest: "+ dest);
+            System.out.println("SourceT" + sourc);
+            System.out.println("dest: " + dest);
 
 
-                Table.get().sourceTile = Table.get().chessBoard.getTile(sourc);
-                Table.get().destinationTile = Table.get().chessBoard.getTile(dest);
+            Table.get().sourceTile = Table.get().chessBoard.getTile(sourc);
+            Table.get().destinationTile = Table.get().chessBoard.getTile(dest);
 
-            System.out.println("SourceT"+ Table.get().sourceTile);
-            System.out.println("dest: "+ Table.get().destinationTile);
+            System.out.println("SourceT" + Table.get().sourceTile);
+            System.out.println("dest: " + Table.get().destinationTile);
 
             //sourceTile = chessBoard.getTile(52);
             //destinationTile = chessBoard.getTile(36);
@@ -1110,7 +1091,7 @@ public final class Table extends Observable implements  Runnable {
                     Table.get().destinationTile.getTileCoordinate());
 
 
-            System.out.println("F Move: "+ move);
+            System.out.println("F Move: " + move);
 
             System.out.println("This is the legalMoveChosen: " + Table.get().destinationTile);
             //chessBoard.currentPlayer();
@@ -1127,7 +1108,6 @@ public final class Table extends Observable implements  Runnable {
 
                     //connectListenHandler.writer.println("Move" + ":"  +moveBuffer.getSend()+":"+moveBuffer.getFrom()+":" + SourceT + ":" + DestT);
                     //connectListenHandler.writer.flush();
-
 
 
                 } catch (Exception ex) {
@@ -1147,19 +1127,17 @@ public final class Table extends Observable implements  Runnable {
                     Table.get().chessBoard = transition.getToBoard();
 
                     //this add the move to the movelog
-                   // moveLog.addMove(move);
+                    // moveLog.addMove(move);
                 }
 
                 //moveBuffer.setSwitchboolean(false);
-                System.out.println("Get Boolean: "+ MoveBuffer.getBoolean());
+                System.out.println("Get Boolean: " + MoveBuffer.getBoolean());
             }
 
 
             Table.get().sourceTile = null;
             Table.get().destinationTile = null;
             Table.get().humanMovedPiece = null;
-
-
 
 
             //boardPanel.drawBoard(chessBoard);
@@ -1173,8 +1151,6 @@ public final class Table extends Observable implements  Runnable {
 
                 }
             });
-
-
 
 
         }
