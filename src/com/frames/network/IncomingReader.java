@@ -27,76 +27,12 @@ import static javax.swing.SwingUtilities.invokeLater;
 
 public class IncomingReader implements Runnable {
 
-
-    Board chessBoard;
-
-    Table table;
-
     BufferedReader breader;
-    public Tile sourceTile;
-
-    public Tile destinationTile;
 
     public IncomingReader(BufferedReader reader) {
 
-
-
         this.breader = reader;
     }
-
-
-    public void RedrawBoardOnotherClient(int source, int dest)
-    {
-
-        //sourc = Integer.parseInt(moveBuffer.getSourceTile());
-        //dest = Integer.parseInt(moveBuffer.getDestinationTile());
-
-
-        //System.out.println("sourc"+sourc);
-        sourceTile = chessBoard.getTile(source);
-        destinationTile = chessBoard.getTile(dest);
-
-        // System.out.println("Tile Source: " +sourceTile.getTileCoordinate());
-        final Move move1 = Move.MoveFactory.createMove(chessBoard, sourceTile.getTileCoordinate(),
-                destinationTile.getTileCoordinate());
-
-
-        System.out.println("Get Boolean: " + Move.MoveFactory.getBollean());
-        System.out.println("This is the legalMoveChosen: " + move1);
-
-        //String moveee =  move.toString();
-        // System.out.println("nullmoveeee"+chessBoard.getAllLegalMoves());
-        // that checks if the boolean is true of false if true then the move can be done if not #
-        // then it will set the sourceTile destinationtile and humanmovePiece to null
-        if (Move.MoveFactory.getBollean().equals(true)) {
-
-            //Read response information from server
-            final MoveTransition transition = chessBoard.currentPlayer().makeMove(move1);
-
-
-            System.out.println("Alliance: " + chessBoard.currentPlayer().getAlliance());
-            if (transition.getMoveStatus().isDone()) {
-
-                // board will be rendered again and will add move
-                chessBoard = transition.getToBoard();
-
-                //this add the move to the movelog
-                //  moveLog.addMove(move);
-
-                System.out.println("It works: " + chessBoard.currentPlayer().getAlliance());
-            }
-        }
-
-        sourceTile = null;
-        destinationTile = null;
-       // humanMovedPiece = null;
-
-
-
-
-
-    }
-
 
     @Override
     public void run() {
@@ -197,6 +133,7 @@ public class IncomingReader implements Runnable {
                     String challenged = data[2];
 
                     moveBuffer.addPlayers(challenger,challenged);
+                    moveBuffer.setChallenge(challenger,challenged);
 
                    //System.out.println("I am challenger!: "+ getChallenger());
                     //System.out.println("I am the challenged!: "+getChallenged());

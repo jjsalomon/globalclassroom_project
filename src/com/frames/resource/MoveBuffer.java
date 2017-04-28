@@ -18,6 +18,8 @@ public final class MoveBuffer{
     String destinationTile = null;
     String sendTo = null;
     String sendFrom = null;
+    String challenger = null;
+    String challenged = null;
     static boolean hasboardupdated;
 
 
@@ -68,6 +70,12 @@ public final class MoveBuffer{
     }
 
 
+    public void setChallenge(String Challenger,String Challenged)
+    {
+        challenger = Challenger;
+        challenged = Challenged;
+
+    }
     public void addPlayers(String to, String from){
         sendTo = to;
         sendFrom = from;
@@ -92,5 +100,8 @@ public final class MoveBuffer{
     public String getSend(){return sendTo;}
 
     public String getFrom(){return sendFrom;}
+
+    public  String getChallenger(){return challenger;}
+    public  String getChallenged(){return  challenged;}
 
 }

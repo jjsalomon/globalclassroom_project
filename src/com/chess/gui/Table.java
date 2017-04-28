@@ -83,7 +83,7 @@ public final class Table extends Observable implements Runnable {
     //    ConnectListenHandler connectListenHandler;
     MoveBuffer moveBuffer = MoveBuffer.getFirstInstance();
     SingletonAccount sgaccount = SingletonAccount.getFirstInstance();
-    private boolean isMoveSent;
+
 
 
     private Table() {
@@ -95,7 +95,23 @@ public final class Table extends Observable implements Runnable {
         this.gameFrame.setJMenuBar(tableMenuBar);
         this.gameFrame.setLayout(new BorderLayout());
         this.chessBoard = Board.createStandardBoard();
-        this.boardDirection = BoardDirection.NORMAL;
+        this.Challenger = moveBuffer.getChallenger();
+        this.Challenged = moveBuffer.getChallenged();
+
+        System.out.println("Challenger In table"+this.Challenger);
+        System.out.println("Challenged In table"+this.Challenged);
+
+        if(Challenger.equals(sgaccount.username.getText()))
+        {
+            this.boardDirection = BoardDirection.NORMAL;
+        }
+        if(Challenged.equals(sgaccount.username.getText()))
+        {
+            this.boardDirection = BoardDirection.FLIPPED;
+        }
+
+
+
         this.highlightLegalMoves = false;
         this.useBook = false;
         this.pieceIconPath = "art/holywarriors/";
@@ -104,6 +120,8 @@ public final class Table extends Observable implements Runnable {
         this.takenPiecesPanel = new TakenPiecesPanel();
         this.boardPanel = new BoardPanel();
         this.moveLog = new MoveLog();
+
+
 
         this.gameSetup = new GameSetup(this.gameFrame, true);
         this.gameFrame.add(this.takenPiecesPanel, BorderLayout.WEST);
@@ -115,7 +133,7 @@ public final class Table extends Observable implements Runnable {
         this.gameFrame.setSize(OUTER_FRAME_DIMENSION);
         //center(this.gameFrame);
         this.gameFrame.setVisible(true);
-        isMoveSent = false;
+
 
         //when user wants to log out by X close button
         this.gameFrame.addWindowListener(new java.awt.event.WindowAdapter() {
@@ -713,87 +731,15 @@ public final class Table extends Observable implements Runnable {
             addMouseListener(new MouseListener() {
                 @Override
                 public void mouseClicked(final MouseEvent event) {
+                    // transformed those two values to string
+
+
 
 
                     // sourceTile = chessBoard.getTile(52);
                     // destinationTile = chessBoard.getTile(36);
 
-
-                    if (isRightMouseButton(event)) {
-
-                        // SourceTile is a instance of tile
-                        // sourceTile = null;
-                        //destinationTile = null;
-                        // humanMovedPiece = null;
-
-
-                        System.out.println("source" + moveBuffer.getSourceTile());
-                        int sourc;
-                        int dest;
-
-                        sourc = Integer.parseInt(moveBuffer.getSourceTile());
-                        dest = Integer.parseInt(moveBuffer.getDestinationTile());
-
-
-                        //System.out.println("heyyyy"+ moveBuffer.getSourceTile());
-                        sourceTile = chessBoard.getTile(sourc);
-                        destinationTile = chessBoard.getTile(dest);
-
-                        // System.out.println("Tile Source: " +sourceTile.getTileCoordinate());
-                        final Move move = MoveFactory.createMove(chessBoard, sourceTile.getTileCoordinate(),
-                                destinationTile.getTileCoordinate());
-
-
-                        System.out.println("Get Boolean: " + MoveBuffer.getBoolean());
-
-                        System.out.println("This is the legalMoveChosen: " + move);
-
-                        //String moveee =  move.toString();
-                        // System.out.println("nullmoveeee"+chessBoard.getAllLegalMoves());
-                        // that checks if the boolean is true of false if true then the move can be done if not #
-                        // then it will set the sourceTile destinationtile and humanmovePiece to null
-                        if (MoveFactory.getBollean().equals(true)) {
-
-                            try {
-
-                                sclh.writer.println("Move" + ":" + moveBuffer.getSend() + ":" + moveBuffer.getFrom() + ":" + SourceT + ":" + DestT);
-                                sclh.writer.flush();
-
-
-                            } catch (Exception ex) {
-                                System.out.println("You Cannot send data try again");
-                                ex.printStackTrace();
-                            }
-                            //Read response information from server
-                            sclh.ListenThread();
-
-                            final MoveTransition transition = chessBoard.currentPlayer().makeMove(move);
-
-
-                            System.out.println("Alliance: " + chessBoard.currentPlayer().getAlliance());
-                            if (transition.getMoveStatus().isDone()) {
-
-                                // board will be rendered again and will add move
-                                chessBoard = transition.getToBoard();
-
-                                //this add the move to the movelog
-                                moveLog.addMove(move);
-                            }
-
-                            moveBuffer.setSwitchboolean(false);
-                            System.out.println("Get Boolean: " + MoveBuffer.getBoolean());
-                        }
-
-
-                        sourceTile = null;
-                        destinationTile = null;
-                        humanMovedPiece = null;
-
-
-                        boardPanel.drawBoard(chessBoard);
-
-
-                    } else if (isLeftMouseButton(event)) {
+                    if (isLeftMouseButton(event)) {
 
 
                         if (sourceTile == null) {
@@ -811,6 +757,34 @@ public final class Table extends Observable implements Runnable {
                             //humanMovedPiece is to check if human clicked on a tile with a piece
                             //sourceTile.getPiece() will return the piece clicked
                             humanMovedPiece = sourceTile.getPiece();
+
+                            getCurrentPlayer  = humanMovedPiece.getPieceAllegiance().toString();
+                            getPieceAllegianceClicked = chessBoard.currentPlayer().toString();
+
+                            if ((Challenger.equals(sgaccount.username.getText()))) {
+
+                                if(getCurrentPlayer.equals("Black"))
+                                {
+                                    sourceTile = null;
+                                    humanMovedPiece = null;
+                                    destinationTile = null;
+                                }
+
+                                System.out.println("insideI"+Challenger);
+                            }
+                            if(Challenged.equals(sgaccount.username.getText()))
+                            {
+                                if(getCurrentPlayer.equals("White"))
+                                {
+                                    sourceTile = null;
+                                    humanMovedPiece = null;
+                                    destinationTile = null;
+                                    System.out.println("insideIC"+Challenged);
+                                }
+                            }
+
+
+
                             if (humanMovedPiece == null) {
                                 sourceTile = null;
 
@@ -819,13 +793,6 @@ public final class Table extends Observable implements Runnable {
                             System.out.println("this is SourceT" + sourceTile);
                             System.out.println("this is Tiled" + tileId);
                             System.out.println("this is humand moved P" + humanMovedPiece);
-
-
-                            // transformed those two values to string
-                            //getCurrentPlayer  = humanMovedPiece.getPieceAllegiance().toString();
-                            // getPieceAllegianceClicked = chessBoard.currentPlayer().toString();
-
-
                             System.out.println("Piece Clicked" + getCurrentPlayer);
                             System.out.println("Current Player" + getPieceAllegianceClicked);
 
@@ -833,6 +800,9 @@ public final class Table extends Observable implements Runnable {
                         } else {
 
                             // uncomment this piece of code to get the chess engine running properly
+
+
+
 
                             destinationTile = chessBoard.getTile(tileId);
                             DestT = tileId;
