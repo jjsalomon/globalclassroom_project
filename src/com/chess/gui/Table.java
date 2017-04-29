@@ -867,11 +867,15 @@ public final class Table extends Observable implements Runnable {
                             if(getPieceAllegianceClicked.equals("White") && BoardUtils.isEndGame(chessBoard) ==true)
                             {
                                 System.out.println(""+Challenger+ " Wins");
+                                sclh.writer.println("Win"+":"+Challenger+":"+"Lose"+":"+Challenged);
+                                sclh.writer.flush();
 
                             }
                             if(getPieceAllegianceClicked.equals("Black")&& BoardUtils.isEndGame(chessBoard) ==true)
                             {
                                 System.out.println(""+Challenged+ " Wins");
+                                sclh.writer.println("Win"+":"+Challenged+":"+"Lose"+":"+Challenger);
+                                sclh.writer.flush();
                             }
 
                             debugPanel.redo();

@@ -53,7 +53,8 @@ public class IncomingReader implements Runnable {
                 login = "Login", add = "Add", sending = "Sending",
                 remove = "Remove", invite = "Invite", start = "START",
                 declined = "DECLINED"  , move = "Move" ,checklogin= "CheckLogin",
-                checkRegister="CheckRegister", interrupt = "Interrupt";
+                checkRegister="CheckRegister", interrupt = "Interrupt",
+                win = "Win", lose = "Lose";
 
         try {
             while ((stream = breader.readLine()) != null) {
@@ -191,12 +192,50 @@ public class IncomingReader implements Runnable {
                             "Your opponent has disconnected","Game Closing",
                             JOptionPane.ERROR_MESSAGE);
 
-                    Table.setNull();
+
                     Table.get().gameFrame.dispose();
+                    Table.setNull();
                     sgaccount.refreshList();
                     sgaccount.setVisible(true);
 
                     System.out.println("Player back to account gui");
+                }
+
+                if(data[0].equals(win)){
+                    //other loser client
+                    String loser = data[1];
+                    //Win message
+                    String winMessage = data[2];
+
+                    System.out.println(winMessage);
+                    System.out.println("Loser is:"+ loser);
+                    //Create new dialog
+                    System.out.println("Game checkmate");
+                    JOptionPane.showMessageDialog(Table.get().gameFrame,
+                            winMessage,"Game finish",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    Table.get().gameFrame.dispose();
+                    Table.setNull();
+                    sgaccount.refreshList();
+                    sgaccount.setVisible(true);
+
+                }
+
+                if(data[0].equals(lose)){
+                    String winner = data[1];
+                    //lose message
+                    String loseMessage = data[2];
+
+                    System.out.println(loseMessage);
+                    System.out.println("Winner is:"+winner);
+                    System.out.println("Game checkmate");
+                    JOptionPane.showMessageDialog(Table.get().gameFrame,
+                            loseMessage,"Game finish",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    Table.get().gameFrame.dispose();
+                    Table.setNull();
+                    sgaccount.refreshList();
+                    sgaccount.setVisible(true);
                 }
             }
             }catch(Exception ex){
