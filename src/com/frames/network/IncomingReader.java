@@ -51,7 +51,8 @@ public class IncomingReader implements Runnable {
                 disconnect = "Disconnect", chat = "Message",
                 login = "Login", add = "Add", sending = "Sending",
                 remove = "Remove", invite = "Invite", start = "START",
-                declined = "DECLINED"  , move = "Move" ,checklogin= "CheckLogin", checkRegister="CheckRegister";
+                declined = "DECLINED"  , move = "Move" ,checklogin= "CheckLogin",
+                checkRegister="CheckRegister", interrupt = "Interrupt";
 
         try {
             while ((stream = breader.readLine()) != null) {
@@ -179,9 +180,15 @@ public class IncomingReader implements Runnable {
                     Thread render = new Thread(new Table.RenderBoard(fromClient,toClient,sourceTile,destinationTile));
                     render.start();
 
+                }
 
+                if(data[0].equals(interrupt)){
+                    //Create new dialog
+                    System.out.println("Player has disconnected");
 
-
+                   /* JOptionPane.showMessageDialog(sglogin,
+                            "Your opponent has disconnected",
+                            JOptionPane.ERROR_MESSAGE);*/
                 }
             }
             }catch(Exception ex){

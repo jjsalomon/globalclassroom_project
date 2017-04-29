@@ -150,16 +150,14 @@ public final class Table extends Observable implements Runnable {
                     gameFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
                     sgaccount.setVisible(true);
                     //for some reason it wont show new board when invited again
-                    /* try {
-                        connectListenHandler.writer.println(username.getText() + ":to" + ":Disconnect");
-                        connectListenHandler.writer.flush();
-                        //Read response information from server
-                        connectListenHandler.ListenThread();
-                        System.exit(0);
+                     try {
+                         sclh.writer.println("Interrupt:"+ sgaccount.username.getText()+":"+moveBuffer.getChallenged()+ ":" + moveBuffer.getChallenger());
+                         sclh.writer.flush();
+                         System.exit(0);
                     } catch (Exception ex) {
                         System.out.println("You cannot log out, Try again");
                         ex.printStackTrace();
-                    }*/
+                    }
                 }
                 if (confirm == JOptionPane.NO_OPTION) {
                     gameFrame.setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
