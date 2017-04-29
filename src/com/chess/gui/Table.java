@@ -989,7 +989,7 @@ public final class Table extends Observable implements Runnable {
                 src, desti;
 
 
-        private Piece humanMovedPiece;
+
 
 
         public RenderBoard(String client1, String client2, String src, String dest) {
@@ -1022,6 +1022,7 @@ public final class Table extends Observable implements Runnable {
 
             System.out.println("SourceT" + Table.get().sourceTile);
             System.out.println("dest: " + Table.get().destinationTile);
+
 
             //sourceTile = chessBoard.getTile(52);
             //destinationTile = chessBoard.getTile(36);
@@ -1067,8 +1068,7 @@ public final class Table extends Observable implements Runnable {
                     // board will be rendered again and will add move
                     Table.get().chessBoard = transition.getToBoard();
 
-                    //this add the move to the movelog
-                    // moveLog.addMove(move);
+
                 }
 
                 //moveBuffer.setSwitchboolean(false);
@@ -1088,7 +1088,11 @@ public final class Table extends Observable implements Runnable {
                 public void run() {
 
                     //this will redraw the board
+                    Table.get().takenPiecesPanel.redo(Table.get().moveLog);
+                    //this add the move to the movelog
+                    Table.get().moveLog.addMove(move);
                     Table.get().getBoardPanel().drawBoard(Table.get().chessBoard);
+
 
                 }
             });
