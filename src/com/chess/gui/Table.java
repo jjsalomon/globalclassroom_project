@@ -126,7 +126,7 @@ public final class Table extends Observable implements Runnable {
         setDefaultLookAndFeelDecorated(true);
         this.gameFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.gameFrame.setSize(OUTER_FRAME_DIMENSION);
-        //center(this.gameFrame);
+
         this.gameFrame.setVisible(true);
 
 
@@ -205,13 +205,8 @@ public final class Table extends Observable implements Runnable {
         return this.gameSetup;
     }
 
-    private boolean getHighlightLegalMoves() {
-        return this.highlightLegalMoves;
-    }
 
-    private boolean getUseBook() {
-        return this.useBook;
-    }
+
 
     public void show() {
         Table.get().getMoveLog().clear();
@@ -715,12 +710,6 @@ public final class Table extends Observable implements Runnable {
             // this instance passes the data so if you hard code 52 it'll get the sourcetile of the 5th pawn behind the king
             // uncomment these two piece of code and click on the gui to see the change automatically because the tileid was entered
 
-
-            //System.out.println("heyyyy"+moveBuffer.getChallenged());
-            //System.out.println("heyyyy"+moveBuffer.getChallenger());
-            System.out.println("heyyyy" + moveBuffer.getSourceTile());
-
-
             addMouseListener(new MouseListener() {
                 @Override
                 public void mouseClicked(final MouseEvent event) {
@@ -837,6 +826,8 @@ public final class Table extends Observable implements Runnable {
                                 //Read response information from server
                                 sclh.ListenThread();
 
+
+
                                 final MoveTransition transition = chessBoard.currentPlayer().makeMove(move);
 
 
@@ -866,6 +857,23 @@ public final class Table extends Observable implements Runnable {
 
                             //this will redraw the board
                             boardPanel.drawBoard(chessBoard);
+                            System.out.println("endGame"+BoardUtils.isEndGame(chessBoard));
+
+                            System.out.println("Piece Clicked: " + getCurrentPlayer);
+                            System.out.println("Current Player: " + getPieceAllegianceClicked);
+
+                            //print the winner to the screen
+
+                            if(getPieceAllegianceClicked.equals("White") && BoardUtils.isEndGame(chessBoard) ==true)
+                            {
+                                System.out.println(""+Challenger+ " Wins");
+
+                            }
+                            if(getPieceAllegianceClicked.equals("Black")&& BoardUtils.isEndGame(chessBoard) ==true)
+                            {
+                                System.out.println(""+Challenged+ " Wins");
+                            }
+
                             debugPanel.redo();
                         }
                     });
@@ -895,8 +903,6 @@ public final class Table extends Observable implements Runnable {
             assignTileColor();
             assignTilePieceIcon(board);
             highlightTileBorder(board);
-            highlightLegals(board);
-            highlightAIMove();
             validate();
             repaint();
         }
@@ -929,19 +935,6 @@ public final class Table extends Observable implements Runnable {
             }
         }
 
-        private void highlightLegals(final Board board) {
-            if (Table.get().getHighlightLegalMoves()) {
-                for (final Move move : pieceLegalMoves(board)) {
-                    if (move.getDestinationCoordinate() == this.tileId) {
-                        try {
-                            add(new JLabel(new ImageIcon(ImageIO.read(new File("art/misc/green_dot.png")))));
-                        } catch (final IOException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }
-            }
-        }
 
         private Collection<Move> pieceLegalMoves(final Board board) {
             if (humanMovedPiece != null && humanMovedPiece.getPieceAllegiance() == board.currentPlayer().getAlliance()) {
@@ -1012,13 +1005,6 @@ public final class Table extends Observable implements Runnable {
         public void run() {
 
             //render board method
-
-
-            System.out.println("Say Hey it worked" + src);
-
-
-            //sourc = Integer.parseInt(src);
-            //dest = Integer.parseInt(desti);
             int sourc;
             int dest;
 

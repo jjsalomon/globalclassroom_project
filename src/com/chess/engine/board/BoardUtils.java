@@ -84,44 +84,15 @@ public enum  BoardUtils {
         return coordinate >= START_TILE_INDEX && coordinate < NUM_TILES;
     }
 
-    public int getCoordinateAtPosition(final String position) {
-        return POSITION_TO_COORDINATE.get(position);
-    }
-
     public String getPositionAtCoordinate(final int coordinate) {
         return ALGEBRAIC_NOTATION.get(coordinate);
     }
 
-    public static boolean isThreatenedBoardImmediate(final Board board) {
-        return board.whitePlayer().isInCheck() || board.blackPlayer().isInCheck();
-    }
-
-//    public static boolean isEscapeCheckMove(final Board board) {
-//
-//        final Board priorBoard = move.getBoard()
-//
-//
-//        return isThreatenedBoardImmediate(moveTransition.getFromBoard()) &&
-//               !isThreatenedBoardImmediate(moveTransition.getToBoard());
-//    }
-
-    public static boolean threatChainScore(final Board board) {
-
-        Board currentBoard = board;
-        boolean isThreat = false;
-        while(currentBoard != null) {
-            if(currentBoard.whitePlayer().isInCheck() || currentBoard.blackPlayer().isInCheck()) {
-                isThreat = true;
-                break;
-            }
-            currentBoard = currentBoard.getTransitionMove().getBoard();
-        }
-        return isThreat;
-    }
 
     public static boolean isEndGame(final Board board) {
         return board.currentPlayer().isInCheckMate() ||
                 board.currentPlayer().isInStaleMate();
 
     }
+
 }
