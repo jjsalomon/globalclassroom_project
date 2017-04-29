@@ -44,7 +44,7 @@ import javax.swing.filechooser.FileFilter;
 
 public final class Table extends Observable implements Runnable {
 
-    private final JFrame gameFrame;
+    public final JFrame gameFrame;
     private final GameHistoryPanel gameHistoryPanel;
     private final TakenPiecesPanel takenPiecesPanel;
     private final DebugPanel debugPanel;
@@ -85,7 +85,6 @@ public final class Table extends Observable implements Runnable {
     SingletonAccount sgaccount = SingletonAccount.getFirstInstance();
 
 
-
     private Table() {
 //        connectListenHandler = new ConnectListenHandler();
         this.gameFrame = new JFrame("Chess Master ~ " + sgaccount.username.getText());
@@ -98,18 +97,15 @@ public final class Table extends Observable implements Runnable {
         this.Challenger = moveBuffer.getChallenger();
         this.Challenged = moveBuffer.getChallenged();
 
-        System.out.println("Challenger In table"+this.Challenger);
-        System.out.println("Challenged In table"+this.Challenged);
+        System.out.println("Challenger In table" + this.Challenger);
+        System.out.println("Challenged In table" + this.Challenged);
 
-        if(Challenger.equals(sgaccount.username.getText()))
-        {
+        if (Challenger.equals(sgaccount.username.getText())) {
             this.boardDirection = BoardDirection.NORMAL;
         }
-        if(Challenged.equals(sgaccount.username.getText()))
-        {
+        if (Challenged.equals(sgaccount.username.getText())) {
             this.boardDirection = BoardDirection.FLIPPED;
         }
-
 
 
         this.highlightLegalMoves = false;
@@ -120,7 +116,6 @@ public final class Table extends Observable implements Runnable {
         this.takenPiecesPanel = new TakenPiecesPanel();
         this.boardPanel = new BoardPanel();
         this.moveLog = new MoveLog();
-
 
 
         this.gameSetup = new GameSetup(this.gameFrame, true);
@@ -146,14 +141,10 @@ public final class Table extends Observable implements Runnable {
                         JOptionPane.QUESTION_MESSAGE, null, null, null);
                 if (confirm == JOptionPane.YES_OPTION) {
                     System.out.println("CLOSING GAME");
-                    INSTANCE = null;
-                    gameFrame.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
-                    sgaccount.setVisible(true);
                     //for some reason it wont show new board when invited again
-                     try {
-                         sclh.writer.println("Interrupt:"+ sgaccount.username.getText()+":"+moveBuffer.getChallenged()+ ":" + moveBuffer.getChallenger());
-                         sclh.writer.flush();
-                         System.exit(0);
+                    try {
+                        sclh.writer.println("Interrupt:" + sgaccount.username.getText() + ":" + moveBuffer.getChallenged() + ":" + moveBuffer.getChallenger());
+                        sclh.writer.flush();
                     } catch (Exception ex) {
                         System.out.println("You cannot log out, Try again");
                         ex.printStackTrace();
@@ -172,6 +163,10 @@ public final class Table extends Observable implements Runnable {
 
     public static Table get() {
         return INSTANCE;
+    }
+
+    public static void setNull() {
+        INSTANCE = null;
     }
 
     public static void set() {
@@ -732,8 +727,6 @@ public final class Table extends Observable implements Runnable {
                     // transformed those two values to string
 
 
-
-
                     // sourceTile = chessBoard.getTile(52);
                     // destinationTile = chessBoard.getTile(36);
 
@@ -756,31 +749,27 @@ public final class Table extends Observable implements Runnable {
                             //sourceTile.getPiece() will return the piece clicked
                             humanMovedPiece = sourceTile.getPiece();
 
-                            getCurrentPlayer  = humanMovedPiece.getPieceAllegiance().toString();
+                            getCurrentPlayer = humanMovedPiece.getPieceAllegiance().toString();
                             getPieceAllegianceClicked = chessBoard.currentPlayer().toString();
 
                             if ((Challenger.equals(sgaccount.username.getText()))) {
 
-                                if(getCurrentPlayer.equals("Black"))
-                                {
+                                if (getCurrentPlayer.equals("Black")) {
                                     sourceTile = null;
                                     humanMovedPiece = null;
                                     destinationTile = null;
                                 }
 
-                                System.out.println("insideI"+Challenger);
+                                System.out.println("insideI" + Challenger);
                             }
-                            if(Challenged.equals(sgaccount.username.getText()))
-                            {
-                                if(getCurrentPlayer.equals("White"))
-                                {
+                            if (Challenged.equals(sgaccount.username.getText())) {
+                                if (getCurrentPlayer.equals("White")) {
                                     sourceTile = null;
                                     humanMovedPiece = null;
                                     destinationTile = null;
-                                    System.out.println("insideIC"+Challenged);
+                                    System.out.println("insideIC" + Challenged);
                                 }
                             }
-
 
 
                             if (humanMovedPiece == null) {
@@ -798,8 +787,6 @@ public final class Table extends Observable implements Runnable {
                         } else {
 
                             // uncomment this piece of code to get the chess engine running properly
-
-
 
 
                             destinationTile = chessBoard.getTile(tileId);

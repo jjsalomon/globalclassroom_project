@@ -17,6 +17,7 @@ import javax.swing.*;
 import java.io.BufferedReader;
 
 import static javax.swing.SwingUtilities.invokeLater;
+import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 
 /**
  * Created by azkei on 02/04/2017.
@@ -186,9 +187,16 @@ public class IncomingReader implements Runnable {
                     //Create new dialog
                     System.out.println("Player has disconnected");
 
-                   /* JOptionPane.showMessageDialog(sglogin,
-                            "Your opponent has disconnected",
-                            JOptionPane.ERROR_MESSAGE);*/
+                    JOptionPane.showMessageDialog(Table.get().gameFrame,
+                            "Your opponent has disconnected","Game Closing",
+                            JOptionPane.ERROR_MESSAGE);
+
+                    Table.setNull();
+                    Table.get().gameFrame.dispose();
+                    sgaccount.refreshList();
+                    sgaccount.setVisible(true);
+
+                    System.out.println("Player back to account gui");
                 }
             }
             }catch(Exception ex){
