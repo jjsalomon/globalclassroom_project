@@ -54,7 +54,7 @@ public class IncomingReader implements Runnable {
                 remove = "Remove", invite = "Invite", start = "START",
                 declined = "DECLINED"  , move = "Move" ,checklogin= "CheckLogin",
                 checkRegister="CheckRegister", interrupt = "Interrupt",
-                win = "Win", lose = "Lose";
+                win = "Win", lose = "Lose", reupdate = "ReUpdate";
 
         try {
             while ((stream = breader.readLine()) != null) {
@@ -100,6 +100,11 @@ public class IncomingReader implements Runnable {
                     accounts.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                     accounts.setSize(700, 500);
                     accounts.setVisible(true);*/
+                }
+
+                if (data[1].equals(reupdate)) {
+                    System.out.println(stream);
+                    sgaccount.setStream(stream);
                 }
 
                 if (data[1].equals(checklogin)) {
@@ -217,6 +222,7 @@ public class IncomingReader implements Runnable {
                     Table.get().gameFrame.dispose();
                     Table.setNull();
                     sgaccount.refreshList();
+                    sgaccount.setAccountComponents();
                     sgaccount.setVisible(true);
 
                 }
@@ -235,6 +241,7 @@ public class IncomingReader implements Runnable {
                     Table.get().gameFrame.dispose();
                     Table.setNull();
                     sgaccount.refreshList();
+                    sgaccount.setAccountComponents();
                     sgaccount.setVisible(true);
                 }
             }
