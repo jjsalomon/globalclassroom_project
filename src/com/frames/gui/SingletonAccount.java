@@ -1,6 +1,5 @@
 package com.frames.gui;
 
-import com.frames.network.ConnectListenHandler;
 import com.frames.network.sConnectListenHandler;
 import com.frames.resource.UserOnline;
 
@@ -31,7 +30,6 @@ public class SingletonAccount extends JFrame {
     public JLabel username;
     private JLabel loss;
     private JLabel coins;
-    private JButton skinsButton;
     private JLabel rank;
     private JLabel win;
     private JLabel dbcoin;
@@ -42,10 +40,6 @@ public class SingletonAccount extends JFrame {
     private JButton Play;
     private JButton logout;
     private JLabel OnlinePlayers;
-
-    //network
-//    ConnectListenHandler connectListenHandler;
-
 
     public static SingletonAccount getFirstInstance() {
         if (firstInstance == null) {
@@ -58,7 +52,6 @@ public class SingletonAccount extends JFrame {
                     e.printStackTrace();
                 }
             }
-
             //Here we sync when the first object is created
             synchronized (SingletonAccount.class) {
                 //if the first instance isnt needed it isnt created
@@ -73,8 +66,6 @@ public class SingletonAccount extends JFrame {
     //Constructor
     private SingletonAccount() {
         super("Chess Master - ");
-        //network
-//        connectListenHandler = new ConnectListenHandler();
 
         DefaultListModel listModel = new DefaultListModel();
         this.lmodel = listModel;
@@ -109,7 +100,6 @@ public class SingletonAccount extends JFrame {
         container.add(rank);
 
         dbrank = new JLabel(); //user rank data from database
-//        dbrank = new JLabel("12"); //dummy data
         dbrank.setBounds(120,120,100,20);
         dbrank.setFont(new Font("Lucida Handwriting", Font.PLAIN, 18));
         dbrank.setForeground(new Color(245, 245, 245));
@@ -121,7 +111,6 @@ public class SingletonAccount extends JFrame {
         win.setForeground(new Color(245, 245, 245));
         container.add(win);
 
-//        dbwin = new JLabel("15"); //dummy data
         dbwin = new JLabel(); //user win data from database
         dbwin.setBounds(120,170,100,20);
         dbwin.setFont(new Font("Lucida Handwriting", Font.PLAIN, 18));
@@ -134,7 +123,6 @@ public class SingletonAccount extends JFrame {
         loss.setForeground(new Color(245, 245, 245));
         container.add(loss);
 
-//        dbloss = new JLabel("55"); //dummy data
         dbloss = new JLabel(); //user loss data from database
         dbloss.setBounds(120,220,100,20);
         dbloss.setFont(new Font("Lucida Handwriting", Font.PLAIN, 18));
@@ -147,7 +135,6 @@ public class SingletonAccount extends JFrame {
         coins.setForeground(new Color(245, 245, 245));
         container.add(coins);
 
-//        dbcoin = new JLabel("13224"); //dummy data
         dbcoin = new JLabel(); //user coin data from database
         dbcoin.setBounds(120,270,100,20);
         dbcoin.setFont(new Font("Lucida Handwriting", Font.PLAIN, 18));
@@ -301,17 +288,14 @@ public class SingletonAccount extends JFrame {
         }
     }
 
-    //
     public void refreshList(){
         lmodel.removeAllElements();
 
         for(int i = 0;i<onlineBuff.getOnlineBuff().size();i++){
             lmodel.addElement(onlineBuff.getOnlineBuff().get(i));
         }
-
         //removes the user's name in the list
         lmodel.removeElement(username.getText());
-
         //re-set the listmodel
         online.setModel(lmodel);
         Play.setEnabled(false);
@@ -357,8 +341,6 @@ public class SingletonAccount extends JFrame {
 
     //storing user profile data from server
     public void setStream(String data){stream = data;}
-
-    public String getStream(){return stream;}
 }
 
 

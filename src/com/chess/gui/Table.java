@@ -1,6 +1,5 @@
 package com.chess.gui;
 
-import com.chess.engine.Alliance;
 import com.chess.engine.board.*;
 import com.chess.engine.pieces.Piece;
 
@@ -17,18 +16,13 @@ import java.util.List;
 import static javax.swing.JFrame.setDefaultLookAndFeelDecorated;
 import static javax.swing.SwingUtilities.invokeLater;
 import static javax.swing.SwingUtilities.isLeftMouseButton;
-import static javax.swing.SwingUtilities.isRightMouseButton;
-import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import static javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE;
 
 import com.chess.engine.board.Move.MoveFactory;
 import com.chess.engine.player.Player;
 import com.frames.gui.SingletonAccount;
-import com.frames.network.ConnectListenHandler;
-import com.frames.network.IncomingReader;
 import com.frames.network.sConnectListenHandler;
 import com.frames.resource.MoveBuffer;
-import com.frames.resource.UserOnline;
 import com.google.common.collect.Lists;
 
 import java.awt.event.KeyEvent;
@@ -38,7 +32,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Observable;
-import java.util.Observer;
 import javax.swing.filechooser.FileFilter;
 
 

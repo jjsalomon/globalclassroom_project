@@ -1,23 +1,14 @@
 package com.frames.network;
 
 import com.chess.engine.board.Board;
-import com.chess.engine.board.Move;
-import com.chess.engine.board.MoveTransition;
-import com.chess.engine.board.Move.MoveFactory;
-import com.chess.engine.board.Tile;
 import com.chess.gui.Table;
 import com.frames.gui.*;
 import com.frames.resource.MoveBuffer;
 import com.frames.gui.SingletonLogin;
 import com.frames.resource.UserOnline;
-import com.sun.org.glassfish.gmbal.ParameterNames;
-import javafx.scene.control.Tab;
-
 import javax.swing.*;
 import java.io.BufferedReader;
 
-import static javax.swing.SwingUtilities.invokeLater;
-import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 
 /**
  * Created by azkei on 02/04/2017.
@@ -60,7 +51,6 @@ public class IncomingReader implements Runnable {
             while ((stream = breader.readLine()) != null) {
                 data = stream.split(":");
 
-
                 if (data[1].equals(chat)) {
                     System.out.println(stream);
                 }
@@ -87,19 +77,11 @@ public class IncomingReader implements Runnable {
 
                 if (data[1].equals(login)) {
                     sglogin.setVisible(false); //set login gui false/hide it
-                    //Show new account activity
                     System.out.println(stream);
                     /*stores in the users data information from the server to the singletonAccount.setStream(stream);
                         to give easier access when using SingletonAccount in different java classes */
                     sgaccount.setStream(stream);
                     sgaccount.setGuiWindow();       //set up the Account Gui and user information
-
-                    //this comment are the gui class not singleton
-                    /*Account accounts = new Account(stream);
-                    //whenever x button then terminate
-                    accounts.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-                    accounts.setSize(700, 500);
-                    accounts.setVisible(true);*/
                 }
 
                 if (data[1].equals(reupdate)) {
