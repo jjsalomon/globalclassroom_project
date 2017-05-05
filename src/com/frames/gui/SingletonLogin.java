@@ -1,6 +1,5 @@
 package com.frames.gui;
 
-import com.frames.network.ConnectListenHandler;
 import com.frames.network.sConnectListenHandler;
 
 import javax.swing.*;
@@ -33,8 +32,6 @@ public final class SingletonLogin extends JFrame {
     private JLabel password;
     private JLabel background;
 
-//    ConnectListenHandler connectListenHandler;
-
     public static SingletonLogin getFirstInstance() {
         if (firstInstance == null) {
             if (firstThread) {
@@ -46,7 +43,6 @@ public final class SingletonLogin extends JFrame {
                     e.printStackTrace();
                 }
             }
-
             //Here we sync when the first object is created
             synchronized (SingletonLogin.class) {
                 //if the first instance isnt needed it isnt created
@@ -61,10 +57,7 @@ public final class SingletonLogin extends JFrame {
 
     // constructor
     private SingletonLogin() {
-//        connectListenHandler = new ConnectListenHandler();
-
         //Adding and setting up components
-
         //Container panel = main panel
         container = new JPanel();
         container.setLayout(null);

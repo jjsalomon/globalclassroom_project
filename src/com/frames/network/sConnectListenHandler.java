@@ -1,16 +1,15 @@
 package com.frames.network;
 
-import com.frames.resource.UserOnline;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.util.ArrayList;
 
 /**
  * Created by Francis on 4/26/2017.
+ * Initially made by Jelo
  */
 public class sConnectListenHandler {
 

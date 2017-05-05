@@ -1,8 +1,5 @@
 package com.frames.resource;
 
-
-import java.util.ArrayList;
-
 /**
  * Created by azkei on 21/04/2017.
  */
@@ -22,13 +19,11 @@ public final class MoveBuffer{
     String challenged = null;
     static boolean hasboardupdated;
 
-
     //empty constructor
     private MoveBuffer(){
 
         hasboardupdated =false;
     }
-
     //lazy instantiation
     public static MoveBuffer getFirstInstance(){
         if(firstInstance == null){
@@ -68,7 +63,6 @@ public final class MoveBuffer{
                 " and DestinationTile: "+destinationTile+
                 " into the move buffer singleton");
     }
-
 
     public void setChallenge(String Challenger,String Challenged)
     {

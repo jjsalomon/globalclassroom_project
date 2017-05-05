@@ -1,8 +1,6 @@
 package com.frames.gui;
 
-import com.frames.network.ConnectListenHandler;
 import com.frames.network.sConnectListenHandler;
-import com.frames.resource.UserOnline;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,20 +14,17 @@ public class ShowInvitePane extends JFrame {
 
     private JLabel message;
     private JLabel inviter;
-    private JPanel container;
     private JButton yesBtn;
     private JButton noBtn;
     private String challenged;
     private String challenger;
     sConnectListenHandler sclh = sConnectListenHandler.getInstance();
-//    ConnectListenHandler connectListenHandler;
 
     public ShowInvitePane(String challenged, String challenger) {
         super("Game Invite");
         this.challenged = challenged;
         this.challenger = challenger;
 
-//        connectListenHandler = new ConnectListenHandler();
         SingletonAccount sgaccount = SingletonAccount.getFirstInstance();
 
         //Adding and setting up components
