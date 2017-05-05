@@ -40,10 +40,10 @@ public final class Table extends Observable implements Runnable {
     public final JFrame gameFrame;
     private final GameHistoryPanel gameHistoryPanel;
     private final TakenPiecesPanel takenPiecesPanel;
-    private final DebugPanel debugPanel;
+
     private final BoardPanel boardPanel;
     private final MoveLog moveLog;
-    private final GameSetup gameSetup;
+
     private Board chessBoard;
     private Move computerMove;
 
@@ -57,8 +57,7 @@ public final class Table extends Observable implements Runnable {
     private Piece humanMovedPiece;
     private BoardDirection boardDirection;
     private String pieceIconPath;
-    private boolean highlightLegalMoves;
-    private boolean useBook;
+
     private Color lightTileColor = Color.decode("#FFFACD");
     private Color darkTileColor = Color.decode("#593E1A");
 
@@ -101,21 +100,19 @@ public final class Table extends Observable implements Runnable {
         }
 
 
-        this.highlightLegalMoves = false;
-        this.useBook = false;
         this.pieceIconPath = "art/holywarriors/";
         this.gameHistoryPanel = new GameHistoryPanel();
-        this.debugPanel = new DebugPanel();
+
         this.takenPiecesPanel = new TakenPiecesPanel();
         this.boardPanel = new BoardPanel();
         this.moveLog = new MoveLog();
 
 
-        this.gameSetup = new GameSetup(this.gameFrame, true);
+
         this.gameFrame.add(this.takenPiecesPanel, BorderLayout.WEST);
         this.gameFrame.add(this.boardPanel, BorderLayout.CENTER);
         this.gameFrame.add(this.gameHistoryPanel, BorderLayout.EAST);
-        this.gameFrame.add(debugPanel, BorderLayout.SOUTH);
+
         setDefaultLookAndFeelDecorated(true);
         this.gameFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         this.gameFrame.setSize(OUTER_FRAME_DIMENSION);
@@ -190,14 +187,6 @@ public final class Table extends Observable implements Runnable {
         return this.takenPiecesPanel;
     }
 
-    private DebugPanel getDebugPanel() {
-        return this.debugPanel;
-    }
-
-    private GameSetup getGameSetup() {
-        return this.gameSetup;
-    }
-
 
 
 
@@ -206,14 +195,14 @@ public final class Table extends Observable implements Runnable {
         Table.get().getGameHistoryPanel().redo(chessBoard, Table.get().getMoveLog());
         Table.get().getTakenPiecesPanel().redo(Table.get().getMoveLog());
         Table.get().getBoardPanel().drawBoard(Table.get().getGameBoard());
-        Table.get().getDebugPanel().redo();
+
         sgaccount.setVisible(false);
     }
 
     private void populateMenuBar(final JMenuBar tableMenuBar) {
-        tableMenuBar.add(createFileMenu());
+
         tableMenuBar.add(createPreferencesMenu());
-        tableMenuBar.add(createOptionsMenu());
+
     }
 
     private static void center(final JFrame frame) {
@@ -225,145 +214,6 @@ public final class Table extends Observable implements Runnable {
         frame.setLocation(x, y);
     }
 
-    private JMenu createFileMenu() {
-        final JMenu filesMenu = new JMenu("File");
-        filesMenu.setMnemonic(KeyEvent.VK_F);
-
-        final JMenuItem openPGN = new JMenuItem("Load PGN File", KeyEvent.VK_O);
-        openPGN.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                JFileChooser chooser = new JFileChooser();
-                int option = chooser.showOpenDialog(Table.get().getGameFrame());
-                if (option == JFileChooser.APPROVE_OPTION) {
-
-                }
-            }
-        });
-        filesMenu.add(openPGN);
-
-        final JMenuItem openFEN = new JMenuItem("Load FEN File", KeyEvent.VK_F);
-        openFEN.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                String fenString = JOptionPane.showInputDialog("Input FEN");
-                undoAllMoves();
-                //chessBoard = FenUtilities.createGameFromFEN(fenString);
-                Table.get().getBoardPanel().drawBoard(chessBoard);
-            }
-        });
-        filesMenu.add(openFEN);
-
-        final JMenuItem saveToPGN = new JMenuItem("Save Game", KeyEvent.VK_S);
-        saveToPGN.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                final JFileChooser chooser = new JFileChooser();
-                chooser.setFileFilter(new FileFilter() {
-                    @Override
-                    public String getDescription() {
-                        return ".pgn";
-                    }
-
-                    @Override
-                    public boolean accept(final File file) {
-                        return file.isDirectory() || file.getName().toLowerCase().endsWith("pgn");
-                    }
-                });
-                final int option = chooser.showSaveDialog(Table.get().getGameFrame());
-                if (option == JFileChooser.APPROVE_OPTION) {
-
-                }
-            }
-        });
-        filesMenu.add(saveToPGN);
-
-        final JMenuItem exitMenuItem = new JMenuItem("Exit", KeyEvent.VK_X);
-        exitMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                Table.get().getGameFrame().dispose();
-                System.exit(0);
-            }
-        });
-        filesMenu.add(exitMenuItem);
-
-        return filesMenu;
-    }
-
-    private JMenu createOptionsMenu() {
-
-        final JMenu optionsMenu = new JMenu("Options");
-        optionsMenu.setMnemonic(KeyEvent.VK_O);
-
-        final JMenuItem resetMenuItem = new JMenuItem("New Game", KeyEvent.VK_P);
-        resetMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                undoAllMoves();
-            }
-
-        });
-        optionsMenu.add(resetMenuItem);
-
-        final JMenuItem evaluateBoardMenuItem = new JMenuItem("Evaluate Board", KeyEvent.VK_E);
-        evaluateBoardMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                // System.out.println(new StandardBoardEvaluator().evaluate(chessBoard, gameSetup.getSearchDepth()));
-
-            }
-        });
-        optionsMenu.add(evaluateBoardMenuItem);
-
-        final JMenuItem escapeAnalysis = new JMenuItem("Escape Analysis Score", KeyEvent.VK_S);
-        escapeAnalysis.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                final Move lastMove = moveLog.getMoves().get(moveLog.size() - 1);
-                if (lastMove != null) {
-                    System.out.println(MoveUtils.exchangeScore(lastMove));
-                }
-
-            }
-        });
-        optionsMenu.add(escapeAnalysis);
-
-        final JMenuItem legalMovesMenuItem = new JMenuItem("Current State", KeyEvent.VK_L);
-        legalMovesMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                System.out.println(chessBoard.getWhitePieces());
-                System.out.println(chessBoard.getBlackPieces());
-                System.out.println(playerInfo(chessBoard.currentPlayer()));
-                System.out.println(playerInfo(chessBoard.currentPlayer().getOpponent()));
-            }
-        });
-        optionsMenu.add(legalMovesMenuItem);
-
-        final JMenuItem undoMoveMenuItem = new JMenuItem("Undo last move", KeyEvent.VK_M);
-        undoMoveMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                if (Table.get().getMoveLog().size() > 0) {
-                    undoLastMove();
-                }
-            }
-        });
-        optionsMenu.add(undoMoveMenuItem);
-
-        final JMenuItem setupGameMenuItem = new JMenuItem("Setup Game", KeyEvent.VK_S);
-        setupGameMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                Table.get().getGameSetup().promptUser();
-                Table.get().setupUpdate(Table.get().getGameSetup());
-            }
-        });
-        optionsMenu.add(setupGameMenuItem);
-
-        return optionsMenu;
-    }
 
     private JMenu createPreferencesMenu() {
 
@@ -378,9 +228,7 @@ public final class Table extends Observable implements Runnable {
         final JMenuItem chooseLightMenuItem = new JMenuItem("Choose Light Tile Color");
         colorChooserSubMenu.add(chooseLightMenuItem);
 
-        final JMenuItem chooseLegalHighlightMenuItem = new JMenuItem(
-                "Choose Legal Move Highlight Color");
-        colorChooserSubMenu.add(chooseLegalHighlightMenuItem);
+
 
         preferencesMenu.add(colorChooserSubMenu);
 
@@ -406,176 +254,10 @@ public final class Table extends Observable implements Runnable {
             }
         });
 
-        final JMenu chessMenChoiceSubMenu = new JMenu("Choose Chess Men Image Set");
-
-        final JMenuItem holyWarriorsMenuItem = new JMenuItem("Holy Warriors");
-        chessMenChoiceSubMenu.add(holyWarriorsMenuItem);
-
-        final JMenuItem rockMenMenuItem = new JMenuItem("Rock Men");
-        chessMenChoiceSubMenu.add(rockMenMenuItem);
-
-        final JMenuItem abstractMenMenuItem = new JMenuItem("Abstract Men");
-        chessMenChoiceSubMenu.add(abstractMenMenuItem);
-
-        final JMenuItem woodMenMenuItem = new JMenuItem("Wood Men");
-        chessMenChoiceSubMenu.add(woodMenMenuItem);
-
-        final JMenuItem fancyMenMenuItem = new JMenuItem("Fancy Men");
-        chessMenChoiceSubMenu.add(fancyMenMenuItem);
-
-        final JMenuItem fancyMenMenuItem2 = new JMenuItem("Fancy Men 2");
-        chessMenChoiceSubMenu.add(fancyMenMenuItem2);
-
-        woodMenMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                System.out.println("implement me");
-                Table.get().getGameFrame().repaint();
-            }
-        });
-
-        holyWarriorsMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                pieceIconPath = "art/holywarriors/";
-                Table.get().getBoardPanel().drawBoard(chessBoard);
-            }
-        });
-
-        rockMenMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-            }
-        });
-
-        abstractMenMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                pieceIconPath = "art/simple/";
-                Table.get().getBoardPanel().drawBoard(chessBoard);
-            }
-        });
-
-        fancyMenMenuItem2.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                pieceIconPath = "art/fancy2/";
-                Table.get().getBoardPanel().drawBoard(chessBoard);
-            }
-        });
-
-        fancyMenMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                pieceIconPath = "art/fancy/";
-                Table.get().getBoardPanel().drawBoard(chessBoard);
-            }
-        });
-
-        preferencesMenu.add(chessMenChoiceSubMenu);
-
-        chooseLegalHighlightMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                System.out.println("implement me");
-                Table.get().getGameFrame().repaint();
-            }
-        });
-
-        final JMenuItem flipBoardMenuItem = new JMenuItem("Flip board");
-
-        flipBoardMenuItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                boardDirection = boardDirection.opposite();
-                boardPanel.drawBoard(chessBoard);
-            }
-        });
-
-        preferencesMenu.add(flipBoardMenuItem);
-        preferencesMenu.addSeparator();
-
-
-        final JCheckBoxMenuItem cbLegalMoveHighlighter = new JCheckBoxMenuItem(
-                "Highlight Legal Moves", false);
-
-        cbLegalMoveHighlighter.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                highlightLegalMoves = cbLegalMoveHighlighter.isSelected();
-            }
-        });
-
-        preferencesMenu.add(cbLegalMoveHighlighter);
-
-        final JCheckBoxMenuItem cbUseBookMoves = new JCheckBoxMenuItem(
-                "Use Book Moves", false);
-
-        cbUseBookMoves.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(final ActionEvent e) {
-                useBook = cbUseBookMoves.isSelected();
-            }
-        });
-
-        preferencesMenu.add(cbUseBookMoves);
-
         return preferencesMenu;
 
     }
 
-    private static String playerInfo(final Player player) {
-        return ("Player is: " + player.getAlliance() + "\nlegal moves =" + player.getLegalMoves() + "\ninCheck = " +
-                player.isInCheck() + "\nisInCheckMate = " + player.isInCheckMate() +
-                "\nisCastled = " + player.isCastled()) + "\n";
-    }
-
-    private void updateGameBoard(final Board board) {
-        this.chessBoard = board;
-    }
-
-    private void updateComputerMove(final Move move) {
-        this.computerMove = move;
-    }
-
-    private void undoAllMoves() {
-        for (int i = Table.get().getMoveLog().size() - 1; i >= 0; i--) {
-            final Move lastMove = Table.get().getMoveLog().removeMove(Table.get().getMoveLog().size() - 1);
-            this.chessBoard = this.chessBoard.currentPlayer().unMakeMove(lastMove).getToBoard();
-        }
-        this.computerMove = null;
-        Table.get().getMoveLog().clear();
-        Table.get().getGameHistoryPanel().redo(chessBoard, Table.get().getMoveLog());
-        Table.get().getTakenPiecesPanel().redo(Table.get().getMoveLog());
-        Table.get().getBoardPanel().drawBoard(chessBoard);
-        Table.get().getDebugPanel().redo();
-    }
-
-    private void undoLastMove() {
-        final Move lastMove = Table.get().getMoveLog().removeMove(Table.get().getMoveLog().size() - 1);
-        this.chessBoard = this.chessBoard.currentPlayer().unMakeMove(lastMove).getToBoard();
-        this.computerMove = null;
-        Table.get().getMoveLog().removeMove(lastMove);
-        Table.get().getGameHistoryPanel().redo(chessBoard, Table.get().getMoveLog());
-        Table.get().getTakenPiecesPanel().redo(Table.get().getMoveLog());
-        Table.get().getBoardPanel().drawBoard(chessBoard);
-        Table.get().getDebugPanel().redo();
-    }
-
-    private void moveMadeUpdate(final PlayerType playerType) {
-        setChanged();
-        notifyObservers(playerType);
-    }
-
-    private void setupUpdate(final GameSetup gameSetup) {
-        setChanged();
-        notifyObservers(gameSetup);
-    }
-
-    enum PlayerType {
-        HUMAN,
-        COMPUTER
-    }
 
     private class BoardPanel extends JPanel {
 
@@ -677,13 +359,6 @@ public final class Table extends Observable implements Runnable {
             this.moves.clear();
         }
 
-        public Move removeMove(int index) {
-            return this.moves.remove(index);
-        }
-
-        public boolean removeMove(final Move move) {
-            return this.moves.remove(move);
-        }
 
     }
 
@@ -871,7 +546,6 @@ public final class Table extends Observable implements Runnable {
                                 sclh.writer.flush();
                             }
 
-                            debugPanel.redo();
                         }
                     });
                 }
@@ -922,23 +596,7 @@ public final class Table extends Observable implements Runnable {
             }
         }
 
-        private void highlightAIMove() {
-            if (computerMove != null) {
-                if (this.tileId == computerMove.getCurrentCoordinate()) {
-                    setBackground(Color.pink);
-                } else if (this.tileId == computerMove.getDestinationCoordinate()) {
-                    setBackground(Color.red);
-                }
-            }
-        }
 
-
-        private Collection<Move> pieceLegalMoves(final Board board) {
-            if (humanMovedPiece != null && humanMovedPiece.getPieceAllegiance() == board.currentPlayer().getAlliance()) {
-                return humanMovedPiece.calculateLegalMoves(board);
-            }
-            return Collections.emptyList();
-        }
 
         private void assignTilePieceIcon(final Board board) {
             this.removeAll();
@@ -1043,16 +701,6 @@ public final class Table extends Observable implements Runnable {
 
             if (MoveFactory.getBollean().equals(true)) {
 
-                try {
-
-                    //connectListenHandler.writer.println("Move" + ":"  +moveBuffer.getSend()+":"+moveBuffer.getFrom()+":" + SourceT + ":" + DestT);
-                    //connectListenHandler.writer.flush();
-
-
-                } catch (Exception ex) {
-                    System.out.println("You Cannot send data try again");
-                    ex.printStackTrace();
-                }
                 //Read response information from server
 
 
@@ -1079,8 +727,6 @@ public final class Table extends Observable implements Runnable {
 
 
             //boardPanel.drawBoard(chessBoard);
-
-
             invokeLater(new Runnable() {
                 public void run() {
 
