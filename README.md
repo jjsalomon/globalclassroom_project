@@ -16,6 +16,8 @@ Step 2: Clone these 2 repositories into your local machine. You will need both.
   
 Step 3: Load up the dependencies on the project. The project will not work without them.
 
+You can get the dependencies here:https://drive.google.com/open?id=0B35ajbtwSaSWZ3piakVfVjNIMUU
+
   Client: guava
   Server: spring-security-crypto & sqlite-jdbc
 
